@@ -1,0 +1,10 @@
+# Format Style Options - Created with Clang Power Tools
+---
+Language: Cpp
+BasedOnStyle: Google
+AllowShortIfStatementsOnASingleLine: Never
+BreakBeforeBraces: Stroustrup
+ColumnLimit: 0
+IndentWidth: 4
+TabWidth: 4
+...

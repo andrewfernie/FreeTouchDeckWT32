@@ -1,0 +1,37 @@
+{
+  "logo0": "mute.bmp",
+  "logo1": "videooff.bmp",
+  "logo2": "share.bmp",
+  "logo3": "raisehand.bmp",
+  "logo4": "off.bmp",
+  "button0":{
+    "latch": true,
+    "latchlogo": "unmute.bmp",
+    "actionarray": [ "5", "5", "4" ],
+    "valuearray": [ "1", "6", "m" ] 
+  },
+  "button1":{
+    "latch": true,
+    "latchlogo": "videoon.bmp",
+    "actionarray": [ "5", "5", "4" ],
+    "valuearray": [ "1", "6", "o" ] 
+  },
+  "button2":{
+    "latch": true,
+    "latchlogo": "closeshare.bmp",
+    "actionarray": [ "5", "5", "4" ],
+    "valuearray": [ "1", "6", "e" ] 
+  },
+  "button3":{
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [ "5", "5", "4" ],
+    "valuearray": [ "1", "6", "k" ]  
+  },
+  "button4":{
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [ "5", "5", "4" ],
+    "valuearray": [ "1", "6", "b" ] 
+  }
+}

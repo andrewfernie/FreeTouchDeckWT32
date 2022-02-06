@@ -1,0 +1,37 @@
+{
+  "logo0": "snip.bmp",
+  "logo1": "todo.bmp",
+  "logo2": "outlook.bmp",
+  "logo3": "explorer.bmp",
+  "logo4": "lock.bmp",
+  "button0":{
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [ "5", "5", "4" ],
+    "valuearray": [ "8", "2", "s" ] 
+  },
+  "button1":{
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [ "5", "7", "0" ],
+    "valuearray": [ "8", "2", "0" ] 
+  },
+  "button2":{
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [ "5", "7", "0" ],
+    "valuearray": [ "8", "3", "0" ] 
+  },
+  "button3":{
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [ "5", "4", "0"],
+    "valuearray": [ "8", "e", "0" ] 
+  },
+  "button4":{
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [ "5", "4", "0" ],
+    "valuearray": [ "8", "l", "0" ] 
+  }
+}
