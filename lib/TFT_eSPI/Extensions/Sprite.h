@@ -63,9 +63,9 @@ class TFT_eSprite : public TFT_eSPI {
            // Colours are converted to the set Sprite colour bit depth
            setWindow(int32_t x0, int32_t y0, int32_t x1, int32_t y1),
            // Push a color (aka singe pixel) to the screen
-           pushColor(uint32_t color),
+           pushColor(uint16_t color),
            // Push len colors (pixels) to the screen
-           pushColor(uint32_t color, uint16_t len),
+           pushColor(uint16_t color, uint32_t len),
            // Push a pixel preformatted as a 8 or 16 bit colour (avoids conversion overhead)
            writeColor(uint16_t color),
 
@@ -92,9 +92,9 @@ class TFT_eSprite : public TFT_eSPI {
   uint8_t  getRotation(void);
 
            // Push a rotated copy of Sprite to TFT with optional transparent colour
-  bool     pushRotated(int16_t angle, int32_t transp = -1);   // Using fixed point maths
+  bool     pushRotated(int16_t angle, uint32_t transp = 0x00FFFFFF);   // Using fixed point maths
            // Push a rotated copy of Sprite to another different Sprite with optional transparent colour
-  bool     pushRotated(TFT_eSprite *spr, int16_t angle, int32_t transp = -1);   // Using fixed point maths
+  bool     pushRotated(TFT_eSprite *spr, int16_t angle, uint32_t transp = 0x00FFFFFF);   // Using fixed point maths
 
            // Get the TFT bounding box for a rotated copy of this Sprite
   bool     getRotatedBounds(int16_t angle, int16_t *min_x, int16_t *min_y, int16_t *max_x, int16_t *max_y);
@@ -148,6 +148,10 @@ class TFT_eSprite : public TFT_eSPI {
 
            // Reserve memory for the Sprite and return a pointer
   void*    callocSprite(int16_t width, int16_t height, uint8_t frames = 1);
+
+           // Override the non-inlined TFT_eSPI functions
+  void     begin_nin_write(void) { ; }
+  void     end_nin_write(void) { ; }
 
  protected:
 
