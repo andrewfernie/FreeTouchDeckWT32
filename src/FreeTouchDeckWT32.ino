@@ -52,7 +52,7 @@
 
 // ------- Uncomment the define below if you want to use SLEEP and wake up on touch -------
 // The pin where the IRQ from the touch screen is connected uses ESP-style GPIO_NUM_* instead of just pinnumber
-//#define touchInterruptPin GPIO_NUM_27
+#define touchInterruptPin GPIO_NUM_39
 
 // ------- Uncomment the define below if you want to use a piezo buzzer and specify the pin where the speaker is connected -------
 //#define speakerPin 26
@@ -285,7 +285,7 @@ Menu menu6;
 unsigned long previousMillis = 0;
 unsigned long Interval = 0;
 bool displayinginfo;
-char* jsonfilefail = "";
+char* jsonfilefail = (char*)"";
 
 // Invoke the TFT_eSPI button class and create all the button objects
 TFT_eSPI_Button key[6];
@@ -487,7 +487,7 @@ void setup()
   if(!loadConfig("general")){
     Serial.println("[WARNING]: general.json seems to be corrupted!");
     Serial.println("[WARNING]: To reset to default type 'reset general'.");
-    jsonfilefail = "general";
+    jsonfilefail = (char*)"general";
     pageNum = 10;
   }
 
@@ -521,37 +521,37 @@ if(generalconfig.beep){
   if(!loadConfig("homescreen")){
     Serial.println("[WARNING]: homescreen.json seems to be corrupted!");
     Serial.println("[WARNING]: To reset to default type 'reset homescreen'.");
-    jsonfilefail = "homescreen";
+    jsonfilefail = (char*)"homescreen";
     pageNum = 10;
   }
   if(!loadConfig("menu1")){
     Serial.println("[WARNING]: menu1.json seems to be corrupted!");
     Serial.println("[WARNING]: To reset to default type 'reset menu1'.");
-    jsonfilefail = "menu1";
+    jsonfilefail = (char*)"menu1";
     pageNum = 10;
   }
   if(!loadConfig("menu2")){
     Serial.println("[WARNING]: menu2.json seems to be corrupted!");
     Serial.println("[WARNING]: To reset to default type 'reset menu2'.");
-    jsonfilefail = "menu2";
+    jsonfilefail = (char*)"menu2";
     pageNum = 10;
   }
   if(!loadConfig("menu3")){
     Serial.println("[WARNING]: menu3.json seems to be corrupted!");
     Serial.println("[WARNING]: To reset to default type 'reset menu3'.");
-    jsonfilefail = "menu3";
+    jsonfilefail = (char*)"menu3";
     pageNum = 10;
   }
   if(!loadConfig("menu4")){
     Serial.println("[WARNING]: menu4.json seems to be corrupted!");
     Serial.println("[WARNING]: To reset to default type 'reset menu4'.");
-    jsonfilefail = "menu4";
+    jsonfilefail = (char*)"menu4";
     pageNum = 10;
   }
   if(!loadConfig("menu5")){
     Serial.println("[WARNING]: menu5.json seems to be corrupted!");
     Serial.println("[WARNING]: To reset to default type 'reset menu5'.");
-    jsonfilefail = "menu5";
+    jsonfilefail = (char*)"menu5";
     pageNum = 10;
   }
   Serial.println("[INFO]: All configs loaded");
@@ -719,7 +719,7 @@ void loop(void)
       printinfo();
     }
 
-    uint16_t t_x = 0, t_y = 0;
+//    uint16_t t_x = 0, t_y = 0;
 
     //At the beginning of a new loop, make sure we do not use last loop's touch.
     boolean pressed = false;
@@ -732,14 +732,14 @@ void loop(void)
 
         //Flip things around so it matches our screen rotation
 //        p.x = map(p.x, 0, 320, 320, 0);
-        t_x = touchPos.xPos;
-        t_y = touchPos.yPos;
+//       t_x = touchPos.xPos;
+//        t_y = touchPos.yPos;
 
         pressed = true;
     }
 
 #else
-
+    uint16_t t_x = 0, t_y = 0;
     pressed = tft.getTouch(&t_x, &t_y);
 
 #endif
@@ -756,7 +756,7 @@ void loop(void)
   {
 
     // We were unable to connect to WiFi. Waiting for touch to get back to the settings menu.
-    uint16_t t_x = 0, t_y = 0;
+//    uint16_t t_x = 0, t_y = 0;
 
     //At the beginning of a new loop, make sure we do not use last loop's touch.
     boolean pressed = false;
@@ -767,14 +767,14 @@ void loop(void)
     if (touchPos.touched) {
         //Flip things around so it matches our screen rotation
         //        p.x = map(p.x, 0, 320, 320, 0);
-        t_x = touchPos.xPos;
-        t_y = touchPos.yPos;
+//        t_x = touchPos.xPos;
+//        t_y = touchPos.yPos;
 
         pressed = true;
     }
 
 #else
-
+    uint16_t t_x = 0, t_y = 0;
     pressed = tft.getTouch(&t_x, &t_y);
 
 #endif
@@ -792,7 +792,7 @@ void loop(void)
   {
 
     // A JSON file failed to load. We are drawing an error message. And waiting for a touch.
-    uint16_t t_x = 0, t_y = 0;
+   // uint16_t t_x = 0, t_y = 0;
 
     //At the beginning of a new loop, make sure we do not use last loop's touch.
     boolean pressed = false;
@@ -803,14 +803,14 @@ void loop(void)
     if (touchPos.touched) {
         //Flip things around so it matches our screen rotation
         //        p.x = map(p.x, 0, 320, 320, 0);
-        t_x = touchPos.xPos;
-        t_y = touchPos.yPos;
+  //      t_x = touchPos.xPos;
+   //     t_y = touchPos.yPos;
 
         pressed = true;
     }
 
 #else
-
+    uint16_t t_x = 0, t_y = 0;
     pressed = tft.getTouch(&t_x, &t_y);
 
 #endif
@@ -1024,9 +1024,9 @@ void loop(void)
         }
         tft.setFreeFont(LABEL_FONT);
         key[b].initButton(&tft, KEY_X + col * (KEY_W + KEY_SPACING_X),
-                          KEY_Y + row * (KEY_H + KEY_SPACING_Y), // x, y, w, h, outline, fill, text
+                          KEY_Y + row * (KEY_H + KEY_SPACING_Y),  // x, y, w, h, outline, fill, text
                           KEY_W, KEY_H, TFT_WHITE, buttonBG, TFT_WHITE,
-                          "", KEY_TEXTSIZE);
+                          (char*)"", KEY_TEXTSIZE);
         key[b].drawButton();
 
         // After drawing the button outline we call this to draw a logo.
@@ -1089,9 +1089,9 @@ void loop(void)
 
         tft.setFreeFont(LABEL_FONT);
         key[b].initButton(&tft, KEY_X + col * (KEY_W + KEY_SPACING_X),
-                          KEY_Y + row * (KEY_H + KEY_SPACING_Y), // x, y, w, h, outline, fill, text
+                          KEY_Y + row * (KEY_H + KEY_SPACING_Y),  // x, y, w, h, outline, fill, text
                           KEY_W, KEY_H, TFT_WHITE, TFT_WHITE, TFT_WHITE,
-                          "", KEY_TEXTSIZE);
+                          (char*)"", KEY_TEXTSIZE);
         key[b].drawButton();
 
         //---------------------------------------- Button press handeling --------------------------------------------------
