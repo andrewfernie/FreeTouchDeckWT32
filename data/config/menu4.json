@@ -1,77 +1,44 @@
 {
-  "logo0": "videooff.bmp",
-  "logo1": "mute.bmp",
-  "logo2": "raisehand.bmp",
-  "logo3": "OnePerson.bmp",
-  "logo4": "People.bmp",
-  "button0": {
+  "logo00": "videooff.bmp",
+  "logo01": "mute.bmp",
+  "logo02": "raisehand.bmp",
+  "logo10": "OnePerson.bmp",
+  "logo11": "People.bmp",
+  "logo12": "home.bmp",
+  "button00":{
     "latch": false,
     "latchlogo": "",
-    "actionarray": [
-      "5",
-      "4",
-      "0"
-    ],
-    "valuearray": [
-      "3",
-      "v",
-      "0"
-    ]
+    "actionarray": [ "5", "4", "0" ],
+    "valuearray": [ "3", "v", "0" ]
   },
-  "button1": {
+  "button01":{
     "latch": false,
     "latchlogo": "",
-    "actionarray": [
-      "5",
-      "4",
-      "0"
-    ],
-    "valuearray": [
-      "3",
-      "a",
-      "0"
-    ]
+    "actionarray": [ "5", "4", "0" ],
+    "valuearray": [ "3", "a", "0" ]
   },
-  "button2": {
+  "button02":{
     "latch": false,
     "latchlogo": "",
-    "actionarray": [
-      "5",
-      "4",
-      "0"
-    ],
-    "valuearray": [
-      "3",
-      "y",
-      "0"
-    ]
+    "actionarray": [ "5", "4", "0" ],
+    "valuearray": [ "3", "y", "0" ]
   },
-  "button3": {
+  "button10":{
     "latch": false,
     "latchlogo": "",
-    "actionarray": [
-      "5",
-      "6",
-      "0"
-    ],
-    "valuearray": [
-      "3",
-      "1",
-      "0"
-    ]
+    "actionarray": [ "5", "6", "0" ],
+    "valuearray": [ "3", "1", "0" ]
   },
-  "button4": {
+  "button11":{
     "latch": false,
     "latchlogo": "",
-    "actionarray": [
-      "5",
-      "6",
-      "0"
-    ],
-    "valuearray": [
-      "3",
-      "2",
-      "0"
-    ]
-  }
+    "actionarray": [ "5", "6", "0" ],
+    "valuearray": [ "3", "2", "0" ]
+  },
+  "button12":{
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [ "11", "0", "0" ],
+    "valuearray": [ "6", "0", "0" ] 
+  } 
 }

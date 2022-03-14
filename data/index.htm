@@ -397,7 +397,7 @@
 	</div>
 	<!-- Tab Menu 1 -->
 	<div id="menu1" class="tabcontent">
-		<div style="float: right; font-size: 11px" ><a href="/download?file=menu1.json">download menu1.json</a></div><br>
+		<div style="float: right; font-size: 11px" ><a href="/download?file=menu[0].json">download menu[0].json</a></div><br>
 		<h3>Menu 1</h3>
 		<p>
 		<form method='post' id="savemenu1" action='/saveconfig'>
@@ -501,7 +501,7 @@
 	</div>
 	<!-- Tab Menu 2 -->
 	<div id="menu2" class="tabcontent">
-		<div style="float: right; font-size: 11px" ><a href="/download?file=menu2.json">download menu2.json</a></div><br>
+		<div style="float: right; font-size: 11px" ><a href="/download?file=menu[1].json">download menu[1].json</a></div><br>
 		<h3>Menu 2</h3>
 		<p>
 		<form method='post' id="savemenu2" action='/saveconfig'>
@@ -605,7 +605,7 @@
 	</div>
 	<!-- Tab Menu 3 -->
 	<div id="menu3" class="tabcontent">
-		<div style="float: right; font-size: 11px" ><a href="/download?file=menu3.json">download menu3.json</a></div><br>
+		<div style="float: right; font-size: 11px" ><a href="/download?file=menu[2].json">download menu[2].json</a></div><br>
 		<h3>Menu 3</h3>
 		<p>
 		<form method='post' id="savemenu3" action='/saveconfig'>
@@ -709,7 +709,7 @@
 	</div>
 	<!-- Tab Menu 4 -->
 	<div id="menu4" class="tabcontent">
-		<div style="float: right; font-size: 11px" ><a href="/download?file=menu4.json">download menu4.json</a></div><br>
+		<div style="float: right; font-size: 11px" ><a href="/download?file=menu[3].json">download menu[3].json</a></div><br>
 		<h3>Menu 4</h3>
 		<p>
 		<form method='post' id="savemenu4" action='/saveconfig'>
@@ -813,7 +813,7 @@
 	</div>
 	<!-- Tab Menu 5 -->
 	<div id="menu5" class="tabcontent">
-		<div style="float: right; font-size: 11px" ><a href="/download?file=menu5.json">download menu5.json</a></div><br>
+		<div style="float: right; font-size: 11px" ><a href="/download?file=menu[4].json">download menu[4].json</a></div><br>
 		<h3>Menu 5</h3>
 		<p>
 		<form method='post' id="savemenu5" action='/saveconfig'>
@@ -945,7 +945,7 @@
 	 <!-- Upload JSON -->
 	 <div id="uploadjson" class="tabcontent">
 	    <h3>Upload a JSON Config File</h3>
-	    <div style="width: 70%; text-align: left; margin: auto;"> You can upload a previously downloaded JSON file to save you some time from having to configure a whole menu. The filename should be the menu name (all lower-case), e.g. menu1.json for Menu 1, menu2.json for Menu 2, etc. It is also a good idea to validate your .json file if you made any manual modifications. You can do that using <a href="https://jsonlint.com/" target="_blank">JSONLint</a><br/><br/></div>
+	    <div style="width: 70%; text-align: left; margin: auto;"> You can upload a previously downloaded JSON file to save you some time from having to configure a whole menu. The filename should be the menu name (all lower-case), e.g. menu[0].json for Menu 1, menu[1].json for Menu 2, etc. It is also a good idea to validate your .json file if you made any manual modifications. You can do that using <a href="https://jsonlint.com/" target="_blank">JSONLint</a><br/><br/></div>
 	    <p>
 	    <div class="form" style="width: 10%; text-align: center; margin: auto;">
 	        <input form="uploadjsonfile" type="file" name="name" accept=".json"><br /><br />
@@ -3882,122 +3882,122 @@ $(function () {
 
 
 			// Load Menu 1
-				fetch('config/menu1.json')
+				fetch('config/menu[0].json')
 					.then((response) => {
 					return response.json()
 				})
 				.then((data) => {
 
-					document.getElementById("screen1logo0").add(new Option(data.logo0));
-					if(data.button0.latch){
+					document.getElementById("screen1logo0").add(new Option(data.logo[0]));
+					if(data.button[0].latch){
 						document.getElementById("screen1button0latch").checked = true;
 					}
 
-					if(data.button0.latchlogo == ""){
+					if(data.button[0].latchlogo == ""){
 						document.getElementById("screen1latchlogo0").add(new Option("---"));
 					}else{
-						document.getElementById("screen1latchlogo0").add(new Option(data.button0.latchlogo));
+						document.getElementById("screen1latchlogo0").add(new Option(data.button[0].latchlogo));
 						document.getElementById("screen1latchlogo0").add(new Option("---"));
 					}
 
-					document.getElementById('screen1button0action0').value = data.button0.actionarray[0];
-					document.getElementById('screen1button0action1').value = data.button0.actionarray[1];
-					document.getElementById('screen1button0action2').value = data.button0.actionarray[2];
-					fillvaluelist(screen1button0value0, selecteditems[data.button0.actionarray[0]].subitems);
-					document.getElementById('screen1button0value0').value = data.button0.valuearray[0];
-					fillvaluelist(screen1button0value1, selecteditems[data.button0.actionarray[1]].subitems);
-					document.getElementById('screen1button0value1').value = data.button0.valuearray[1];
-					fillvaluelist(screen1button0value2, selecteditems[data.button0.actionarray[2]].subitems);
-					document.getElementById('screen1button0value2').value = data.button0.valuearray[2];
+					document.getElementById('screen1button0action0').value = data.button[0].actionarray[0];
+					document.getElementById('screen1button0action1').value = data.button[0].actionarray[1];
+					document.getElementById('screen1button0action2').value = data.button[0].actionarray[2];
+					fillvaluelist(screen1button0value0, selecteditems[data.button[0].actionarray[0]].subitems);
+					document.getElementById('screen1button0value0').value = data.button[0].valuearray[0];
+					fillvaluelist(screen1button0value1, selecteditems[data.button[0].actionarray[1]].subitems);
+					document.getElementById('screen1button0value1').value = data.button[0].valuearray[1];
+					fillvaluelist(screen1button0value2, selecteditems[data.button[0].actionarray[2]].subitems);
+					document.getElementById('screen1button0value2').value = data.button[0].valuearray[2];
 
-					document.getElementById("screen1logo1").add(new Option(data.logo1));
-					if(data.button1.latch){
+					document.getElementById("screen1logo1").add(new Option(data.logo[1]));
+					if(data.button[1].latch){
 						document.getElementById("screen1button1latch").checked = true;
 					}
 
-					if(data.button1.latchlogo == ""){
+					if(data.button[1].latchlogo == ""){
 						document.getElementById("screen1latchlogo1").add(new Option("---"));
 					}else{
-						document.getElementById("screen1latchlogo1").add(new Option(data.button1.latchlogo));
+						document.getElementById("screen1latchlogo1").add(new Option(data.button[1].latchlogo));
 						document.getElementById("screen1latchlogo1").add(new Option("---"));
 					}
 
 
-					document.getElementById('screen1button1action0').value = data.button1.actionarray[0];
-					document.getElementById('screen1button1action1').value = data.button1.actionarray[1];
-					document.getElementById('screen1button1action2').value = data.button1.actionarray[2];
-					fillvaluelist(screen1button1value0, selecteditems[data.button1.actionarray[0]].subitems);
-					document.getElementById('screen1button1value0').value = data.button1.valuearray[0];
-					fillvaluelist(screen1button1value1, selecteditems[data.button1.actionarray[1]].subitems);
-					document.getElementById('screen1button1value1').value = data.button1.valuearray[1];
-					fillvaluelist(screen1button1value2, selecteditems[data.button1.actionarray[2]].subitems);
-					document.getElementById('screen1button1value2').value = data.button1.valuearray[2];
+					document.getElementById('screen1button1action0').value = data.button[1].actionarray[0];
+					document.getElementById('screen1button1action1').value = data.button[1].actionarray[1];
+					document.getElementById('screen1button1action2').value = data.button[1].actionarray[2];
+					fillvaluelist(screen1button1value0, selecteditems[data.button[1].actionarray[0]].subitems);
+					document.getElementById('screen1button1value0').value = data.button[1].valuearray[0];
+					fillvaluelist(screen1button1value1, selecteditems[data.button[1].actionarray[1]].subitems);
+					document.getElementById('screen1button1value1').value = data.button[1].valuearray[1];
+					fillvaluelist(screen1button1value2, selecteditems[data.button[1].actionarray[2]].subitems);
+					document.getElementById('screen1button1value2').value = data.button[1].valuearray[2];
 
-					document.getElementById("screen1logo2").add(new Option(data.logo2));
-					if(data.button2.latch){
+					document.getElementById("screen1logo2").add(new Option(data.logo[2]));
+					if(data.button[2].latch){
 						document.getElementById("screen1button2latch").checked = true;
 					}
 
-					if(data.button2.latchlogo == ""){
+					if(data.button[2].latchlogo == ""){
 						document.getElementById("screen1latchlogo2").add(new Option("---"));
 					}else{
-						document.getElementById("screen1latchlogo2").add(new Option(data.button2.latchlogo));
+						document.getElementById("screen1latchlogo2").add(new Option(data.button[2].latchlogo));
 						document.getElementById("screen1latchlogo2").add(new Option("---"));
 					}
 
-					document.getElementById('screen1button2action0').value = data.button2.actionarray[0];
-					document.getElementById('screen1button2action1').value = data.button2.actionarray[1];
-					document.getElementById('screen1button2action2').value = data.button2.actionarray[2];
-					fillvaluelist(screen1button2value0, selecteditems[data.button2.actionarray[0]].subitems);
-					document.getElementById('screen1button2value0').value = data.button2.valuearray[0];
-					fillvaluelist(screen1button2value1, selecteditems[data.button2.actionarray[1]].subitems);
-					document.getElementById('screen1button2value1').value = data.button2.valuearray[1];
-					fillvaluelist(screen1button2value2, selecteditems[data.button2.actionarray[2]].subitems);
-					document.getElementById('screen1button2value2').value = data.button2.valuearray[2];
+					document.getElementById('screen1button2action0').value = data.button[2].actionarray[0];
+					document.getElementById('screen1button2action1').value = data.button[2].actionarray[1];
+					document.getElementById('screen1button2action2').value = data.button[2].actionarray[2];
+					fillvaluelist(screen1button2value0, selecteditems[data.button[2].actionarray[0]].subitems);
+					document.getElementById('screen1button2value0').value = data.button[2].valuearray[0];
+					fillvaluelist(screen1button2value1, selecteditems[data.button[2].actionarray[1]].subitems);
+					document.getElementById('screen1button2value1').value = data.button[2].valuearray[1];
+					fillvaluelist(screen1button2value2, selecteditems[data.button[2].actionarray[2]].subitems);
+					document.getElementById('screen1button2value2').value = data.button[2].valuearray[2];
 
-					document.getElementById("screen1logo3").add(new Option(data.logo3));
-					if(data.button3.latch){
+					document.getElementById("screen1logo3").add(new Option(data.logo[3]));
+					if(data.button[3].latch){
 						document.getElementById("screen1button3latch").checked = true;
 					}
 
-					if(data.button3.latchlogo == ""){
+					if(data.button[3].latchlogo == ""){
 						document.getElementById("screen1latchlogo3").add(new Option("---"));
 					}else{
-						document.getElementById("screen1latchlogo3").add(new Option(data.button3.latchlogo));
+						document.getElementById("screen1latchlogo3").add(new Option(data.button[3].latchlogo));
 						document.getElementById("screen1latchlogo3").add(new Option("---"));
 					}
 
-					document.getElementById('screen1button3action0').value = data.button3.actionarray[0];
-					document.getElementById('screen1button3action1').value = data.button3.actionarray[1];
-					document.getElementById('screen1button3action2').value = data.button3.actionarray[2];
-					fillvaluelist(screen1button3value0, selecteditems[data.button3.actionarray[0]].subitems);
-					document.getElementById('screen1button3value0').value = data.button3.valuearray[0];
-					fillvaluelist(screen1button3value1, selecteditems[data.button3.actionarray[1]].subitems);
-					document.getElementById('screen1button3value1').value = data.button3.valuearray[1];
-					fillvaluelist(screen1button3value2, selecteditems[data.button3.actionarray[2]].subitems);
-					document.getElementById('screen1button3value2').value = data.button3.valuearray[2];
+					document.getElementById('screen1button3action0').value = data.button[3].actionarray[0];
+					document.getElementById('screen1button3action1').value = data.button[3].actionarray[1];
+					document.getElementById('screen1button3action2').value = data.button[3].actionarray[2];
+					fillvaluelist(screen1button3value0, selecteditems[data.button[3].actionarray[0]].subitems);
+					document.getElementById('screen1button3value0').value = data.button[3].valuearray[0];
+					fillvaluelist(screen1button3value1, selecteditems[data.button[3].actionarray[1]].subitems);
+					document.getElementById('screen1button3value1').value = data.button[3].valuearray[1];
+					fillvaluelist(screen1button3value2, selecteditems[data.button[3].actionarray[2]].subitems);
+					document.getElementById('screen1button3value2').value = data.button[3].valuearray[2];
 
-					document.getElementById("screen1logo4").add(new Option(data.logo4));
-					if(data.button4.latch){
+					document.getElementById("screen1logo4").add(new Option(data.logo[4]));
+					if(data.button[4].latch){
 						document.getElementById("screen1button4latch").checked = true;
 					}
 
-					if(data.button4.latchlogo == ""){
+					if(data.button[4].latchlogo == ""){
 						document.getElementById("screen1latchlogo4").add(new Option("---"));
 					}else{
-						document.getElementById("screen1latchlogo4").add(new Option(data.button4.latchlogo));
+						document.getElementById("screen1latchlogo4").add(new Option(data.button[4].latchlogo));
 						document.getElementById("screen1latchlogo4").add(new Option("---"));
 					}
 
-					document.getElementById('screen1button4action0').value = data.button4.actionarray[0];
-					document.getElementById('screen1button4action1').value = data.button4.actionarray[1];
-					document.getElementById('screen1button4action2').value = data.button4.actionarray[2];
-					fillvaluelist(screen1button4value0, selecteditems[data.button4.actionarray[0]].subitems);
-					document.getElementById('screen1button4value0').value = data.button4.valuearray[0];
-					fillvaluelist(screen1button4value1, selecteditems[data.button4.actionarray[1]].subitems);
-					document.getElementById('screen1button4value1').value = data.button4.valuearray[1];
-					fillvaluelist(screen1button4value2, selecteditems[data.button4.actionarray[2]].subitems);
-					document.getElementById('screen1button4value2').value = data.button4.valuearray[2];
+					document.getElementById('screen1button4action0').value = data.button[4].actionarray[0];
+					document.getElementById('screen1button4action1').value = data.button[4].actionarray[1];
+					document.getElementById('screen1button4action2').value = data.button[4].actionarray[2];
+					fillvaluelist(screen1button4value0, selecteditems[data.button[4].actionarray[0]].subitems);
+					document.getElementById('screen1button4value0').value = data.button[4].valuearray[0];
+					fillvaluelist(screen1button4value1, selecteditems[data.button[4].actionarray[1]].subitems);
+					document.getElementById('screen1button4value1').value = data.button[4].valuearray[1];
+					fillvaluelist(screen1button4value2, selecteditems[data.button[4].actionarray[2]].subitems);
+					document.getElementById('screen1button4value2').value = data.button[4].valuearray[2];
 
 					document.getElementById("screen1logo5").add(new Option("home.bmp"));
 
@@ -4011,121 +4011,121 @@ $(function () {
 
 			// Load Menu 2
 
-				fetch('config/menu2.json')
+				fetch('config/menu[1].json')
 					.then((response) => {
 						return response.json()
 					})
 					.then((data) => {
 
-					document.getElementById("screen2logo0").add(new Option(data.logo0));
-					if(data.button0.latch){
+					document.getElementById("screen2logo0").add(new Option(data.logo[0]));
+					if(data.button[0].latch){
 						document.getElementById("screen2button0latch").checked = true;
 					}
 
-					if(data.button0.latchlogo == ""){
+					if(data.button[0].latchlogo == ""){
 						document.getElementById("screen2latchlogo0").add(new Option("---"));
 					}else{
-						document.getElementById("screen2latchlogo0").add(new Option(data.button0.latchlogo));
+						document.getElementById("screen2latchlogo0").add(new Option(data.button[0].latchlogo));
 						document.getElementById("screen2latchlogo0").add(new Option("---"));
 					}
 
-					document.getElementById('screen2button0action0').value = data.button0.actionarray[0];
-					document.getElementById('screen2button0action1').value = data.button0.actionarray[1];
-					document.getElementById('screen2button0action2').value = data.button0.actionarray[2];
-					fillvaluelist(screen2button0value0, selecteditems[data.button0.actionarray[0]].subitems);
-					document.getElementById('screen2button0value0').value = data.button0.valuearray[0];
-					fillvaluelist(screen2button0value1, selecteditems[data.button0.actionarray[1]].subitems);
-					document.getElementById('screen2button0value1').value = data.button0.valuearray[1];
-					fillvaluelist(screen2button0value2, selecteditems[data.button0.actionarray[2]].subitems);
-					document.getElementById('screen2button0value2').value = data.button0.valuearray[2];
+					document.getElementById('screen2button0action0').value = data.button[0].actionarray[0];
+					document.getElementById('screen2button0action1').value = data.button[0].actionarray[1];
+					document.getElementById('screen2button0action2').value = data.button[0].actionarray[2];
+					fillvaluelist(screen2button0value0, selecteditems[data.button[0].actionarray[0]].subitems);
+					document.getElementById('screen2button0value0').value = data.button[0].valuearray[0];
+					fillvaluelist(screen2button0value1, selecteditems[data.button[0].actionarray[1]].subitems);
+					document.getElementById('screen2button0value1').value = data.button[0].valuearray[1];
+					fillvaluelist(screen2button0value2, selecteditems[data.button[0].actionarray[2]].subitems);
+					document.getElementById('screen2button0value2').value = data.button[0].valuearray[2];
 
-					document.getElementById("screen2logo1").add(new Option(data.logo1));
-					if(data.button1.latch){
+					document.getElementById("screen2logo1").add(new Option(data.logo[1]));
+					if(data.button[1].latch){
 						document.getElementById("screen2button1latch").checked = true;
 					}
 
-					if(data.button1.latchlogo == ""){
+					if(data.button[1].latchlogo == ""){
 						document.getElementById("screen2latchlogo1").add(new Option("---"));
 					}else{
-						document.getElementById("screen2latchlogo1").add(new Option(data.button1.latchlogo));
+						document.getElementById("screen2latchlogo1").add(new Option(data.button[1].latchlogo));
 						document.getElementById("screen2latchlogo1").add(new Option("---"));
 					}
 
-					document.getElementById('screen2button1action0').value = data.button1.actionarray[0];
-					document.getElementById('screen2button1action1').value = data.button1.actionarray[1];
-					document.getElementById('screen2button1action2').value = data.button1.actionarray[2];
-					fillvaluelist(screen2button1value0, selecteditems[data.button1.actionarray[0]].subitems);
-					document.getElementById('screen2button1value0').value = data.button1.valuearray[0];
-					fillvaluelist(screen2button1value1, selecteditems[data.button1.actionarray[1]].subitems);
-					document.getElementById('screen2button1value1').value = data.button1.valuearray[1];
-					fillvaluelist(screen2button1value2, selecteditems[data.button1.actionarray[2]].subitems);
-					document.getElementById('screen2button1value2').value = data.button1.valuearray[2];
+					document.getElementById('screen2button1action0').value = data.button[1].actionarray[0];
+					document.getElementById('screen2button1action1').value = data.button[1].actionarray[1];
+					document.getElementById('screen2button1action2').value = data.button[1].actionarray[2];
+					fillvaluelist(screen2button1value0, selecteditems[data.button[1].actionarray[0]].subitems);
+					document.getElementById('screen2button1value0').value = data.button[1].valuearray[0];
+					fillvaluelist(screen2button1value1, selecteditems[data.button[1].actionarray[1]].subitems);
+					document.getElementById('screen2button1value1').value = data.button[1].valuearray[1];
+					fillvaluelist(screen2button1value2, selecteditems[data.button[1].actionarray[2]].subitems);
+					document.getElementById('screen2button1value2').value = data.button[1].valuearray[2];
 
-					document.getElementById("screen2logo2").add(new Option(data.logo2));
-					if(data.button2.latch){
+					document.getElementById("screen2logo2").add(new Option(data.logo[2]));
+					if(data.button[2].latch){
 						document.getElementById("screen2button2latch").checked = true;
 					}
 
-					if(data.button2.latchlogo == ""){
+					if(data.button[2].latchlogo == ""){
 						document.getElementById("screen2latchlogo2").add(new Option("---"));
 					}else{
-						document.getElementById("screen2latchlogo2").add(new Option(data.button2.latchlogo));
+						document.getElementById("screen2latchlogo2").add(new Option(data.button[2].latchlogo));
 						document.getElementById("screen2latchlogo2").add(new Option("---"));
 					}
 
-					document.getElementById('screen2button2action0').value = data.button2.actionarray[0];
-					document.getElementById('screen2button2action1').value = data.button2.actionarray[1];
-					document.getElementById('screen2button2action2').value = data.button2.actionarray[2];
-					fillvaluelist(screen2button2value0, selecteditems[data.button2.actionarray[0]].subitems);
-					document.getElementById('screen2button2value0').value = data.button2.valuearray[0];
-					fillvaluelist(screen2button2value1, selecteditems[data.button2.actionarray[1]].subitems);
-					document.getElementById('screen2button2value1').value = data.button2.valuearray[1];
-					fillvaluelist(screen2button2value2, selecteditems[data.button2.actionarray[2]].subitems);
-					document.getElementById('screen2button2value2').value = data.button2.valuearray[2];
+					document.getElementById('screen2button2action0').value = data.button[2].actionarray[0];
+					document.getElementById('screen2button2action1').value = data.button[2].actionarray[1];
+					document.getElementById('screen2button2action2').value = data.button[2].actionarray[2];
+					fillvaluelist(screen2button2value0, selecteditems[data.button[2].actionarray[0]].subitems);
+					document.getElementById('screen2button2value0').value = data.button[2].valuearray[0];
+					fillvaluelist(screen2button2value1, selecteditems[data.button[2].actionarray[1]].subitems);
+					document.getElementById('screen2button2value1').value = data.button[2].valuearray[1];
+					fillvaluelist(screen2button2value2, selecteditems[data.button[2].actionarray[2]].subitems);
+					document.getElementById('screen2button2value2').value = data.button[2].valuearray[2];
 
-					document.getElementById("screen2logo3").add(new Option(data.logo3));
-					if(data.button3.latch){
+					document.getElementById("screen2logo3").add(new Option(data.logo[3]));
+					if(data.button[3].latch){
 						document.getElementById("screen2button3latch").checked = true;
 					}
 
-					if(data.button3.latchlogo == ""){
+					if(data.button[3].latchlogo == ""){
 						document.getElementById("screen2latchlogo3").add(new Option("---"));
 					}else{
-						document.getElementById("screen2latchlogo3").add(new Option(data.button3.latchlogo));
+						document.getElementById("screen2latchlogo3").add(new Option(data.button[3].latchlogo));
 						document.getElementById("screen2latchlogo3").add(new Option("---"));
 					}
 
-					document.getElementById('screen2button3action0').value = data.button3.actionarray[0];
-					document.getElementById('screen2button3action1').value = data.button3.actionarray[1];
-					document.getElementById('screen2button3action2').value = data.button3.actionarray[2];
-					fillvaluelist(screen2button3value0, selecteditems[data.button3.actionarray[0]].subitems);
-					document.getElementById('screen2button3value0').value = data.button3.valuearray[0];
-					fillvaluelist(screen2button3value1, selecteditems[data.button3.actionarray[1]].subitems);
-					document.getElementById('screen2button3value1').value = data.button3.valuearray[1];
-					fillvaluelist(screen2button3value2, selecteditems[data.button3.actionarray[2]].subitems);
-					document.getElementById('screen2button3value2').value = data.button3.valuearray[2];
+					document.getElementById('screen2button3action0').value = data.button[3].actionarray[0];
+					document.getElementById('screen2button3action1').value = data.button[3].actionarray[1];
+					document.getElementById('screen2button3action2').value = data.button[3].actionarray[2];
+					fillvaluelist(screen2button3value0, selecteditems[data.button[3].actionarray[0]].subitems);
+					document.getElementById('screen2button3value0').value = data.button[3].valuearray[0];
+					fillvaluelist(screen2button3value1, selecteditems[data.button[3].actionarray[1]].subitems);
+					document.getElementById('screen2button3value1').value = data.button[3].valuearray[1];
+					fillvaluelist(screen2button3value2, selecteditems[data.button[3].actionarray[2]].subitems);
+					document.getElementById('screen2button3value2').value = data.button[3].valuearray[2];
 
-					document.getElementById("screen2logo4").add(new Option(data.logo4));
-					if(data.button4.latch){
+					document.getElementById("screen2logo4").add(new Option(data.logo[4]));
+					if(data.button[4].latch){
 						document.getElementById("screen2button4latch").checked = true;
 					}
 
-					if(data.button4.latchlogo == ""){
+					if(data.button[4].latchlogo == ""){
 						document.getElementById("screen2latchlogo4").add(new Option("---"));
 					}else{
-						document.getElementById("screen2latchlogo4").add(new Option(data.button4.latchlogo));
+						document.getElementById("screen2latchlogo4").add(new Option(data.button[4].latchlogo));
 						document.getElementById("screen2latchlogo4").add(new Option("---"));
 					}
 
-					document.getElementById('screen2button4action0').value = data.button4.actionarray[0];
-					document.getElementById('screen2button4action1').value = data.button4.actionarray[1];
-					document.getElementById('screen2button4action2').value = data.button4.actionarray[2];
-					fillvaluelist(screen2button4value0, selecteditems[data.button4.actionarray[0]].subitems);
-					document.getElementById('screen2button4value0').value = data.button4.valuearray[0];
-					fillvaluelist(screen2button4value1, selecteditems[data.button4.actionarray[1]].subitems);
-					document.getElementById('screen2button4value1').value = data.button4.valuearray[1];
-					fillvaluelist(screen2button4value2, selecteditems[data.button4.actionarray[2]].subitems);
-					document.getElementById('screen2button4value2').value = data.button4.valuearray[2];
+					document.getElementById('screen2button4action0').value = data.button[4].actionarray[0];
+					document.getElementById('screen2button4action1').value = data.button[4].actionarray[1];
+					document.getElementById('screen2button4action2').value = data.button[4].actionarray[2];
+					fillvaluelist(screen2button4value0, selecteditems[data.button[4].actionarray[0]].subitems);
+					document.getElementById('screen2button4value0').value = data.button[4].valuearray[0];
+					fillvaluelist(screen2button4value1, selecteditems[data.button[4].actionarray[1]].subitems);
+					document.getElementById('screen2button4value1').value = data.button[4].valuearray[1];
+					fillvaluelist(screen2button4value2, selecteditems[data.button[4].actionarray[2]].subitems);
+					document.getElementById('screen2button4value2').value = data.button[4].valuearray[2];
 
 					document.getElementById("screen2logo5").add(new Option("home.bmp"));
 
@@ -4140,121 +4140,121 @@ $(function () {
 
 		function getconfig3(){
 				// Load Menu 3
-			fetch('config/menu3.json')
+			fetch('config/menu[2].json')
 				.then((response) => {
 					return response.json()
 				})
 				.then((data) => {
 
-				document.getElementById("screen3logo0").add(new Option(data.logo0));
-				if(data.button0.latch){
+				document.getElementById("screen3logo0").add(new Option(data.logo[0]));
+				if(data.button[0].latch){
 					document.getElementById("screen3button0latch").checked = true;
 				}
 
-				if(data.button0.latchlogo == ""){
+				if(data.button[0].latchlogo == ""){
 					document.getElementById("screen3latchlogo0").add(new Option("---"));
 				}else{
-					document.getElementById("screen3latchlogo0").add(new Option(data.button0.latchlogo));
+					document.getElementById("screen3latchlogo0").add(new Option(data.button[0].latchlogo));
 					document.getElementById("screen3latchlogo0").add(new Option("---"));
 				}
 
-				document.getElementById('screen3button0action0').value = data.button0.actionarray[0];
-				document.getElementById('screen3button0action1').value = data.button0.actionarray[1];
-				document.getElementById('screen3button0action2').value = data.button0.actionarray[2];
-				fillvaluelist(screen3button0value0, selecteditems[data.button0.actionarray[0]].subitems);
-				document.getElementById('screen3button0value0').value = data.button0.valuearray[0];
-				fillvaluelist(screen3button0value1, selecteditems[data.button0.actionarray[1]].subitems);
-				document.getElementById('screen3button0value1').value = data.button0.valuearray[1];
-				fillvaluelist(screen3button0value2, selecteditems[data.button0.actionarray[2]].subitems);
-				document.getElementById('screen3button0value2').value = data.button0.valuearray[2];
+				document.getElementById('screen3button0action0').value = data.button[0].actionarray[0];
+				document.getElementById('screen3button0action1').value = data.button[0].actionarray[1];
+				document.getElementById('screen3button0action2').value = data.button[0].actionarray[2];
+				fillvaluelist(screen3button0value0, selecteditems[data.button[0].actionarray[0]].subitems);
+				document.getElementById('screen3button0value0').value = data.button[0].valuearray[0];
+				fillvaluelist(screen3button0value1, selecteditems[data.button[0].actionarray[1]].subitems);
+				document.getElementById('screen3button0value1').value = data.button[0].valuearray[1];
+				fillvaluelist(screen3button0value2, selecteditems[data.button[0].actionarray[2]].subitems);
+				document.getElementById('screen3button0value2').value = data.button[0].valuearray[2];
 
-				document.getElementById("screen3logo1").add(new Option(data.logo1));
-				if(data.button1.latch){
+				document.getElementById("screen3logo1").add(new Option(data.logo[1]));
+				if(data.button[1].latch){
 					document.getElementById("screen3button1latch").checked = true;
 				}
 
-				if(data.button1.latchlogo == ""){
+				if(data.button[1].latchlogo == ""){
 					document.getElementById("screen3latchlogo1").add(new Option("---"));
 				}else{
-					document.getElementById("screen3latchlogo1").add(new Option(data.button1.latchlogo));
+					document.getElementById("screen3latchlogo1").add(new Option(data.button[1].latchlogo));
 					document.getElementById("screen3latchlogo1").add(new Option("---"));
 				}
 
-				document.getElementById('screen3button1action0').value = data.button1.actionarray[0];
-				document.getElementById('screen3button1action1').value = data.button1.actionarray[1];
-				document.getElementById('screen3button1action2').value = data.button1.actionarray[2];
-				fillvaluelist(screen3button1value0, selecteditems[data.button1.actionarray[0]].subitems);
-				document.getElementById('screen3button1value0').value = data.button1.valuearray[0];
-				fillvaluelist(screen3button1value1, selecteditems[data.button1.actionarray[1]].subitems);
-				document.getElementById('screen3button1value1').value = data.button1.valuearray[1];
-				fillvaluelist(screen3button1value2, selecteditems[data.button1.actionarray[2]].subitems);
-				document.getElementById('screen3button1value2').value = data.button1.valuearray[2];
+				document.getElementById('screen3button1action0').value = data.button[1].actionarray[0];
+				document.getElementById('screen3button1action1').value = data.button[1].actionarray[1];
+				document.getElementById('screen3button1action2').value = data.button[1].actionarray[2];
+				fillvaluelist(screen3button1value0, selecteditems[data.button[1].actionarray[0]].subitems);
+				document.getElementById('screen3button1value0').value = data.button[1].valuearray[0];
+				fillvaluelist(screen3button1value1, selecteditems[data.button[1].actionarray[1]].subitems);
+				document.getElementById('screen3button1value1').value = data.button[1].valuearray[1];
+				fillvaluelist(screen3button1value2, selecteditems[data.button[1].actionarray[2]].subitems);
+				document.getElementById('screen3button1value2').value = data.button[1].valuearray[2];
 
-				document.getElementById("screen3logo2").add(new Option(data.logo2));
-				if(data.button2.latch){
+				document.getElementById("screen3logo2").add(new Option(data.logo[2]));
+				if(data.button[2].latch){
 					document.getElementById("screen3button2latch").checked = true;
 				}
 
-				if(data.button2.latchlogo == ""){
+				if(data.button[2].latchlogo == ""){
 					document.getElementById("screen3latchlogo2").add(new Option("---"));
 				}else{
-					document.getElementById("screen3latchlogo2").add(new Option(data.button2.latchlogo));
+					document.getElementById("screen3latchlogo2").add(new Option(data.button[2].latchlogo));
 					document.getElementById("screen3latchlogo2").add(new Option("---"));
 				}
 
-				document.getElementById('screen3button2action0').value = data.button2.actionarray[0];
-				document.getElementById('screen3button2action1').value = data.button2.actionarray[1];
-				document.getElementById('screen3button2action2').value = data.button2.actionarray[2];
-				fillvaluelist(screen3button2value0, selecteditems[data.button2.actionarray[0]].subitems);
-				document.getElementById('screen3button2value0').value = data.button2.valuearray[0];
-				fillvaluelist(screen3button2value1, selecteditems[data.button2.actionarray[1]].subitems);
-				document.getElementById('screen3button2value1').value = data.button2.valuearray[1];
-				fillvaluelist(screen3button2value2, selecteditems[data.button2.actionarray[2]].subitems);
-				document.getElementById('screen3button2value2').value = data.button2.valuearray[2];
+				document.getElementById('screen3button2action0').value = data.button[2].actionarray[0];
+				document.getElementById('screen3button2action1').value = data.button[2].actionarray[1];
+				document.getElementById('screen3button2action2').value = data.button[2].actionarray[2];
+				fillvaluelist(screen3button2value0, selecteditems[data.button[2].actionarray[0]].subitems);
+				document.getElementById('screen3button2value0').value = data.button[2].valuearray[0];
+				fillvaluelist(screen3button2value1, selecteditems[data.button[2].actionarray[1]].subitems);
+				document.getElementById('screen3button2value1').value = data.button[2].valuearray[1];
+				fillvaluelist(screen3button2value2, selecteditems[data.button[2].actionarray[2]].subitems);
+				document.getElementById('screen3button2value2').value = data.button[2].valuearray[2];
 
-				document.getElementById("screen3logo3").add(new Option(data.logo3));
-				if(data.button3.latch){
+				document.getElementById("screen3logo3").add(new Option(data.logo[3]));
+				if(data.button[3].latch){
 					document.getElementById("screen3button3latch").checked = true;
 				}
 
-				if(data.button3.latchlogo == ""){
+				if(data.button[3].latchlogo == ""){
 					document.getElementById("screen3latchlogo3").add(new Option("---"));
 				}else{
-					document.getElementById("screen3latchlogo3").add(new Option(data.button3.latchlogo));
+					document.getElementById("screen3latchlogo3").add(new Option(data.button[3].latchlogo));
 					document.getElementById("screen3latchlogo3").add(new Option("---"));
 				}
 
-				document.getElementById('screen3button3action0').value = data.button3.actionarray[0];
-				document.getElementById('screen3button3action1').value = data.button3.actionarray[1];
-				document.getElementById('screen3button3action2').value = data.button3.actionarray[2];
-				fillvaluelist(screen3button3value0, selecteditems[data.button3.actionarray[0]].subitems);
-				document.getElementById('screen3button3value0').value = data.button3.valuearray[0];
-				fillvaluelist(screen3button3value1, selecteditems[data.button3.actionarray[1]].subitems);
-				document.getElementById('screen3button3value1').value = data.button3.valuearray[1];
-				fillvaluelist(screen3button3value2, selecteditems[data.button3.actionarray[2]].subitems);
-				document.getElementById('screen3button3value2').value = data.button3.valuearray[2];
+				document.getElementById('screen3button3action0').value = data.button[3].actionarray[0];
+				document.getElementById('screen3button3action1').value = data.button[3].actionarray[1];
+				document.getElementById('screen3button3action2').value = data.button[3].actionarray[2];
+				fillvaluelist(screen3button3value0, selecteditems[data.button[3].actionarray[0]].subitems);
+				document.getElementById('screen3button3value0').value = data.button[3].valuearray[0];
+				fillvaluelist(screen3button3value1, selecteditems[data.button[3].actionarray[1]].subitems);
+				document.getElementById('screen3button3value1').value = data.button[3].valuearray[1];
+				fillvaluelist(screen3button3value2, selecteditems[data.button[3].actionarray[2]].subitems);
+				document.getElementById('screen3button3value2').value = data.button[3].valuearray[2];
 
-				document.getElementById("screen3logo4").add(new Option(data.logo4));
-				if(data.button4.latch){
+				document.getElementById("screen3logo4").add(new Option(data.logo[4]));
+				if(data.button[4].latch){
 					document.getElementById("screen3button4latch").checked = true;
 				}
 
-				if(data.button4.latchlogo == ""){
+				if(data.button[4].latchlogo == ""){
 					document.getElementById("screen3latchlogo4").add(new Option("---"));
 				}else{
-					document.getElementById("screen3latchlogo4").add(new Option(data.button4.latchlogo));
+					document.getElementById("screen3latchlogo4").add(new Option(data.button[4].latchlogo));
 					document.getElementById("screen3latchlogo4").add(new Option("---"));
 				}
 
-				document.getElementById('screen3button4action0').value = data.button4.actionarray[0];
-				document.getElementById('screen3button4action1').value = data.button4.actionarray[1];
-				document.getElementById('screen3button4action2').value = data.button4.actionarray[2];
-				fillvaluelist(screen3button4value0, selecteditems[data.button4.actionarray[0]].subitems);
-				document.getElementById('screen3button4value0').value = data.button4.valuearray[0];
-				fillvaluelist(screen3button4value1, selecteditems[data.button4.actionarray[1]].subitems);
-				document.getElementById('screen3button4value1').value = data.button4.valuearray[1];
-				fillvaluelist(screen3button4value2, selecteditems[data.button4.actionarray[2]].subitems);
-				document.getElementById('screen3button4value2').value = data.button4.valuearray[2];
+				document.getElementById('screen3button4action0').value = data.button[4].actionarray[0];
+				document.getElementById('screen3button4action1').value = data.button[4].actionarray[1];
+				document.getElementById('screen3button4action2').value = data.button[4].actionarray[2];
+				fillvaluelist(screen3button4value0, selecteditems[data.button[4].actionarray[0]].subitems);
+				document.getElementById('screen3button4value0').value = data.button[4].valuearray[0];
+				fillvaluelist(screen3button4value1, selecteditems[data.button[4].actionarray[1]].subitems);
+				document.getElementById('screen3button4value1').value = data.button[4].valuearray[1];
+				fillvaluelist(screen3button4value2, selecteditems[data.button[4].actionarray[2]].subitems);
+				document.getElementById('screen3button4value2').value = data.button[4].valuearray[2];
 
 				document.getElementById("screen3logo5").add(new Option("home.bmp"));
 
@@ -4269,121 +4269,121 @@ $(function () {
 		function getconfig4(){
 
 				// Load Menu 4
-			fetch('config/menu4.json')
+			fetch('config/menu[3].json')
 				.then((response) => {
 					return response.json()
 				})
 				.then((data) => {
 
-				document.getElementById("screen4logo0").add(new Option(data.logo0));
-				if(data.button0.latch){
+				document.getElementById("screen4logo0").add(new Option(data.logo[0]));
+				if(data.button[0].latch){
 					document.getElementById("screen4button0latch").checked = true;
 				}
 
-				if(data.button0.latchlogo == ""){
+				if(data.button[0].latchlogo == ""){
 					document.getElementById("screen4latchlogo0").add(new Option("---"));
 				}else{
-					document.getElementById("screen4latchlogo0").add(new Option(data.button0.latchlogo));
+					document.getElementById("screen4latchlogo0").add(new Option(data.button[0].latchlogo));
 					document.getElementById("screen4latchlogo0").add(new Option("---"));
 				}
 
-				document.getElementById('screen4button0action0').value = data.button0.actionarray[0];
-				document.getElementById('screen4button0action1').value = data.button0.actionarray[1];
-				document.getElementById('screen4button0action2').value = data.button0.actionarray[2];
-				fillvaluelist(screen4button0value0, selecteditems[data.button0.actionarray[0]].subitems);
-				document.getElementById('screen4button0value0').value = data.button0.valuearray[0];
-				fillvaluelist(screen4button0value1, selecteditems[data.button0.actionarray[1]].subitems);
-				document.getElementById('screen4button0value1').value = data.button0.valuearray[1];
-				fillvaluelist(screen4button0value2, selecteditems[data.button0.actionarray[2]].subitems);
-				document.getElementById('screen4button0value2').value = data.button0.valuearray[2];
+				document.getElementById('screen4button0action0').value = data.button[0].actionarray[0];
+				document.getElementById('screen4button0action1').value = data.button[0].actionarray[1];
+				document.getElementById('screen4button0action2').value = data.button[0].actionarray[2];
+				fillvaluelist(screen4button0value0, selecteditems[data.button[0].actionarray[0]].subitems);
+				document.getElementById('screen4button0value0').value = data.button[0].valuearray[0];
+				fillvaluelist(screen4button0value1, selecteditems[data.button[0].actionarray[1]].subitems);
+				document.getElementById('screen4button0value1').value = data.button[0].valuearray[1];
+				fillvaluelist(screen4button0value2, selecteditems[data.button[0].actionarray[2]].subitems);
+				document.getElementById('screen4button0value2').value = data.button[0].valuearray[2];
 
-				document.getElementById("screen4logo1").add(new Option(data.logo1));
-				if(data.button1.latch){
+				document.getElementById("screen4logo1").add(new Option(data.logo[1]));
+				if(data.button[1].latch){
 					document.getElementById("screen4button1latch").checked = true;
 				}
 
-				if(data.button1.latchlogo == ""){
+				if(data.button[1].latchlogo == ""){
 					document.getElementById("screen4latchlogo1").add(new Option("---"));
 				}else{
-					document.getElementById("screen4latchlogo1").add(new Option(data.button1.latchlogo));
+					document.getElementById("screen4latchlogo1").add(new Option(data.button[1].latchlogo));
 					document.getElementById("screen4latchlogo1").add(new Option("---"));
 				}
 
-				document.getElementById('screen4button1action0').value = data.button1.actionarray[0];
-				document.getElementById('screen4button1action1').value = data.button1.actionarray[1];
-				document.getElementById('screen4button1action2').value = data.button1.actionarray[2];
-				fillvaluelist(screen4button1value0, selecteditems[data.button1.actionarray[0]].subitems);
-				document.getElementById('screen4button1value0').value = data.button1.valuearray[0];
-				fillvaluelist(screen4button1value1, selecteditems[data.button1.actionarray[1]].subitems);
-				document.getElementById('screen4button1value1').value = data.button1.valuearray[1];
-				fillvaluelist(screen4button1value2, selecteditems[data.button1.actionarray[2]].subitems);
-				document.getElementById('screen4button1value2').value = data.button1.valuearray[2];
+				document.getElementById('screen4button1action0').value = data.button[1].actionarray[0];
+				document.getElementById('screen4button1action1').value = data.button[1].actionarray[1];
+				document.getElementById('screen4button1action2').value = data.button[1].actionarray[2];
+				fillvaluelist(screen4button1value0, selecteditems[data.button[1].actionarray[0]].subitems);
+				document.getElementById('screen4button1value0').value = data.button[1].valuearray[0];
+				fillvaluelist(screen4button1value1, selecteditems[data.button[1].actionarray[1]].subitems);
+				document.getElementById('screen4button1value1').value = data.button[1].valuearray[1];
+				fillvaluelist(screen4button1value2, selecteditems[data.button[1].actionarray[2]].subitems);
+				document.getElementById('screen4button1value2').value = data.button[1].valuearray[2];
 
-				document.getElementById("screen4logo2").add(new Option(data.logo2));
-				if(data.button2.latch){
+				document.getElementById("screen4logo2").add(new Option(data.logo[2]));
+				if(data.button[2].latch){
 					document.getElementById("screen4button2latch").checked = true;
 				}
 
-				if(data.button2.latchlogo == ""){
+				if(data.button[2].latchlogo == ""){
 					document.getElementById("screen4latchlogo2").add(new Option("---"));
 				}else{
-					document.getElementById("screen4latchlogo2").add(new Option(data.button2.latchlogo));
+					document.getElementById("screen4latchlogo2").add(new Option(data.button[2].latchlogo));
 					document.getElementById("screen4latchlogo2").add(new Option("---"));
 				}
 
-				document.getElementById('screen4button2action0').value = data.button2.actionarray[0];
-				document.getElementById('screen4button2action1').value = data.button2.actionarray[1];
-				document.getElementById('screen4button2action2').value = data.button2.actionarray[2];
-				fillvaluelist(screen4button2value0, selecteditems[data.button2.actionarray[0]].subitems);
-				document.getElementById('screen4button2value0').value = data.button2.valuearray[0];
-				fillvaluelist(screen4button2value1, selecteditems[data.button2.actionarray[1]].subitems);
-				document.getElementById('screen4button2value1').value = data.button2.valuearray[1];
-				fillvaluelist(screen4button2value2, selecteditems[data.button2.actionarray[2]].subitems);
-				document.getElementById('screen4button2value2').value = data.button2.valuearray[2];
+				document.getElementById('screen4button2action0').value = data.button[2].actionarray[0];
+				document.getElementById('screen4button2action1').value = data.button[2].actionarray[1];
+				document.getElementById('screen4button2action2').value = data.button[2].actionarray[2];
+				fillvaluelist(screen4button2value0, selecteditems[data.button[2].actionarray[0]].subitems);
+				document.getElementById('screen4button2value0').value = data.button[2].valuearray[0];
+				fillvaluelist(screen4button2value1, selecteditems[data.button[2].actionarray[1]].subitems);
+				document.getElementById('screen4button2value1').value = data.button[2].valuearray[1];
+				fillvaluelist(screen4button2value2, selecteditems[data.button[2].actionarray[2]].subitems);
+				document.getElementById('screen4button2value2').value = data.button[2].valuearray[2];
 
-				document.getElementById("screen4logo3").add(new Option(data.logo3));
-				if(data.button3.latch){
+				document.getElementById("screen4logo3").add(new Option(data.logo[3]));
+				if(data.button[3].latch){
 					document.getElementById("screen4button3latch").checked = true;
 				}
 
-				if(data.button3.latchlogo == ""){
+				if(data.button[3].latchlogo == ""){
 					document.getElementById("screen4latchlogo3").add(new Option("---"));
 				}else{
-					document.getElementById("screen4latchlogo3").add(new Option(data.button3.latchlogo));
+					document.getElementById("screen4latchlogo3").add(new Option(data.button[3].latchlogo));
 					document.getElementById("screen4latchlogo3").add(new Option("---"));
 				}
 
-				document.getElementById('screen4button3action0').value = data.button3.actionarray[0];
-				document.getElementById('screen4button3action1').value = data.button3.actionarray[1];
-				document.getElementById('screen4button3action2').value = data.button3.actionarray[2];
-				fillvaluelist(screen4button3value0, selecteditems[data.button3.actionarray[0]].subitems);
-				document.getElementById('screen4button3value0').value = data.button3.valuearray[0];
-				fillvaluelist(screen4button3value1, selecteditems[data.button3.actionarray[1]].subitems);
-				document.getElementById('screen4button3value1').value = data.button3.valuearray[1];
-				fillvaluelist(screen4button3value2, selecteditems[data.button3.actionarray[2]].subitems);
-				document.getElementById('screen4button3value2').value = data.button3.valuearray[2];
+				document.getElementById('screen4button3action0').value = data.button[3].actionarray[0];
+				document.getElementById('screen4button3action1').value = data.button[3].actionarray[1];
+				document.getElementById('screen4button3action2').value = data.button[3].actionarray[2];
+				fillvaluelist(screen4button3value0, selecteditems[data.button[3].actionarray[0]].subitems);
+				document.getElementById('screen4button3value0').value = data.button[3].valuearray[0];
+				fillvaluelist(screen4button3value1, selecteditems[data.button[3].actionarray[1]].subitems);
+				document.getElementById('screen4button3value1').value = data.button[3].valuearray[1];
+				fillvaluelist(screen4button3value2, selecteditems[data.button[3].actionarray[2]].subitems);
+				document.getElementById('screen4button3value2').value = data.button[3].valuearray[2];
 
-				document.getElementById("screen4logo4").add(new Option(data.logo4));
-				if(data.button4.latch){
+				document.getElementById("screen4logo4").add(new Option(data.logo[4]));
+				if(data.button[4].latch){
 					document.getElementById("screen4button4latch").checked = true;
 				}
 
-				if(data.button4.latchlogo == ""){
+				if(data.button[4].latchlogo == ""){
 					document.getElementById("screen4latchlogo4").add(new Option("---"));
 				}else{
-					document.getElementById("screen4latchlogo4").add(new Option(data.button4.latchlogo));
+					document.getElementById("screen4latchlogo4").add(new Option(data.button[4].latchlogo));
 					document.getElementById("screen4latchlogo4").add(new Option("---"));
 				}
 
-				document.getElementById('screen4button4action0').value = data.button4.actionarray[0];
-				document.getElementById('screen4button4action1').value = data.button4.actionarray[1];
-				document.getElementById('screen4button4action2').value = data.button4.actionarray[2];
-				fillvaluelist(screen4button4value0, selecteditems[data.button4.actionarray[0]].subitems);
-				document.getElementById('screen4button4value0').value = data.button4.valuearray[0];
-				fillvaluelist(screen4button4value1, selecteditems[data.button4.actionarray[1]].subitems);
-				document.getElementById('screen4button4value1').value = data.button4.valuearray[1];
-				fillvaluelist(screen4button4value2, selecteditems[data.button4.actionarray[2]].subitems);
-				document.getElementById('screen4button4value2').value = data.button4.valuearray[2];
+				document.getElementById('screen4button4action0').value = data.button[4].actionarray[0];
+				document.getElementById('screen4button4action1').value = data.button[4].actionarray[1];
+				document.getElementById('screen4button4action2').value = data.button[4].actionarray[2];
+				fillvaluelist(screen4button4value0, selecteditems[data.button[4].actionarray[0]].subitems);
+				document.getElementById('screen4button4value0').value = data.button[4].valuearray[0];
+				fillvaluelist(screen4button4value1, selecteditems[data.button[4].actionarray[1]].subitems);
+				document.getElementById('screen4button4value1').value = data.button[4].valuearray[1];
+				fillvaluelist(screen4button4value2, selecteditems[data.button[4].actionarray[2]].subitems);
+				document.getElementById('screen4button4value2').value = data.button[4].valuearray[2];
 
 				document.getElementById("screen4logo5").add(new Option("home.bmp"));
 
@@ -4397,121 +4397,121 @@ $(function () {
 		function getconfig5(){
 
 				// Load Menu 5
-		fetch('config/menu5.json')
+		fetch('config/menu[4].json')
 			.then((response) => {
 				return response.json()
 			})
 			.then((data) => {
 
-				document.getElementById("screen5logo0").add(new Option(data.logo0));
-				if(data.button0.latch){
+				document.getElementById("screen5logo0").add(new Option(data.logo[0]));
+				if(data.button[0].latch){
 					document.getElementById("screen5button0latch").checked = true;
 				}
 
-				if(data.button0.latchlogo == ""){
+				if(data.button[0].latchlogo == ""){
 					document.getElementById("screen5latchlogo0").add(new Option("---"));
 				}else{
-					document.getElementById("screen5latchlogo0").add(new Option(data.button0.latchlogo));
+					document.getElementById("screen5latchlogo0").add(new Option(data.button[0].latchlogo));
 					document.getElementById("screen5latchlogo0").add(new Option("---"));
 				}
 
-				document.getElementById('screen5button0action0').value = data.button0.actionarray[0];
-				document.getElementById('screen5button0action1').value = data.button0.actionarray[1];
-				document.getElementById('screen5button0action2').value = data.button0.actionarray[2];
-				fillvaluelist(screen5button0value0, selecteditems[data.button0.actionarray[0]].subitems);
-				document.getElementById('screen5button0value0').value = data.button0.valuearray[0];
-				fillvaluelist(screen5button0value1, selecteditems[data.button0.actionarray[1]].subitems);
-				document.getElementById('screen5button0value1').value = data.button0.valuearray[1];
-				fillvaluelist(screen5button0value2, selecteditems[data.button0.actionarray[2]].subitems);
-				document.getElementById('screen5button0value2').value = data.button0.valuearray[2];
+				document.getElementById('screen5button0action0').value = data.button[0].actionarray[0];
+				document.getElementById('screen5button0action1').value = data.button[0].actionarray[1];
+				document.getElementById('screen5button0action2').value = data.button[0].actionarray[2];
+				fillvaluelist(screen5button0value0, selecteditems[data.button[0].actionarray[0]].subitems);
+				document.getElementById('screen5button0value0').value = data.button[0].valuearray[0];
+				fillvaluelist(screen5button0value1, selecteditems[data.button[0].actionarray[1]].subitems);
+				document.getElementById('screen5button0value1').value = data.button[0].valuearray[1];
+				fillvaluelist(screen5button0value2, selecteditems[data.button[0].actionarray[2]].subitems);
+				document.getElementById('screen5button0value2').value = data.button[0].valuearray[2];
 
-				document.getElementById("screen5logo1").add(new Option(data.logo1));
-				if(data.button1.latch){
+				document.getElementById("screen5logo1").add(new Option(data.logo[1]));
+				if(data.button[1].latch){
 					document.getElementById("screen5button1latch").checked = true;
 				}
 
-				if(data.button1.latchlogo == ""){
+				if(data.button[1].latchlogo == ""){
 					document.getElementById("screen5latchlogo1").add(new Option("---"));
 				}else{
-					document.getElementById("screen5latchlogo1").add(new Option(data.button1.latchlogo));
+					document.getElementById("screen5latchlogo1").add(new Option(data.button[1].latchlogo));
 					document.getElementById("screen5latchlogo1").add(new Option("---"));
 				}
 
-				document.getElementById('screen5button1action0').value = data.button1.actionarray[0];
-				document.getElementById('screen5button1action1').value = data.button1.actionarray[1];
-				document.getElementById('screen5button1action2').value = data.button1.actionarray[2];
-				fillvaluelist(screen5button1value0, selecteditems[data.button1.actionarray[0]].subitems);
-				document.getElementById('screen5button1value0').value = data.button1.valuearray[0];
-				fillvaluelist(screen5button1value1, selecteditems[data.button1.actionarray[1]].subitems);
-				document.getElementById('screen5button1value1').value = data.button1.valuearray[1];
-				fillvaluelist(screen5button1value2, selecteditems[data.button1.actionarray[2]].subitems);
-				document.getElementById('screen5button1value2').value = data.button1.valuearray[2];
+				document.getElementById('screen5button1action0').value = data.button[1].actionarray[0];
+				document.getElementById('screen5button1action1').value = data.button[1].actionarray[1];
+				document.getElementById('screen5button1action2').value = data.button[1].actionarray[2];
+				fillvaluelist(screen5button1value0, selecteditems[data.button[1].actionarray[0]].subitems);
+				document.getElementById('screen5button1value0').value = data.button[1].valuearray[0];
+				fillvaluelist(screen5button1value1, selecteditems[data.button[1].actionarray[1]].subitems);
+				document.getElementById('screen5button1value1').value = data.button[1].valuearray[1];
+				fillvaluelist(screen5button1value2, selecteditems[data.button[1].actionarray[2]].subitems);
+				document.getElementById('screen5button1value2').value = data.button[1].valuearray[2];
 
-				document.getElementById("screen5logo2").add(new Option(data.logo2));
-				if(data.button2.latch){
+				document.getElementById("screen5logo2").add(new Option(data.logo[2]));
+				if(data.button[2].latch){
 					document.getElementById("screen5button2latch").checked = true;
 				}
 
-				if(data.button2.latchlogo == ""){
+				if(data.button[2].latchlogo == ""){
 					document.getElementById("screen5latchlogo2").add(new Option("---"));
 				}else{
-					document.getElementById("screen5latchlogo2").add(new Option(data.button2.latchlogo));
+					document.getElementById("screen5latchlogo2").add(new Option(data.button[2].latchlogo));
 					document.getElementById("screen5latchlogo2").add(new Option("---"));
 				}
 
-				document.getElementById('screen5button2action0').value = data.button2.actionarray[0];
-				document.getElementById('screen5button2action1').value = data.button2.actionarray[1];
-				document.getElementById('screen5button2action2').value = data.button2.actionarray[2];
-				fillvaluelist(screen5button2value0, selecteditems[data.button2.actionarray[0]].subitems);
-				document.getElementById('screen5button2value0').value = data.button2.valuearray[0];
-				fillvaluelist(screen5button2value1, selecteditems[data.button2.actionarray[1]].subitems);
-				document.getElementById('screen5button2value1').value = data.button2.valuearray[1];
-				fillvaluelist(screen5button2value2, selecteditems[data.button2.actionarray[2]].subitems);
-				document.getElementById('screen5button2value2').value = data.button2.valuearray[2];
+				document.getElementById('screen5button2action0').value = data.button[2].actionarray[0];
+				document.getElementById('screen5button2action1').value = data.button[2].actionarray[1];
+				document.getElementById('screen5button2action2').value = data.button[2].actionarray[2];
+				fillvaluelist(screen5button2value0, selecteditems[data.button[2].actionarray[0]].subitems);
+				document.getElementById('screen5button2value0').value = data.button[2].valuearray[0];
+				fillvaluelist(screen5button2value1, selecteditems[data.button[2].actionarray[1]].subitems);
+				document.getElementById('screen5button2value1').value = data.button[2].valuearray[1];
+				fillvaluelist(screen5button2value2, selecteditems[data.button[2].actionarray[2]].subitems);
+				document.getElementById('screen5button2value2').value = data.button[2].valuearray[2];
 
-				document.getElementById("screen5logo3").add(new Option(data.logo3));
-				if(data.button3.latch){
+				document.getElementById("screen5logo3").add(new Option(data.logo[3]));
+				if(data.button[3].latch){
 					document.getElementById("screen5button3latch").checked = true;
 				}
 
-				if(data.button3.latchlogo == ""){
+				if(data.button[3].latchlogo == ""){
 					document.getElementById("screen5latchlogo3").add(new Option("---"));
 				}else{
-					document.getElementById("screen5latchlogo3").add(new Option(data.button3.latchlogo));
+					document.getElementById("screen5latchlogo3").add(new Option(data.button[3].latchlogo));
 					document.getElementById("screen5latchlogo3").add(new Option("---"));
 				}
 
-				document.getElementById('screen5button3action0').value = data.button3.actionarray[0];
-				document.getElementById('screen5button3action1').value = data.button3.actionarray[1];
-				document.getElementById('screen5button3action2').value = data.button3.actionarray[2];
-				fillvaluelist(screen5button3value0, selecteditems[data.button3.actionarray[0]].subitems);
-				document.getElementById('screen5button3value0').value = data.button3.valuearray[0];
-				fillvaluelist(screen5button3value1, selecteditems[data.button3.actionarray[1]].subitems);
-				document.getElementById('screen5button3value1').value = data.button3.valuearray[1];
-				fillvaluelist(screen5button3value2, selecteditems[data.button3.actionarray[2]].subitems);
-				document.getElementById('screen5button3value2').value = data.button3.valuearray[2];
+				document.getElementById('screen5button3action0').value = data.button[3].actionarray[0];
+				document.getElementById('screen5button3action1').value = data.button[3].actionarray[1];
+				document.getElementById('screen5button3action2').value = data.button[3].actionarray[2];
+				fillvaluelist(screen5button3value0, selecteditems[data.button[3].actionarray[0]].subitems);
+				document.getElementById('screen5button3value0').value = data.button[3].valuearray[0];
+				fillvaluelist(screen5button3value1, selecteditems[data.button[3].actionarray[1]].subitems);
+				document.getElementById('screen5button3value1').value = data.button[3].valuearray[1];
+				fillvaluelist(screen5button3value2, selecteditems[data.button[3].actionarray[2]].subitems);
+				document.getElementById('screen5button3value2').value = data.button[3].valuearray[2];
 
-				document.getElementById("screen5logo4").add(new Option(data.logo4));
-				if(data.button4.latch){
+				document.getElementById("screen5logo4").add(new Option(data.logo[4]));
+				if(data.button[4].latch){
 					document.getElementById("screen5button4latch").checked = true;
 				}
 
-				if(data.button4.latchlogo == ""){
+				if(data.button[4].latchlogo == ""){
 					document.getElementById("screen5latchlogo4").add(new Option("---"));
 				}else{
-					document.getElementById("screen5latchlogo4").add(new Option(data.button4.latchlogo));
+					document.getElementById("screen5latchlogo4").add(new Option(data.button[4].latchlogo));
 					document.getElementById("screen5latchlogo4").add(new Option("---"));
 				}
 
-				document.getElementById('screen5button4action0').value = data.button4.actionarray[0];
-				document.getElementById('screen5button4action1').value = data.button4.actionarray[1];
-				document.getElementById('screen5button4action2').value = data.button4.actionarray[2];
-				fillvaluelist(screen5button4value0, selecteditems[data.button4.actionarray[0]].subitems);
-				document.getElementById('screen5button4value0').value = data.button4.valuearray[0];
-				fillvaluelist(screen5button4value1, selecteditems[data.button4.actionarray[1]].subitems);
-				document.getElementById('screen5button4value1').value = data.button4.valuearray[1];
-				fillvaluelist(screen5button4value2, selecteditems[data.button4.actionarray[2]].subitems);
-				document.getElementById('screen5button4value2').value = data.button4.valuearray[2];
+				document.getElementById('screen5button4action0').value = data.button[4].actionarray[0];
+				document.getElementById('screen5button4action1').value = data.button[4].actionarray[1];
+				document.getElementById('screen5button4action2').value = data.button[4].actionarray[2];
+				fillvaluelist(screen5button4value0, selecteditems[data.button[4].actionarray[0]].subitems);
+				document.getElementById('screen5button4value0').value = data.button[4].valuearray[0];
+				fillvaluelist(screen5button4value1, selecteditems[data.button[4].actionarray[1]].subitems);
+				document.getElementById('screen5button4value1').value = data.button[4].valuearray[1];
+				fillvaluelist(screen5button4value2, selecteditems[data.button[4].actionarray[2]].subitems);
+				document.getElementById('screen5button4value2').value = data.button[4].valuearray[2];
 
 				document.getElementById("screen5logo5").add(new Option("home.bmp"));
 
@@ -4535,12 +4535,12 @@ $(function () {
 			})
 			.then((data) => {
 
-				document.getElementById("homescreenlogo0").add(new Option(data.logo0));
-				document.getElementById("homescreenlogo1").add(new Option(data.logo1));
-				document.getElementById("homescreenlogo2").add(new Option(data.logo2));
-				document.getElementById("homescreenlogo3").add(new Option(data.logo3));
-				document.getElementById("homescreenlogo4").add(new Option(data.logo4));
-				document.getElementById("homescreenlogo5").add(new Option(data.logo5));
+				document.getElementById("homescreenlogo0").add(new Option(data.logo[0]));
+				document.getElementById("homescreenlogo1").add(new Option(data.logo[1]));
+				document.getElementById("homescreenlogo2").add(new Option(data.logo[2]));
+				document.getElementById("homescreenlogo3").add(new Option(data.logo[3]));
+				document.getElementById("homescreenlogo4").add(new Option(data.logo[4]));
+				document.getElementById("homescreenlogo5").add(new Option(data.logo[5]));
 
 			})
 			.then((data) => {

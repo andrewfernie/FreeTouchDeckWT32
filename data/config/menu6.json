@@ -1,0 +1,44 @@
+{
+  "logo00": "wifi.bmp",
+  "logo01": "brightnessdown.bmp",
+  "logo02": "brightnessup.bmp",
+  "logo10": "sleep.bmp",
+  "logo11": "info.bmp",
+  "logo12": "home.bmp",
+  "button00":{
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [ "11", "0", "0" ],
+    "valuearray": [ "1", "0", "0" ] 
+  },
+  "button01":{
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [ "11", "0", "0" ],
+    "valuearray": [ "2", "2", "0" ] 
+  },
+  "button02":{
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [ "11", "0", "0" ],
+    "valuearray": [ "3", "0", "0" ] 
+  },
+  "button10":{
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [ "11", "0", "0" ],
+    "valuearray": [ "4", "0", "0" ] 
+  },
+  "button11":{
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [ "11", "0", "0" ],
+    "valuearray": [ "5", "0", "0" ] 
+  },
+  "button12":{
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [ "11", "0", "0" ],
+    "valuearray": [ "6", "0", "0" ] 
+  }
+}

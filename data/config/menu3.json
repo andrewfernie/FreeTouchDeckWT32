@@ -1,37 +1,44 @@
 {
-  "logo0": "refresh.bmp",
-  "logo1": "devtools.bmp",
-  "logo2": "closetab.bmp",
-  "logo3": "sp.bmp",
-  "logo4": "sp.bmp",
-  "button0":{
+  "logo00": "refresh.bmp",
+  "logo01": "devtools.bmp",
+  "logo02": "closetab.bmp",
+  "logo10": "sp.bmp",
+  "logo11": "sp.bmp",
+  "logo12": "home.bmp",
+  "button00":{
     "latch": false,
     "latchlogo": "",
     "actionarray": [ "5", "6", "0" ],
     "valuearray": [ "2", "5", "0" ] 
   },
-  "button1":{
+  "button01":{
     "latch": false,
     "latchlogo": "",
     "actionarray": [ "6", "0", "0" ],
     "valuearray": [ "12", "0", "0" ] 
   },
-  "button2":{
+  "button02":{
     "latch": false,
     "latchlogo": "",
     "actionarray": [ "5", "4", "0" ],
     "valuearray": [ "1", "w", "0" ] 
   },
-  "button3":{
+  "button10":{
     "latch": false,
     "latchlogo": "",
     "actionarray": [ "5", "7", "0"],
     "valuearray": [ "1", "2", "0" ] 
   },
-  "button4":{
+  "button11":{
     "latch": false,
     "latchlogo": "",
     "actionarray": [ "5", "7", "0" ],
     "valuearray": [ "1", "1", "0" ] 
+  },
+  "button12":{
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [ "11", "0", "0" ],
+    "valuearray": [ "6", "0", "0" ] 
   }
 }

@@ -1,37 +1,44 @@
 {
-  "logo0": "snip.bmp",
-  "logo1": "todo.bmp",
-  "logo2": "outlook.bmp",
-  "logo3": "explorer.bmp",
-  "logo4": "lock.bmp",
-  "button0":{
+  "logo00": "snip.bmp",
+  "logo01": "todo.bmp",
+  "logo02": "outlook.bmp",
+  "logo10": "explorer.bmp",
+  "logo11": "lock.bmp",
+  "logo12": "home.bmp",
+  "button00":{
     "latch": false,
     "latchlogo": "",
     "actionarray": [ "5", "5", "4" ],
     "valuearray": [ "8", "2", "s" ] 
   },
-  "button1":{
+  "button01":{
     "latch": false,
     "latchlogo": "",
     "actionarray": [ "5", "7", "0" ],
     "valuearray": [ "8", "2", "0" ] 
   },
-  "button2":{
+  "button02":{
     "latch": false,
     "latchlogo": "",
     "actionarray": [ "5", "7", "0" ],
     "valuearray": [ "8", "3", "0" ] 
   },
-  "button3":{
+  "button10":{
     "latch": false,
     "latchlogo": "",
     "actionarray": [ "5", "4", "0"],
     "valuearray": [ "8", "e", "0" ] 
   },
-  "button4":{
+  "button11":{
     "latch": false,
     "latchlogo": "",
     "actionarray": [ "5", "4", "0" ],
     "valuearray": [ "8", "l", "0" ] 
+  },
+  "button12":{
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [ "11", "0", "0" ],
+    "valuearray": [ "6", "0", "0" ] 
   }
 }

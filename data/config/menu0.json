@@ -1,0 +1,44 @@
+{
+  "logo00": "win.bmp",
+  "logo01": "teams.bmp",
+  "logo02": "edge.bmp",
+  "logo10": "zoom.bmp",
+  "logo11": "media.bmp",
+  "logo12": "settings.bmp",
+  "button00":{
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [ "14", "0", "0" ],
+    "valuearray": [ "1", "0", "0" ] 
+  },
+  "button01":{
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [ "14", "0", "0" ],
+    "valuearray": [ "2", "0", "0" ] 
+  },
+  "button02":{
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [ "14", "0", "0" ],
+    "valuearray": [ "3", "0", "0" ] 
+  },
+  "button10":{
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [ "14", "0", "0" ],
+    "valuearray": [ "4", "0", "0" ] 
+  },
+  "button11":{
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [ "14", "0", "0" ],
+    "valuearray": [ "5", "0", "0" ] 
+  },
+  "button12":{
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [ "14", "0", "0" ],
+    "valuearray": [ "6", "0", "0" ] 
+  }
+}
