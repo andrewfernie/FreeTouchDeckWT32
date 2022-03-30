@@ -174,6 +174,7 @@ Preferences savedStates;
 
 // placeholder for the pagenumber we are on (0 indicates home)
 int pageNum = 0;
+int callingPageNum = 0;
 
 // Initial LED brightness
 int ledBrightness = 255;
@@ -266,7 +267,7 @@ TFT_eSPI_Button key[BUTTON_ROWS][BUTTON_COLS];
 
 // Special pages
 #define WEB_REQUEST_PAGE (NUM_PAGES + 1)
-#define SPECIAL_2_PAGE (NUM_PAGES + 2)
+#define SPECIAL_PAGE_INFO (NUM_PAGES + 2)
 #define SPECIAL_3_PAGE (NUM_PAGES + 3)
 #define SPECIAL_4_PAGE (NUM_PAGES + 4)
 
@@ -531,11 +532,13 @@ void loop(void)
         String command = Serial.readStringUntil(' ');
 
         if (command == "cal") {
+            MSG_INFOLN("[INFO] received command cal");
             FILESYSTEM.remove(CALIBRATION_FILE);
             ESP.restart();
         }
         else if (command == "setssid") {
             String value = Serial.readString();
+            MSG_INFO1("[INFO] received command setssid ", value.c_str());
             if (saveWifiSSID(value)) {
                 Serial.printf("[INFO]: Saved new SSID: %s\n", value.c_str());
                 loadMainConfig();
@@ -544,6 +547,7 @@ void loop(void)
         }
         else if (command == "setpassword") {
             String value = Serial.readString();
+            MSG_INFO1("[INFO] received command setpassword ", value.c_str());
             if (saveWifiPW(value)) {
                 Serial.printf("[INFO]: Saved new Password: %s\n", value.c_str());
                 loadMainConfig();
@@ -552,6 +556,25 @@ void loop(void)
         }
         else if (command == "setwifimode") {
             String value = Serial.readString();
+            MSG_INFO1("[INFO] received command setwifimode ", value.c_str());
+            if (saveWifiMode(value)) {
+                Serial.printf("[INFO]: Saved new WiFi Mode: %s\n", value.c_str());
+                loadMainConfig();
+                MSG_INFOLN("[INFO]: New configuration loaded");
+            }
+        }
+        else if (command == "setwifimodesta") {
+            String value = "WIFI_STA";
+            MSG_INFO1("[INFO] received command setwifimode ", value.c_str());
+            if (saveWifiMode(value)) {
+                Serial.printf("[INFO]: Saved new WiFi Mode: %s\n", value.c_str());
+                loadMainConfig();
+                MSG_INFOLN("[INFO]: New configuration loaded");
+            }
+        }
+        else if (command == "setwifimodeap") {
+            String value = "WIFI_AP";
+            MSG_INFO1("[INFO] received command setwifimode ", value.c_str());
             if (saveWifiMode(value)) {
                 Serial.printf("[INFO]: Saved new WiFi Mode: %s\n", value.c_str());
                 loadMainConfig();
@@ -562,7 +585,6 @@ void loop(void)
             MSG_WARNLN("[WARNING]: Restarting");
             ESP.restart();
         }
-
         else if (command == "reset") {
             String file = Serial.readString();
             Serial.printf("[INFO]: Resetting %s.json now\n", file.c_str());
@@ -587,7 +609,7 @@ void loop(void)
         // If the pageNum is set to NUM_PAGES+1, do not draw anything on screen or check for touch
         // and start handeling incomming web requests.
     }
-    else if (pageNum == SPECIAL_2_PAGE) {
+    else if (pageNum == SPECIAL_PAGE_INFO) {
         if (!displayinginfo) {
             printinfo();
         }
@@ -618,7 +640,7 @@ void loop(void)
 
         if (pressed) {
             displayinginfo = false;
-            pageNum = NUM_PAGES;
+            pageNum = callingPageNum;
             tft.fillScreen(generalconfig.backgroundColour);
             drawKeypad();
         }
@@ -651,7 +673,7 @@ void loop(void)
         if (pressed) {
             // Return to Settings page
             displayinginfo = false;
-            pageNum = NUM_PAGES;
+            pageNum = callingPageNum;
             tft.fillScreen(generalconfig.backgroundColour);
             drawKeypad();
         }
@@ -684,7 +706,7 @@ void loop(void)
         if (pressed) {
             // Load home screen
             displayinginfo = false;
-            pageNum = 0;
+            pageNum = callingPageNum;
             tft.fillScreen(generalconfig.backgroundColour);
             drawKeypad();
         }

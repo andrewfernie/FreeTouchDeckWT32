@@ -446,7 +446,7 @@ void bleKeyboardAction(int action, int value, char *symbol)
         case Action_SpecialFn:  // Special functions
             switch (value) {
                 case 1:  // Enter config mode
-
+                    
                     configmode();
 
                     break;
@@ -455,6 +455,7 @@ void bleKeyboardAction(int action, int value, char *symbol)
                         ledBrightness = ledBrightness - 25;
                         ledcWrite(0, ledBrightness);
                         savedStates.putInt("ledBrightness", ledBrightness);
+                        MSG_INFOLN("[INFO]: Brightness down.");
                     }
                     break;
                 case 3:  // Display Brightness Up
@@ -462,6 +463,7 @@ void bleKeyboardAction(int action, int value, char *symbol)
                         ledBrightness = ledBrightness + 25;
                         ledcWrite(0, ledBrightness);
                         savedStates.putInt("ledBrightness", ledBrightness);
+                        MSG_INFOLN("[INFO]: Brightness up.");
                     }
                     break;
                 case 4:  // Sleep Enabled
@@ -478,9 +480,11 @@ void bleKeyboardAction(int action, int value, char *symbol)
                     }
                     break;
                 case 5:
-                    printinfo();
+                    callingPageNum = pageNum;
+                    pageNum = SPECIAL_PAGE_INFO;
                     break;
                 case 6:
+                    callingPageNum = pageNum;
                     pageNum = 0;
                     drawKeypad();
                     break;
@@ -564,7 +568,8 @@ void bleKeyboardAction(int action, int value, char *symbol)
             }
             break;
         case Action_ChangePage:  // Custom functions
-            if((value >= 0) && (value <NUM_PAGES)){
+            if ((value >= 0) && (value < NUM_PAGES)) {
+                callingPageNum = pageNum;
                 pageNum = value;
                 drawKeypad();
             }

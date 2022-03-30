@@ -133,6 +133,9 @@ void configmode()
 
     MSG_INFOLN("[INFO]: Entering Config Mode");
     tft.println("Connecting to Wifi...");
+    MSG_INFO1("[INFO] configmode ssid", wificonfig.ssid);
+    MSG_INFO1("[INFO] configmode pwd", wificonfig.password);
+    MSG_INFO1("[INFO] configmode mode", wificonfig.wifimode);
 
     if (String(wificonfig.ssid) == "YOUR_WIFI_SSID" || String(wificonfig.password) == "YOUR_WIFI_PASSWORD")  // Still default
     {
@@ -146,8 +149,7 @@ void configmode()
         tft.println(WiFi.softAPIP());
         return;
     }
-
-    if (String(wificonfig.ssid) == "FAILED" || String(wificonfig.password) == "FAILED" || String(wificonfig.wifimode) == "FAILED")  // The wificonfig.json failed to load
+    else if (String(wificonfig.ssid) == "FAILED" || String(wificonfig.password) == "FAILED" || String(wificonfig.wifimode) == "FAILED")  // The wificonfig.json failed to load
     {
         tft.println("WiFi Config Failed to load! Starting as AP.");
         MSG_WARNLN("[WARNING]: WiFi Config Failed to load! Configurator started as AP.");
@@ -159,8 +161,7 @@ void configmode()
         tft.println(WiFi.softAPIP());
         return;
     }
-
-    if (strcmp(wificonfig.wifimode, "WIFI_STA") == 0) {
+    else if (strcmp(wificonfig.wifimode, "WIFI_STA") == 0) {
         if (!startWifiStation()) {
             startDefaultAP();
             MSG_WARNLN("[WARNING]: Could not connect to AP, so started as AP.");
@@ -171,6 +172,7 @@ void configmode()
             tft.println(WiFi.softAPIP());
         }
         else {
+            MSG_WARNLN("[WARNING]: Started as STA and in config mode.");
             tft.println("Started as STA and in config mode.");
             tft.println("To configure:");
             tft.println("http://freetouchdeck.local");
@@ -179,12 +181,16 @@ void configmode()
         }
     }
     else if (strcmp(wificonfig.wifimode, "WIFI_AP") == 0) {
+        MSG_WARNLN("[WARNING]: Started as AP and in config mode.");
         startWifiAP();
         tft.println("Started as AP and in config mode.");
         tft.println("To configure:");
         tft.println("http://freetouchdeck.local");
         tft.print("The IP is: ");
         tft.println(WiFi.softAPIP());
+    }
+    else{
+        MSG_WARNLN("[WARNING]: No valid config mode identified.");
     }
 }
 
@@ -259,7 +265,7 @@ bool saveWifiPW(String password)
 /**
 * @brief This function allows for saving (updating) the WiFi Mode
 *
-* @param String wifimode "WIFI_STA" of "WIFI_AP"
+* @param String wifimode "WIFI_STA" or "WIFI_AP"
 *
 * @return boolean True if succeeded. False otherwise.
 *
@@ -269,7 +275,8 @@ bool saveWifiPW(String password)
 bool saveWifiMode(String wifimode)
 {
     if (wifimode != "WIFI_STA" && wifimode != "WIFI_AP") {
-        MSG_WARNLN("[WARNING]: WiFi Mode not supported. Try WIFI_STA or WIFI_AP.");
+        MSG_WARNLN("")
+        MSG_WARN2("[WARNING]: WiFi Mode:",wifimode.c_str(),": not supported. Try WIFI_STA or WIFI_AP.");
         return false;
     }
 

@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "..\\..\\ESP32\\FreeTouchDeck"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"*.cps": "javascript",
+			"random": "cpp"
+		}
+	}
+}

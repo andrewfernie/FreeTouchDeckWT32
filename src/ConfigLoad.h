@@ -10,6 +10,7 @@
  */
 bool loadMainConfig()
 {
+    MSG_INFOLN("[INFO]: Entering loadMainConfig");
     if (!FILESYSTEM.exists("/config/wificonfig.json")) {
         MSG_WARNLN("[WARNING]: Config file not found!");
         return false;
@@ -19,6 +20,13 @@ bool loadMainConfig()
     DynamicJsonDocument doc(256);
 
     DeserializationError error = deserializeJson(doc, configfile);
+
+    if (error == DeserializationError::Ok){
+        MSG_INFOLN("[INFO]: wificonfig.json deserialized loaded OK");
+    }
+    else{
+        MSG_WARN1("[WARN]: wificonfig.json deserialization error: ", error.c_str());
+    }
 
     strlcpy(wificonfig.ssid, doc["ssid"] | "FAILED", sizeof(wificonfig.ssid));
     strlcpy(wificonfig.password, doc["password"] | "FAILED", sizeof(wificonfig.password));
