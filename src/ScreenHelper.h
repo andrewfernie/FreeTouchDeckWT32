@@ -291,15 +291,17 @@ uint16_t getBMPColor(const char *filename)
 */
 uint16_t getImageBG(int row, int col)
 {
-    // Last logo on each screen is the back home button except on the home screen
-    if ((row == (BUTTON_ROWS - 1)) && (col == (BUTTON_COLS - 1)) && pageNum > 0) {
-        return getBMPColor("/logos/home.bmp");
-    }
-    else if ((row >= 0) && (row < BUTTON_ROWS) && (col >= 0) && (col < BUTTON_COLS) && (pageNum >= 0) && (pageNum < NUM_PAGES)) {
-        return getBMPColor(menu[pageNum].button[row][col].logo);
+    if ((pageNum >= 0) && (pageNum < NUM_PAGES)){
+        if ((row >= 0) && (row < BUTTON_ROWS) && (col >= 0) && (col < BUTTON_COLS)) {
+            return getBMPColor(menu[pageNum].button[row][col].logo);
+        }
+        else {
+            MSG_ERRORLN("[ERROR]: getImageBG: Invalid logo index");
+            return 0x0000;
+        }
     }
     else {
-        MSG_ERRORLN("[ERROR]: getImageBG: Invalid index");
+        MSG_ERRORLN("[ERROR]: getImageBG: Invalid pageNum");
         return 0x0000;
     }
 }
@@ -314,17 +316,17 @@ uint16_t getImageBG(int row, int col)
  *
  * @note Uses getBMPColor to read the actual image data.
  */
-uint16_t getLatchImageBG(uint8_t logorow, uint8_t logocol)
+uint16_t getLatchImageBG(uint8_t row, uint8_t col)
 {
-    if ((pageNum > 0) && (pageNum < NUM_PAGES)) {
-        if ((logorow >= 0) && (logorow < BUTTON_ROWS) && (logocol >= 0) && (logocol < BUTTON_COLS)) {
-            if (strcmp(menu[pageNum - 1].button[logorow][logocol].latchlogo, "/logos/") == 0) {
-                return getBMPColor(menu[pageNum - 1].button[logorow][logocol].logo);
+    if ((pageNum >= 0) && (pageNum < NUM_PAGES)) {
+        if ((row >= 0) && (row < BUTTON_ROWS) && (col >= 0) && (col < BUTTON_COLS)) {
+            if (strcmp(menu[pageNum - 1].button[row][col].latchlogo, "/logos/") == 0) {
+                return getBMPColor(menu[pageNum - 1].button[row][col].logo);
             }
-            return getBMPColor(menu[pageNum - 1].button[logorow][logocol].latchlogo);
+            return getBMPColor(menu[pageNum - 1].button[row][col].latchlogo);
         }
         else {
-            MSG_ERRORLN("[ERROR]: getLatchImageBG: Invalid logo index");
+            MSG_ERRORLN("[ERROR]: getLatchImageBG: Invalid latch logo index");
             return 0x0000;
         }
     }

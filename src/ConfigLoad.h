@@ -57,7 +57,7 @@ bool loadMainConfig()
 *
 * @return none
 *
-* @note Options for values are: colors, homescreen, menu1, menu2, menu3
+* @note Options for values are: colors, menu1, menu2, menu3
          menu4, and menu5
 */
 bool loadConfig(String value)
@@ -150,30 +150,24 @@ bool loadConfig(String value)
         MSG_DEBUG1("[INFO] load_config opening file ", configFileName);
         File configfile = FILESYSTEM.open(configFileName, "r");
 
-        DynamicJsonDocument doc(1500);
+        DynamicJsonDocument doc(3000);
 
         DeserializationError error = deserializeJson(doc, configfile);
-
-        for (uint8_t row = 0; row < BUTTON_ROWS; row++) {
-            for (uint8_t col = 0; col < BUTTON_COLS; col++) {
-                char objectName[10];
-
-                snprintf(objectName, sizeof(objectName), "logo%d%d", row, col);
-                const char *logoxx = doc[objectName] | "question.bmp";
-
-                strcpy(templogopath, logopath);
-                strcat(templogopath, logoxx);
-                strcpy(menu[fileNameMenuNumber].button[row][col].logo, templogopath);
-                MSG_DEBUG1("[INFO] load_config loading logo", templogopath);
-            }
-        }
 
         for (uint8_t row = 0; row < BUTTON_ROWS; row++) {
             for (uint8_t col = 0; col < BUTTON_COLS; col++) {
                 {
                     char objectName[10];
 
-                    snprintf(objectName, sizeof(objectName), "button%d%d", row, col);
+                    snprintf(objectName, sizeof(objectName), "button%d%d", row+1, col+1);
+
+                    const char *logo = doc[objectName]["logo"] | "question.bmp";
+
+                    strcpy(templogopath, logopath);
+                    strcat(templogopath, logo);
+                    strcpy(menu[fileNameMenuNumber].button[row][col].logo, templogopath);
+                    MSG_DEBUG2("[INFO] load_config loading logo", objectName, templogopath);
+
                     const char *latchlogo = doc[objectName]["latchlogo"] | "question.bmp";
 
                     menu[fileNameMenuNumber].button[row][col].latch = doc[objectName]["latch"] | false;
@@ -181,7 +175,7 @@ bool loadConfig(String value)
                     strcpy(templogopath, logopath);
                     strcat(templogopath, latchlogo);
                     strcpy(menu[fileNameMenuNumber].button[row][col].latchlogo, templogopath);
-                    MSG_DEBUG1("[INFO] load_config loading latchlogo", templogopath);
+                    MSG_DEBUG2("[INFO] load_config loading latchlogo", objectName, templogopath);
 
                     JsonArray button_actionarray = doc[objectName]["actionarray"];
 

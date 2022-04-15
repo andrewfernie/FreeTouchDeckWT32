@@ -336,7 +336,7 @@ bool resetconfig(String file)
     int fileNameMenuNumber = 0;
     int numConverted = 0;
     numConverted = sscanf("%4s%d", file.c_str(), fileNameType, &fileNameMenuNumber);
-    if ((numConverted == 2) && strncmp("menu", file.c_str(), 4) && (fileNameMenuNumber > 0) && (fileNameMenuNumber < NUM_PAGES)) {
+    if ((numConverted == 2) && strncmp("menu", file.c_str(), 4) && (fileNameMenuNumber >= 0) && (fileNameMenuNumber < NUM_PAGES)) {
         // Reset a menu config
 
         // Delete the corrupted json file

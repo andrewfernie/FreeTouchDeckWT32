@@ -1,44 +1,182 @@
 {
-  "logo00": "refresh.bmp",
-  "logo01": "devtools.bmp",
-  "logo02": "closetab.bmp",
-  "logo10": "sp.bmp",
-  "logo11": "sp.bmp",
-  "logo12": "home.bmp",
-  "button00":{
+  "button11": {
+    "logo": "refresh.bmp",
     "latch": false,
     "latchlogo": "",
-    "actionarray": [ "5", "6", "0" ],
-    "valuearray": [ "2", "5", "0" ] 
+    "actionarray": [
+      "5",
+      "6",
+      "0"
+    ],
+    "valuearray": [
+      "2",
+      "5",
+      "0"
+    ]
   },
-  "button01":{
+  "button12": {
+    "logo": "devtools.bmp",
     "latch": false,
     "latchlogo": "",
-    "actionarray": [ "6", "0", "0" ],
-    "valuearray": [ "12", "0", "0" ] 
+    "actionarray": [
+      "6",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "12",
+      "0",
+      "0"
+    ]
   },
-  "button02":{
+  "button13": {
+    "logo": "closetab.bmp",
     "latch": false,
     "latchlogo": "",
-    "actionarray": [ "5", "4", "0" ],
-    "valuearray": [ "1", "w", "0" ] 
+    "actionarray": [
+      "5",
+      "4",
+      "0"
+    ],
+    "valuearray": [
+      "1",
+      "w",
+      "0"
+    ]
   },
-  "button10":{
+  "button14": {
+    "logo": "closetab.bmp",
     "latch": false,
     "latchlogo": "",
-    "actionarray": [ "5", "7", "0"],
-    "valuearray": [ "1", "2", "0" ] 
+    "actionarray": [
+      "5",
+      "4",
+      "0"
+    ],
+    "valuearray": [
+      "1",
+      "w",
+      "0"
+    ]
   },
-  "button11":{
+  "button21": {
+    "logo": "sp.bmp",
     "latch": false,
     "latchlogo": "",
-    "actionarray": [ "5", "7", "0" ],
-    "valuearray": [ "1", "1", "0" ] 
+    "actionarray": [
+      "5",
+      "7",
+      "0"
+    ],
+    "valuearray": [
+      "1",
+      "2",
+      "0"
+    ]
   },
-  "button12":{
+  "button22": {
+    "logo": "sp.bmp",
     "latch": false,
     "latchlogo": "",
-    "actionarray": [ "11", "0", "0" ],
-    "valuearray": [ "6", "0", "0" ] 
+    "actionarray": [
+      "5",
+      "7",
+      "0"
+    ],
+    "valuearray": [
+      "1",
+      "1",
+      "0"
+    ]
+  },
+  "button23": {
+    "logo": "home.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "11",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "6",
+      "0",
+      "0"
+    ]
+  },
+  "button24": {
+    "logo": "home.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "11",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "6",
+      "0",
+      "0"
+    ]
+  },
+  "button31": {
+    "logo": "sp.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "5",
+      "7",
+      "0"
+    ],
+    "valuearray": [
+      "1",
+      "2",
+      "0"
+    ]
+  },
+  "button32": {
+    "logo": "sp.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "5",
+      "7",
+      "0"
+    ],
+    "valuearray": [
+      "1",
+      "1",
+      "0"
+    ]
+  },
+  "button33": {
+    "logo": "home.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "11",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "6",
+      "0",
+      "0"
+    ]
+  },
+  "button34": {
+    "logo": "home.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "11",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "6",
+      "0",
+      "0"
+    ]
   }
 }

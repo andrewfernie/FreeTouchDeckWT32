@@ -121,7 +121,7 @@ const char *versionnumber = "WT32-0.9.17";
 #define BUTTON_ROWS 2
 #define BUTTON_COLS 3
 #define BUTTONS_PER_PAGE (BUTTON_ROWS * BUTTON_COLS)
-#define NUM_PAGES 7
+#define NUM_PAGES 7             // Includes Menu0 which is the home page
 
 // Keypad start position, centre of the first button
 #define KEY_X SCREEN_WIDTH / (BUTTON_COLS * 2)
@@ -591,7 +591,7 @@ void loop(void)
             resetconfig(file);
         }
         else {
-            for (size_t i = 1; i < NUM_PAGES; i++) {
+            for (size_t i = 0; i < NUM_PAGES; i++) {
                 char menuName[16];
                 sprintf(menuName, "menu%d", i);
 

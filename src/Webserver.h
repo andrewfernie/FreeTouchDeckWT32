@@ -549,56 +549,51 @@ void handlerSetup()
                     return;
                 }
 
-                DynamicJsonDocument doc(1200);
+                DynamicJsonDocument doc(2400);
 
                 JsonObject menu = doc.to<JsonObject>();
 
                 for (uint8_t row = 0; row < BUTTON_ROWS; row++) {
                     for (uint8_t col = 0; col < BUTTON_COLS; col++) {
-                        AsyncWebParameter *menuXlogo0 = request->getParam("menuXlogo0", true);
-                        menu["logo0"] = menuXlogo0->value().c_str();
-                        AsyncWebParameter *menuXlogo1 = request->getParam("menuXlogo1", true);
-                        menu["logo1"] = menuXlogo1->value().c_str();
-                        AsyncWebParameter *menuXlogo2 = request->getParam("menuXlogo2", true);
-                        menu["logo2"] = menuXlogo2->value().c_str();
-                        AsyncWebParameter *menuXlogo3 = request->getParam("menuXlogo3", true);
-                        menu["logo3"] = menuXlogo3->value().c_str();
-                        AsyncWebParameter *menuXlogo4 = request->getParam("menuXlogo4", true);
-                        menu["logo4"] = menuXlogo4->value().c_str();
 
-                        JsonObject button0 = doc.createNestedObject("button0");
+                        String buttonName = "button" + String(row+1) + String(col+1);
+                        JsonObject buttonObject = doc.createNestedObject(buttonName);
 
-                        if (request->hasParam("menuXbutton0latch", true)) {
-                            button0["latch"] = true;
+                        AsyncWebParameter *buttonXXlogo = request->getParam(buttonName + "logo", true);
+
+                        menu["logo"] = buttonXXlogo->value().c_str();
+
+                        if (request->hasParam(buttonName + "latch", true)) {
+                            buttonObject["latch"] = true;
                         }
                         else {
-                            button0["latch"] = false;
+                            buttonObject["latch"] = false;
                         }
 
-                        AsyncWebParameter *menuXlatchlogo0 = request->getParam("menuXlatchlogo0", true);
-                        Serial.println(menuXlatchlogo0->value().c_str());
-                        if (strcmp(menuXlatchlogo0->value().c_str(), "---") == 0) {
-                            button0["latchlogo"] = "";
+                        AsyncWebParameter *buttonXXlatchlogo = request->getParam(buttonName + "latchlogo", true);
+                        Serial.println(buttonXXlatchlogo->value().c_str());
+                        if (strcmp(buttonXXlatchlogo->value().c_str(), "---") == 0) {
+                            buttonObject["latchlogo"] = "";
                         }
                         else {
-                            button0["latchlogo"] = menuXlatchlogo0->value().c_str();
+                            buttonObject["latchlogo"] = buttonXXlatchlogo->value().c_str();
                         }
 
-                        JsonArray button0_actionarray = button0.createNestedArray("actionarray");
-                        AsyncWebParameter *menuXbutton0action0 = request->getParam("menuXbutton0action0", true);
-                        button0_actionarray.add(menuXbutton0action0->value().c_str());
-                        AsyncWebParameter *menuXbutton0action1 = request->getParam("menuXbutton0action1", true);
-                        button0_actionarray.add(menuXbutton0action1->value().c_str());
-                        AsyncWebParameter *menuXbutton0action2 = request->getParam("menuXbutton0action2", true);
-                        button0_actionarray.add(menuXbutton0action2->value().c_str());
+                        JsonArray buttonObject_actionarray = buttonObject.createNestedArray("actionarray");
+                        AsyncWebParameter *buttonXXaction0 = request->getParam(buttonName + "action0", true);
+                        buttonObject_actionarray.add(buttonXXaction0->value().c_str());
+                        AsyncWebParameter *buttonXXaction1 = request->getParam(buttonName + "action1", true);
+                        buttonObject_actionarray.add(buttonXXaction1->value().c_str());
+                        AsyncWebParameter *buttonXXaction2 = request->getParam(buttonName + "action2", true);
+                        buttonObject_actionarray.add(buttonXXaction2->value().c_str());
 
-                        JsonArray button0_valuearray = button0.createNestedArray("valuearray");
-                        AsyncWebParameter *menuXbutton0value0 = request->getParam("menuXbutton0value0", true);
-                        button0_valuearray.add(menuXbutton0value0->value().c_str());
-                        AsyncWebParameter *menuXbutton0value1 = request->getParam("menuXbutton0value1", true);
-                        button0_valuearray.add(menuXbutton0value1->value().c_str());
-                        AsyncWebParameter *menuXbutton0value2 = request->getParam("menuXbutton0value2", true);
-                        button0_valuearray.add(menuXbutton0value2->value().c_str());
+                        JsonArray buttonObject_valuearray = buttonObject.createNestedArray("valuearray");
+                        AsyncWebParameter *buttonXXvalue0 = request->getParam(buttonName + "value0", true);
+                        buttonObject_valuearray.add(buttonXXvalue0->value().c_str());
+                        AsyncWebParameter *buttonXXvalue1 = request->getParam(buttonName + "value1", true);
+                        buttonObject_valuearray.add(buttonXXvalue1->value().c_str());
+                        AsyncWebParameter *buttonXXvalue2 = request->getParam(buttonName + "value2", true);
+                        buttonObject_valuearray.add(buttonXXvalue2->value().c_str());
                     }
                 }
                 if (serializeJsonPretty(doc, file) == 0) {
