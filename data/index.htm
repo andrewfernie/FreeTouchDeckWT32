@@ -246,20 +246,24 @@
 			<br>
 			<h3>Menu</h3>
 			<p>
+			<div id="container">
+				<form>
+					<label for="framework">Select Menu</label>
+					<!--					<select onchange="updateMenuItems(this)" class="menunumber" id='menunumber' name='menunumber'> -->
+					<select onchange="updateMenuItems(this)">
+						<option value="0">Home Menu</option>
+						<option value="1">Menu 1</option>
+						<option value="2">Menu 2</option>
+						<option value="3">Menu 3</option>
+						<option value="4">Menu 4</option>
+						<option value="5">Menu 5</option>
+						<option value="6">Menu 6</option>
+					</select>
+				</form>
+			</div>
 			<form method='post' id="savemenu" action='/saveconfig'>
 				<table style="height: 250px; width: 100%; border: 1px solid #000088; text-align: left;">
 					<tbody>
-						<tr>
-							<select class="menunumber" id='menunumber' name='menunumber'>
-								<option value="0">Home Menu</option>
-								<option value="1">Menu 1</option>
-								<option value="2">Menu 2</option>
-								<option value="3">Menu 3</option>
-								<option value="4">Menu 4</option>
-								<option value="5">Menu 5</option>
-								<option value="6">Menu 6</option>
-							</select>
-						</tr>
 						<tr>
 							<td style="width: 8%;">
 								Row/Col
@@ -368,7 +372,8 @@
 								<select class="actions" id='button21action2' name='button21action2'></select>
 								<select class="actions" id='button21value2' name='button21value2'></select>
 								<br />Latch? <input type="checkbox" id="button21latch" name="button21latch">
-								latch to: <select class="images" id='button21latchlogo' name='button21latchlogo'></select>
+								latch to: <select class="images" id='button21latchlogo'
+									name='button21latchlogo'></select>
 							</td>
 							<td style="width: 23%;">
 								Button 2-2
@@ -384,7 +389,8 @@
 								<select class="actions" id='button22action2' name='button22action2'></select>
 								<select class="actions" id='button22value2' name='button22value2'></select>
 								<br />Latch? <input type="checkbox" id="button22latch" name="button22latch">
-								latch to: <select class="images" id='button22latchlogo' name='button22latchlogo'></select>
+								latch to: <select class="images" id='button22latchlogo'
+									name='button22latchlogo'></select>
 							</td>
 							<td style="width: 23%;">
 								Button 2-3
@@ -400,7 +406,8 @@
 								<select class="actions" id='button23action2' name='button23action2'></select>
 								<select class="actions" id='button23value2' name='button23value2'></select>
 								<br />Latch? <input type="checkbox" id="button23latch" name="button23latch">
-								latch to: <select class="images" id='button23latchlogo' name='button23latchlogo'></select>
+								latch to: <select class="images" id='button23latchlogo'
+									name='button23latchlogo'></select>
 							</td>
 							<td style="width: 23%;">
 								Button 2-4
@@ -416,7 +423,8 @@
 								<select class="actions" id='button24action2' name='button24action2'></select>
 								<select class="actions" id='button24value2' name='button24value2'></select>
 								<br />Latch? <input type="checkbox" id="button24latch" name="button24latch">
-								latch to: <select class="images" id='button24latchlogo' name='button24latchlogo'></select>
+								latch to: <select class="images" id='button24latchlogo'
+									name='button24latchlogo'></select>
 							</td>
 						</tr>
 						<tr>

@@ -117,23 +117,26 @@ const char *versionnumber = "WT32-0.9.17";
 #define SCREEN_WIDTH 480
 #define SCREEN_HEIGHT 320
 
+// Logo Size
+#define LOGO_SIZE_X_Y 75
+
 // Button layout and number of paghes with buttons
-#define BUTTON_ROWS 2
-#define BUTTON_COLS 3
+#define BUTTON_ROWS 3
+#define BUTTON_COLS 4
 #define BUTTONS_PER_PAGE (BUTTON_ROWS * BUTTON_COLS)
 #define NUM_PAGES 7             // Includes Menu0 which is the home page
 
 // Keypad start position, centre of the first button
-#define KEY_X SCREEN_WIDTH / (BUTTON_COLS * 2)
-#define KEY_Y SCREEN_HEIGHT / (BUTTON_ROWS * 2)
+#define KEY_X SCREEN_WIDTH / (BUTTON_COLS * 2) 
+#define KEY_Y SCREEN_HEIGHT / (BUTTON_ROWS * 2) 
 
 // Gaps between buttons
 #define KEY_SPACING_X SCREEN_WIDTH / (BUTTON_COLS * 8)
 #define KEY_SPACING_Y SCREEN_HEIGHT / (BUTTON_ROWS * 8)
 
 // Width and height of a button
-#define KEY_W (SCREEN_WIDTH / 3) - KEY_SPACING_X
-#define KEY_H (SCREEN_WIDTH / 3) - KEY_SPACING_Y
+#define KEY_W (SCREEN_WIDTH / BUTTON_COLS) - KEY_SPACING_X
+#define KEY_H (SCREEN_HEIGHT / BUTTON_ROWS) - KEY_SPACING_Y
 
 // Font size multiplier
 #define KEY_TEXTSIZE 1
@@ -329,7 +332,8 @@ void setup()
         MSG_INFOLN("[INFO]: Capacitive touch started!");
     }
 #endif
-
+    MSG_INFOLN("[INFO]: After ts.begin");
+    
     // Setup PWM channel and attach pin 32
     ledcSetup(0, 5000, 8);
 #ifdef TFT_BL

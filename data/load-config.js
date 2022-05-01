@@ -11,14 +11,16 @@ function fillvaluelist(targetNode, srcArray) {
 
 }
 
-function getMenuConfig() {
+function updateMenuItems(select) {
+    var selectedOption = select.options[select.selectedIndex];
+//    alert("The selected menu is " + selectedOption.value);
+    getMenuConfig(selectedOption.value);
+}
 
-    var menuNumber;
+function getMenuConfig(loadingMenuNumber) {
 
-    menuNumber = document.getElementById('menunumber').value
-
-    menuFileName = `config/menu${menuNumber}.json`;
-    console.log('getMenuConfig(): '+ menuFileName);
+    menuFileName = `config/menu${loadingMenuNumber}.json`;
+    console.log('getMenuConfig(): called with menu number ' + loadingMenuNumber);
 
     // Load Menu
     fetch(menuFileName)
@@ -26,20 +28,19 @@ function getMenuConfig() {
             return response.json()
         })
         .then((data) => {
-            console.log('getMenuConfig(): loading menu');
+            console.log('getMenuConfig(): loading menu ' + menuFileName);
 
             ////////////////////////// Row 1 ///////////////////////////
-            document.getElementById("button11logo").add(new Option(data.button11.logo));
+            document.getElementById('button11logo').value = data.button11.logo;
 
             if (data.button11.latch) {
                 document.getElementById("button11latch").checked = true;
             }
 
             if (data.button11.latchlogo == "") {
-                document.getElementById("button11latchlogo").add(new Option("---"));
+                document.getElementById("button11latchlogo").value = "---";
             } else {
-                document.getElementById("button11latchlogo").add(new Option(data.button11.latchlogo));
-                document.getElementById("button11latchlogo").add(new Option("---"));
+                document.getElementById("button11latchlogo").value = data.button11.latchlogo;
             }
 
             document.getElementById('button11action0').value = data.button11.actionarray[0];
@@ -53,16 +54,15 @@ function getMenuConfig() {
             document.getElementById('button11value2').value = data.button11.valuearray[2];
 
 
-            document.getElementById("button12logo").add(new Option(data.button12.logo));
+            document.getElementById("button12logo").value = data.button12.logo;
             if (data.button12.latch) {
                 document.getElementById("button12latch").checked = true;
             }
 
             if (data.button12.latchlogo == "") {
-                document.getElementById("button12latchlogo").add(new Option("---"));
+                document.getElementById("button12latchlogo").value = "---";
             } else {
-                document.getElementById("button12latchlogo").add(new Option(data.button12.latchlogo));
-                document.getElementById("button12latchlogo").add(new Option("---"));
+                document.getElementById("button12latchlogo").value = data.button12.latchlogo;
             }
 
 
@@ -76,16 +76,15 @@ function getMenuConfig() {
             fillvaluelist(button12value2, selecteditems[data.button12.actionarray[2]].subitems);
             document.getElementById('button12value2').value = data.button12.valuearray[2];
 
-            document.getElementById("button13logo").add(new Option(data.button13.logo));
+            document.getElementById("button13logo").value = data.button13.logo;
             if (data.button13.latch) {
                 document.getElementById("button13latch").checked = true;
             }
 
             if (data.button13.latchlogo == "") {
-                document.getElementById("button13latchlogo").add(new Option("---"));
+                document.getElementById("button13latchlogo").value = "---";
             } else {
-                document.getElementById("button13latchlogo").add(new Option(data.button13.latchlogo));
-                document.getElementById("button13latchlogo").add(new Option("---"));
+                document.getElementById("button13latchlogo").value = data.button13.latchlogo;
             }
 
             document.getElementById('button13action0').value = data.button13.actionarray[0];
@@ -98,16 +97,15 @@ function getMenuConfig() {
             fillvaluelist(button13value2, selecteditems[data.button13.actionarray[2]].subitems);
             document.getElementById('button13value2').value = data.button13.valuearray[2];
 
-            document.getElementById("button14logo").add(new Option(data.button14.logo));
+            document.getElementById("button14logo").value = data.button14.logo;
             if (data.button14.latch) {
                 document.getElementById("button14latch").checked = true;
             }
 
             if (data.button14.latchlogo == "") {
-                document.getElementById("button14latchlogo").add(new Option("---"));
+                document.getElementById("button14latchlogo").value = "---";
             } else {
-                document.getElementById("button14latchlogo").add(new Option(data.button4.latchlogo));
-                document.getElementById("button14latchlogo").add(new Option("---"));
+                document.getElementById("button14latchlogo").value = data.button14.latchlogo;
             }
 
             document.getElementById('button14action0').value = data.button14.actionarray[0];
@@ -121,17 +119,16 @@ function getMenuConfig() {
             document.getElementById('button14value2').value = data.button14.valuearray[2];
 
             ////////////////////////// Row 2 ///////////////////////////
-            document.getElementById("button21logo").add(new Option(data.button21.logo));
+            document.getElementById("button21logo").value = data.button21.logo;
 
             if (data.button21.latch) {
                 document.getElementById("button21latch").checked = true;
             }
 
             if (data.button21.latchlogo == "") {
-                document.getElementById("button21latchlogo").add(new Option("---"));
+                document.getElementById("button21latchlogo").value = "---";
             } else {
-                document.getElementById("button21latchlogo").add(new Option(data.button21.latchlogo));
-                document.getElementById("button21latchlogo").add(new Option("---"));
+                document.getElementById("button21latchlogo").value = data.button21.latchlogo;
             }
 
             document.getElementById('button21action0').value = data.button21.actionarray[0];
@@ -145,16 +142,15 @@ function getMenuConfig() {
             document.getElementById('button21value2').value = data.button21.valuearray[2];
 
 
-            document.getElementById("button22logo").add(new Option(data.button22.logo));
+            document.getElementById("button22logo").value = data.button22.logo;
             if (data.button22.latch) {
                 document.getElementById("button22latch").checked = true;
             }
 
             if (data.button22.latchlogo == "") {
-                document.getElementById("button22latchlogo").add(new Option("---"));
+                document.getElementById("button22latchlogo").value = "---";
             } else {
-                document.getElementById("button22latchlogo").add(new Option(data.button22.latchlogo));
-                document.getElementById("button22latchlogo").add(new Option("---"));
+                document.getElementById("button22latchlogo").value = data.button22.latchlogo;
             }
 
 
@@ -168,16 +164,15 @@ function getMenuConfig() {
             fillvaluelist(button22value2, selecteditems[data.button22.actionarray[2]].subitems);
             document.getElementById('button22value2').value = data.button22.valuearray[2];
 
-            document.getElementById("button23logo").add(new Option(data.button23.logo));
+            document.getElementById("button23logo").value = data.button23.logo;
             if (data.button23.latch) {
                 document.getElementById("button23latch").checked = true;
             }
 
             if (data.button23.latchlogo == "") {
-                document.getElementById("button23latchlogo").add(new Option("---"));
+                document.getElementById("button23latchlogo").value = "---";
             } else {
-                document.getElementById("button23latchlogo").add(new Option(data.button23.latchlogo));
-                document.getElementById("button23latchlogo").add(new Option("---"));
+                document.getElementById("button23latchlogo").value = data.button23.latchlogo;
             }
 
             document.getElementById('button23action0').value = data.button23.actionarray[0];
@@ -190,16 +185,15 @@ function getMenuConfig() {
             fillvaluelist(button23value2, selecteditems[data.button23.actionarray[2]].subitems);
             document.getElementById('button23value2').value = data.button23.valuearray[2];
 
-            document.getElementById("button24logo").add(new Option(data.button24.logo));
+            document.getElementById("button24logo").value = data.button24.logo;
             if (data.button24.latch) {
                 document.getElementById("button24latch").checked = true;
             }
 
             if (data.button24.latchlogo == "") {
-                document.getElementById("button24latchlogo").add(new Option("---"));
+                document.getElementById("button24latchlogo").value = "---";
             } else {
-                document.getElementById("button24latchlogo").add(new Option(data.button4.latchlogo));
-                document.getElementById("button24latchlogo").add(new Option("---"));
+                document.getElementById("button24latchlogo").value = data.button24.latchlogo;
             }
 
             document.getElementById('button24action0').value = data.button24.actionarray[0];
@@ -213,17 +207,16 @@ function getMenuConfig() {
             document.getElementById('button24value2').value = data.button24.valuearray[2];           
 
             ////////////////////////// Row 3 ///////////////////////////
-            document.getElementById("button31logo").add(new Option(data.button31.logo));
+            document.getElementById("button31logo").value = data.button31.logo;
 
             if (data.button31.latch) {
                 document.getElementById("button31latch").checked = true;
             }
 
             if (data.button31.latchlogo == "") {
-                document.getElementById("button31latchlogo").add(new Option("---"));
+                document.getElementById("button31latchlogo").value = "---";
             } else {
-                document.getElementById("button31latchlogo").add(new Option(data.button31.latchlogo));
-                document.getElementById("button31latchlogo").add(new Option("---"));
+                document.getElementById("button31latchlogo").value = data.button31.latchlogo;
             }
 
             document.getElementById('button31action0').value = data.button31.actionarray[0];
@@ -237,16 +230,15 @@ function getMenuConfig() {
             document.getElementById('button31value2').value = data.button31.valuearray[2];
 
 
-            document.getElementById("button32logo").add(new Option(data.button32.logo));
+            document.getElementById("button32logo").value = data.button32.logo;
             if (data.button32.latch) {
                 document.getElementById("button32latch").checked = true;
             }
 
             if (data.button32.latchlogo == "") {
-                document.getElementById("button32latchlogo").add(new Option("---"));
+                document.getElementById("button32latchlogo").value = "---";
             } else {
-                document.getElementById("button32latchlogo").add(new Option(data.button32.latchlogo));
-                document.getElementById("button32latchlogo").add(new Option("---"));
+                document.getElementById("button32latchlogo").value = data.button32.latchlogo;
             }
 
 
@@ -260,16 +252,15 @@ function getMenuConfig() {
             fillvaluelist(button32value2, selecteditems[data.button32.actionarray[2]].subitems);
             document.getElementById('button32value2').value = data.button32.valuearray[2];
 
-            document.getElementById("button33logo").add(new Option(data.button33.logo));
+            document.getElementById("button33logo").value = data.button33.logo;
             if (data.button33.latch) {
                 document.getElementById("button33latch").checked = true;
             }
 
             if (data.button33.latchlogo == "") {
-                document.getElementById("button33latchlogo").add(new Option("---"));
+                document.getElementById("button33latchlogo").value = "---";
             } else {
-                document.getElementById("button33latchlogo").add(new Option(data.button33.latchlogo));
-                document.getElementById("button33latchlogo").add(new Option("---"));
+                document.getElementById("button33latchlogo").value = data.button33.latchlogo;
             }
 
             document.getElementById('button33action0').value = data.button33.actionarray[0];
@@ -282,16 +273,15 @@ function getMenuConfig() {
             fillvaluelist(button33value2, selecteditems[data.button33.actionarray[2]].subitems);
             document.getElementById('button33value2').value = data.button33.valuearray[2];
 
-            document.getElementById("button34logo").add(new Option(data.button34.logo));
+            document.getElementById("button34logo").value = data.button34.logo;
             if (data.button34.latch) {
                 document.getElementById("button34latch").checked = true;
             }
 
             if (data.button34.latchlogo == "") {
-                document.getElementById("button34latchlogo").add(new Option("---"));
+                document.getElementById("button34latchlogo").value = "---";
             } else {
-                document.getElementById("button34latchlogo").add(new Option(data.button4.latchlogo));
-                document.getElementById("button34latchlogo").add(new Option("---"));
+                document.getElementById("button34latchlogo").value = data.button34.latchlogo;
             }
 
             document.getElementById('button34action0').value = data.button34.actionarray[0];
@@ -382,6 +372,11 @@ function getlogoconfig() {
                         });
                     });
 
+                    var i = selects.length;
+                    while (i--) {
+                        var select = selects[i];
+                        select.add(new Option('---', '---'));
+                    }
                 })
                 .then(() => {
                     document.getElementById("contentloading").style.display = "none";
@@ -448,7 +443,7 @@ fetch('config/general.json')
         getwificonfig();
     })
     .then(() => {
-        getMenuConfig();
+        getMenuConfig(0);
     })
     .then(() => {
         getlogoconfig();

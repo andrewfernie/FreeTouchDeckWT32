@@ -731,7 +731,7 @@ void handlerSetup()
             filecount++;
         }
         if (filecount > 0) {
-            resultHeader = "Succes!";
+            resultHeader = "Success!";
         }
         else {
             resultHeader = "Fail!";

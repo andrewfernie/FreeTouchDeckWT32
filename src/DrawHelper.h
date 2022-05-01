@@ -42,8 +42,10 @@ void drawlatched(int b, int col, int row)
 */
 void drawlogo(int col, int row, bool transparent, bool latch)
 {
-    int16_t x = KEY_X - KEY_X / 2 + 4 + col * (KEY_W + KEY_SPACING_X);
-    int16_t y = KEY_Y - KEY_Y / 2 + 4 + row * (KEY_H + KEY_SPACING_Y);
+    //    int16_t x = KEY_X - KEY_X / 2 + 4 + col * (KEY_W + KEY_SPACING_X);
+    //    int16_t y = KEY_Y - KEY_Y / 2 + 4 + row * (KEY_H + KEY_SPACING_Y);
+    int16_t x = KEY_X + col * (KEY_W + KEY_SPACING_X) - LOGO_SIZE_X_Y / 2;
+    int16_t y = KEY_Y + row * (KEY_H + KEY_SPACING_Y) - LOGO_SIZE_X_Y / 2;
 
     if ((pageNum >= 0) && (pageNum < NUM_PAGES)) {
         if (transparent == true) {
