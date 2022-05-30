@@ -1,3 +1,4 @@
+#include "UserActions.h"
 /*
  * User actions you can modify these functions to do custom stuff.
  * Have a look at the 3 examples for some inspiration. Also, have a look

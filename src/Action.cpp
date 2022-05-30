@@ -1,3 +1,6 @@
+#include "Action.h"
+#include "BleKeyboard.h"
+
 /**
 * @brief This function takes an int as an "action" and "value". It uses
          a switch statement to determine which type of action to do.

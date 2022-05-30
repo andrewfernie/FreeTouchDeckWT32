@@ -1,3 +1,5 @@
+#include "Touch.h"
+#include "FreeTouchDeckWT32.h"
 /**
 * @brief This function presents the user with 4 points to touch and saves
          that data to a claibration file.

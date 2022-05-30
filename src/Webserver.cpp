@@ -1,3 +1,5 @@
+#include "WebServer.h"
+
 /**
 * @brief This function returns all the files in a given directory in a json
          formatted string.
@@ -8,6 +10,13 @@
 *
 * @note none
 */
+
+String errorCode;
+String errorText;
+String resultHeader;
+String resultText;
+String resultFiles = "";
+
 String handleFileList(String path)
 {
     File root = FILESYSTEM.open(path);
@@ -167,9 +176,6 @@ String handleInfo()
 
     return output;
 }
-
-String errorCode;
-String errorText;
 
 /**
  * @brief This function handles error.htm template processing.
@@ -360,9 +366,6 @@ void handleUpload(AsyncWebServerRequest *request, String filename, size_t index,
     }
 }
 
-String resultHeader;
-String resultText;
-String resultFiles = "";
 
 /**
  * @brief This function handles delete.htm template processing.
@@ -595,6 +598,8 @@ void handlerSetup()
                         AsyncWebParameter *buttonXXvalue2 = request->getParam(buttonName + "value2", true);
                         buttonObject_valuearray.add(buttonXXvalue2->value().c_str());
                     }
+                    MSG_INFO("[INFO]: handlerSetup(): free heap memory ");
+                    MSG_INFOLN(ESP.getFreeHeap());
                 }
                 if (serializeJsonPretty(doc, file) == 0) {
                     MSG_WARNLN("[WARNING]: Failed to write to file");

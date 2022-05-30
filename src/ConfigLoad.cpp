@@ -1,3 +1,4 @@
+#include "ConfigLoad.h"
 /**
  * @brief This function opens wificonfig.json and fills the wificonfig
  *        struct accordingly.

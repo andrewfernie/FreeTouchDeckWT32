@@ -37,34 +37,9 @@
         You can find examples of User_Setup.h in the "user_setup.h Examples" folder.
 
 */
-// Basic macros for debug and info messages to the serial port
-#define LOG_MSG_BASIC 1
-#define LOG_MSG_LEVEL 3
-#define LOG_MSG_DEBUG 1
-#include "std_defs.h"
+#include <Arduino.h>
 
-// ------- Uncomment the next line if you use capacitive touch -------
-// (THE ESP32 TOUCHDOWN USES THIS!)
-#define USECAPTOUCH
-
-// ------- Uncomment and populate the following if your cap touch uses custom i2c pins -------
-//#define CUSTOM_TOUCH_SDA 26
-//#define CUSTOM_TOUCH_SCL 27
-
-// PAY ATTENTION! Even if resistive touch is not used, the TOUCH pin has to be defined!
-// It can be a random unused pin.
-// TODO: Find a way around this!
-
-// ------- Uncomment the define below if you want to use SLEEP and wake up on touch -------
-// The pin where the IRQ from the touch screen is connected uses ESP-style GPIO_NUM_* instead of just pinnumber
-#define touchInterruptPin GPIO_NUM_39
-
-// ------- Uncomment the define below if you want to use a piezo buzzer and specify the pin where the speaker is connected -------
-//#define speakerPin 26
-
-// ------- NimBLE definition, use only if the NimBLE library is installed
-// and if you are using the original ESP32-BLE-Keyboard library by T-VK -------
-//#define USE_NIMBLE
+#include "FreeTouchDeckWT32.h"
 
 const char *versionnumber = "WT32-0.9.17";
 
@@ -77,78 +52,10 @@ const char *versionnumber = "WT32-0.9.17";
  * Added some missing characters.
  */
 
-/* TODO NEXT VERSION
- *
- * - get image height/width and use it in bmp drawing.
- */
-
-#include <BleKeyboard.h>  // BleKeyboard is used to communicate over BLE
-#include <FS.h>           // Filesystem support header
-#include <Preferences.h>  // Used to store states before sleep/reboot
-#include <SPIFFS.h>       // Filesystem support header
-#include <TFT_eSPI.h>     // The TFT_eSPI library
-#include <pgmspace.h>     // PROGMEM support header
-
-#if defined(USE_NIMBLE)
-
-#include "NimBLEBeacon.h"  // Additional BLE functionaity using NimBLE
-#include "NimBLEDevice.h"  // Additional BLE functionaity using NimBLE
-#include "NimBLEUtils.h"   // Additional BLE functionaity using NimBLE
-
-#else
-
-#include "BLEBeacon.h"  // Additional BLE functionaity
-#include "BLEDevice.h"  // Additional BLE functionaity
-#include "BLEUtils.h"   // Additional BLE functionaity
-
-#endif  // USE_NIMBLE
-
-#include <ArduinoJson.h>        // Using ArduinoJson to read and write config files
-#include <AsyncTCP.h>           //Async Webserver support header
-#include <ESPAsyncWebServer.h>  //Async Webserver support header
-#include <ESPmDNS.h>            // DNS functionality
-#include <WiFi.h>               // Wifi support
-
-#include "esp_bt_device.h"  // Additional BLE functionaity
-#include "esp_bt_main.h"    // Additional BLE functionaity
-#include "esp_sleep.h"      // Additional BLE functionaity
-
-// Set the width and height of your screen here:
-#define SCREEN_WIDTH 480
-#define SCREEN_HEIGHT 320
-
-// Logo Size
-#define LOGO_SIZE_X_Y 75
-
-// Button layout and number of paghes with buttons
-#define BUTTON_ROWS 3
-#define BUTTON_COLS 4
-#define BUTTONS_PER_PAGE (BUTTON_ROWS * BUTTON_COLS)
-#define NUM_PAGES 7             // Includes Menu0 which is the home page
-
-// Keypad start position, centre of the first button
-#define KEY_X SCREEN_WIDTH / (BUTTON_COLS * 2) 
-#define KEY_Y SCREEN_HEIGHT / (BUTTON_ROWS * 2) 
-
-// Gaps between buttons
-#define KEY_SPACING_X SCREEN_WIDTH / (BUTTON_COLS * 8)
-#define KEY_SPACING_Y SCREEN_HEIGHT / (BUTTON_ROWS * 8)
-
-// Width and height of a button
-#define KEY_W (SCREEN_WIDTH / BUTTON_COLS) - KEY_SPACING_X
-#define KEY_H (SCREEN_HEIGHT / BUTTON_ROWS) - KEY_SPACING_Y
-
-// Font size multiplier
-#define KEY_TEXTSIZE 1
-
-// Touch panel definition
+#ifdef ENABLE_TOUCH_SCREEN
 #ifdef USECAPTOUCH
-#include <Wire.h>
-
-#include "FT62XXTouchScreen.h"
-FT62XXTouchScreen ts = FT62XXTouchScreen(SCREEN_HEIGHT, PIN_SDA, PIN_SCL);
-#else
-#include "Touch.h"
+FT6336U ts = FT6336U(PIN_SDA, PIN_SCL);
+#endif
 #endif
 
 BleKeyboard bleKeyboard("FreeTouchDeck", "Made by me");
@@ -158,22 +65,6 @@ AsyncWebServer webserver(80);
 TFT_eSPI tft = TFT_eSPI();
 
 Preferences savedStates;
-
-// Define the storage to be used. For now just SPIFFS.
-#define FILESYSTEM SPIFFS
-
-// This is the file name used to store the calibration data
-// You can change this to create new calibration files.
-// The FILESYSTEM file name must start with "/".
-#define CALIBRATION_FILE "/TouchCalData"
-
-// Set REPEAT_CAL to true instead of false to run calibration
-// again, otherwise it will only be done once.
-// Repeat calibration if you change the screen rotation.
-#define REPEAT_CAL false
-
-// Text Button Label Font
-#define LABEL_FONT &FreeSansBold12pt7b
 
 // placeholder for the pagenumber we are on (0 indicates home)
 int pageNum = 0;
@@ -188,64 +79,9 @@ char logopath[64] = "/logos/";
 // templogopath is used to hold the complete path of an image. It is empty for now.
 char templogopath[64] = "";
 
-// Struct Action: actions and value
-struct Actions {
-    uint8_t action;
-    uint8_t value;
-    char symbol[64];
-};
-
-// Each button has an action struct in it
-struct Button {
-    struct Actions actions[3];
-    bool latch;
-    bool islatched;
-    char logo[32];
-    char latchlogo[32];
-};
-
-// Each menu has an array of buttons
-struct Menu {
-    struct Button button[BUTTON_ROWS][BUTTON_COLS];
-};
-
-// And finally, we have an array of menus
-struct Menu menu[NUM_PAGES];
-
-// Struct to hold the general logos.
-struct Generallogos {
-    char homebutton[64];
-    char configurator[64];
-};
-
-// Struct to hold the general config like colours.
-struct Config {
-    uint16_t menuButtonColour;
-    uint16_t functionButtonColour;
-    uint16_t backgroundColour;
-    uint16_t latchedColour;
-    bool sleepenable;
-    uint16_t sleeptimer;
-    bool beep;
-    uint8_t modifier1;
-    uint8_t modifier2;
-    uint8_t modifier3;
-    uint16_t helperdelay;
-};
-
-struct Wificonfig {
-    char ssid[64];
-    char password[64];
-    char wifimode[9];
-    char hostname[64];
-    uint8_t attempts;
-    uint16_t attemptdelay;
-};
-
-// Array to hold all the latching statuses
-// bool islatched[NUM_PAGES][BUTTONS_PER_PAGE] = {0};
-
 // Create instances of the structs
+Menu menu[NUM_PAGES];
+
 Wificonfig wificonfig;
 
 Config generalconfig;
@@ -262,48 +98,7 @@ char jsonFileFail[32] = "";
 // Invoke the TFT_eSPI button class and create all the button objects
 TFT_eSPI_Button key[BUTTON_ROWS][BUTTON_COLS];
 
-// Checking for BLE Keyboard version
-#ifndef BLE_KEYBOARD_VERSION
-#warning Old BLE Keyboard version detected. Please update.
-#define BLE_KEYBOARD_VERSION "Outdated"
-#endif
-
-// Special pages
-#define WEB_REQUEST_PAGE (NUM_PAGES + 1)
-#define SPECIAL_PAGE_INFO (NUM_PAGES + 2)
-#define SPECIAL_3_PAGE (NUM_PAGES + 3)
-#define SPECIAL_4_PAGE (NUM_PAGES + 4)
-
 uint8_t sleepIsLatched = false;
-
-//--------- Internal references ------------
-// (this needs to be below all structs etc..)
-enum ActionEnum {
-    Action_NoAction = 0,
-    Action_Delay = 1,
-    Action_TabArrow = 2,
-    Action_Media = 3,
-    Action_Char = 4,
-    Action_Option = 5,
-    Action_FnKey = 6,
-    Action_Number = 7,
-    Action_SpecialChar = 8,
-    Action_Combos = 9,
-    Action_Helpers = 10,
-    Action_SpecialFn = 11,
-    Action_Numpad = 12,
-    Action_CustomFn = 13,
-    Action_ChangePage = 14
-};
-
-#include "ScreenHelper.h"
-#include "ConfigLoad.h"
-#include "DrawHelper.h"
-#include "ConfigHelper.h"
-#include "UserActions.h"
-#include "Action.h"
-#include "Webserver.h"
-#include "Touch.h"
 
 //-------------------------------- SETUP --------------------------------------------------------------
 
@@ -318,14 +113,11 @@ void setup()
     savedStates.begin("ftd", false);
 
     ledBrightness = savedStates.getInt("ledBrightness", 255);
+    MSG_INFOLN("[INFO]: Brightness has been set");
 
+#ifdef ENABLE_TOUCH_SCREEN
 #ifdef USECAPTOUCH
-#ifdef CUSTOM_TOUCH_SDA
-    if (!ts.begin(40, CUSTOM_TOUCH_SDA, CUSTOM_TOUCH_SCL))
-#else
-    if (!ts.begin())
-#endif
-    {
+    if (!ts.begin()) {
         MSG_WARNLN("[WARNING]: Unable to start the capacitive touchscreen.");
     }
     else {
@@ -333,7 +125,8 @@ void setup()
     }
 #endif
     MSG_INFOLN("[INFO]: After ts.begin");
-    
+#endif
+
     // Setup PWM channel and attach pin 32
     ledcSetup(0, 5000, 8);
 #ifdef TFT_BL
@@ -348,6 +141,7 @@ void setup()
     // Initialise the TFT screen
     tft.init();
 
+        delay(5000);   //AJF
     // Set the rotation before we calibrate
     tft.setRotation(1);
 
@@ -356,6 +150,8 @@ void setup()
 
     esp_sleep_wakeup_cause_t wakeup_reason;
     wakeup_reason = esp_sleep_get_wakeup_cause();
+
+
 
     // -------------- Start filesystem ----------------------
 
@@ -517,7 +313,7 @@ void setup()
         MSG_INFO("[INFO]: Sleep timer = ");
         Serial.print(generalconfig.sleeptimer);
         Serial.println(" minutes");
-        sleepIsLatched = 1;        
+        sleepIsLatched = 1;
     }
 #endif
 }
@@ -526,8 +322,10 @@ void setup()
 
 void loop(void)
 {
+#ifdef ENABLE_TOUCH_SCREEN
 #ifdef USECAPTOUCH
-    TouchPoint touchPos;
+    FT6336U_TouchPointType touchPos;
+#endif
 #endif
 
     // Check if there is data available on the serial input that needs to be handled.
@@ -623,11 +421,12 @@ void loop(void)
         // At the beginning of a new loop, make sure we do not use last loop's touch.
         boolean pressed = false;
 
+#ifdef ENABLE_TOUCH_SCREEN
 #ifdef USECAPTOUCH
 
-        touchPos = ts.read();
+        touchPos = ts.scan();
 
-        if (touchPos.touched) {
+        if (touchPos.touch_count == 1) {
             // Flip things around so it matches our screen rotation
             //        p.x = map(p.x, 0, 320, 320, 0);
             //       t_x = touchPos.xPos;
@@ -640,6 +439,9 @@ void loop(void)
         uint16_t t_x = 0, t_y = 0;
         pressed = tft.getTouch(&t_x, &t_y);
 
+#endif
+#else   
+        pressed = false;
 #endif
 
         if (pressed) {
@@ -656,10 +458,11 @@ void loop(void)
         // At the beginning of a new loop, make sure we do not use last loop's touch.
         boolean pressed = false;
 
+#ifdef ENABLE_TOUCH_SCREEN
 #ifdef USECAPTOUCH
-        touchPos = ts.read();
+        touchPos = ts.scan();
 
-        if (touchPos.touched) {
+        if (touchPos.touch_count == 1) {
             // Flip things around so it matches our screen rotation
             //         p.x = map(p.x, 0, 320, 320, 0);
             //        t_x = touchPos.xPos;
@@ -672,6 +475,9 @@ void loop(void)
         uint16_t t_x = 0, t_y = 0;
         pressed = tft.getTouch(&t_x, &t_y);
 
+#endif
+#else
+        pressed = false;
 #endif
 
         if (pressed) {
@@ -688,11 +494,11 @@ void loop(void)
 
         // At the beginning of a new loop, make sure we do not use last loop's touch.
         boolean pressed = false;
-
+#ifdef ENABLE_TOUCH_SCREEN
 #ifdef USECAPTOUCH
-        touchPos = ts.read();
+        touchPos = ts.scan();
 
-        if (touchPos.touched) {
+        if (touchPos.touch_count == 1) {
             // Flip things around so it matches our screen rotation
             //         p.x = map(p.x, 0, 320, 320, 0);
             //      t_x = touchPos.xPos;
@@ -705,6 +511,9 @@ void loop(void)
         uint16_t t_x = 0, t_y = 0;
         pressed = tft.getTouch(&t_x, &t_y);
 
+#endif
+#else
+        pressed = false;
 #endif
 
         if (pressed) {
@@ -759,14 +568,15 @@ void loop(void)
         // At the beginning of a new loop, make sure we do not use last loop's touch.
         boolean pressed = false;
 
+#ifdef ENABLE_TOUCH_SCREEN
 #ifdef USECAPTOUCH
-        touchPos = ts.read();
+        touchPos = ts.scan();
 
-        if (touchPos.touched) {
+        if (touchPos.touch_count == 1) {
             // Flip things around so it matches our screen rotation
             //         p.x = map(p.x, 0, 320, 320, 0);
-            t_x = touchPos.xPos;
-            t_y = touchPos.yPos;
+            t_x = touchPos.tp[0].x;
+            t_y = touchPos.tp[0].y;
 
             pressed = true;
         }
@@ -774,6 +584,9 @@ void loop(void)
 
         pressed = tft.getTouch(&t_x, &t_y);
 
+#endif
+#else
+        pressed = false;
 #endif
 
         // Check if the X and Y coordinates of the touch are within one of our buttons

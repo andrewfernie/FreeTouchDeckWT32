@@ -1,4 +1,5 @@
 // Start as WiFi station
+#include "ConfigHelper.h"
 
 bool startWifiStation()
 {
