@@ -1,13 +1,23 @@
 {
 	"folders": [
 		{
+			"name": "FreeTouchDeckWT32",
 			"path": "."
 		}
 	],
 	"settings": {
 		"files.associations": {
-			"*.cps": "javascript",
-			"random": "cpp"
+			"*.tcc": "c",
+			"iomanip": "c",
+			"limits": "c",
+			"numeric": "c",
+			"streambuf": "c",
+			"tuple": "c",
+			"type_traits": "c",
+			"utility": "c",
+			"cmath": "c",
+			"ctime": "c",
+			"cstring": "cpp"
 		}
 	}
 }

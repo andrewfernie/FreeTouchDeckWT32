@@ -207,34 +207,39 @@ FT6336U_TouchPointType FT6336U::scan(void){
     touchPoint.touch_count = read_td_status(); 
 
     if(touchPoint.touch_count == 0) {
-        touchPoint.tp[0].status = release; 
+        touchPoint.tp[0].tapped = (touchPoint.tp[0].status != release);
+        touchPoint.tp[0].status = release;
+        touchPoint.tp[1].tapped = (touchPoint.tp[1].status != release);
         touchPoint.tp[1].status = release; 
     }
     else if(touchPoint.touch_count == 1) {
         uint8_t id1 = read_touch1_id(); // id1 = 0 or 1
         touchPoint.tp[id1].status = (touchPoint.tp[id1].status == release) ? touch : stream; 
         touchPoint.tp[id1].x = read_touch1_x(); 
-        touchPoint.tp[id1].y = read_touch1_y(); 
+        touchPoint.tp[id1].y = read_touch1_y();
+        touchPoint.tp[id1].tapped = false;
         touchPoint.tp[~id1 & 0x01].status = release; 
     }
     else {
         uint8_t id1 = read_touch1_id(); // id1 = 0 or 1
         touchPoint.tp[id1].status = (touchPoint.tp[id1].status == release) ? touch : stream; 
-        touchPoint.tp[id1].x = read_touch1_x(); 
-        touchPoint.tp[id1].y = read_touch1_y(); 
-        uint8_t id2 = read_touch2_id(); // id2 = 0 or 1(~id1 & 0x01)
+        touchPoint.tp[id1].x = read_touch1_x();
+        touchPoint.tp[id1].y = read_touch1_y();
+        touchPoint.tp[id1].tapped = false;
+        uint8_t id2 = read_touch2_id();  // id2 = 0 or 1(~id1 & 0x01)
         touchPoint.tp[id2].status = (touchPoint.tp[id2].status == release) ? touch : stream; 
         touchPoint.tp[id2].x = read_touch2_x(); 
-        touchPoint.tp[id2].y = read_touch2_y(); 
+        touchPoint.tp[id2].y = read_touch2_y();
+        touchPoint.tp[id2].tapped = false;
     }
 
     return touchPoint; 
 
 }
 
-
 // Private Function
-uint8_t FT6336U::readByte(uint8_t addr) {
+uint8_t FT6336U::readByte(uint8_t addr)
+{
     uint8_t rdData = 0; 
     uint8_t rdDataCount; 
     do {
@@ -247,8 +252,7 @@ uint8_t FT6336U::readByte(uint8_t addr) {
     while(Wire.available()) {
         rdData = Wire.read(); 
     }
-    return rdData; 
-
+    return rdData;
 }
 void FT6336U::writeByte(uint8_t addr, uint8_t data) {
     DEBUG_PRINTLN("")

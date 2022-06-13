@@ -476,10 +476,10 @@ void bleKeyboardAction(int action, int value, char *symbol)
                     }
                     else {
                         generalconfig.sleepenable = true;
-                        Interval = generalconfig.sleeptimer * 60000;
+                        Interval = generalconfig.sleeptimer * MIN_TO_MS;
                         MSG_INFOLN("[INFO]: Sleep enabled.");
                         MSG_INFO("[INFO]: Timer set to: ");
-                        Serial.println(generalconfig.sleeptimer);
+                        MSG_INFOLN(generalconfig.sleeptimer);
                     }
                     break;
                 case 5:

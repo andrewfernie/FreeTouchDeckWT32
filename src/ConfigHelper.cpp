@@ -3,19 +3,21 @@
 
 bool startWifiStation()
 {
-    Serial.printf("[INFO]: Connecting to %s", wificonfig.ssid);
+    MSG_INFO1("startWifiStation(): Connecting to", wificonfig.ssid);
     if (String(WiFi.SSID()) != String(wificonfig.ssid)) {
         WiFi.mode(WIFI_STA);
-        WiFi.begin(wificonfig.ssid, wificonfig.password);
+        WiFi.begin();
         uint8_t attempts = wificonfig.attempts;
+        MSG_DEBUG1("startWifiStation(): attempts =", attempts);
+        MSG_DEBUG1("startWifiStation(): attempt delay =", wificonfig.attemptdelay);
         while (WiFi.status() != WL_CONNECTED) {
             if (attempts == 0) {
                 WiFi.disconnect();
-                Serial.println("");
+                MSG_INFOLN("");
                 return false;
             }
             delay(wificonfig.attemptdelay);
-            Serial.print(".");
+            MSG_INFO(".");
             attempts--;
         }
     }
@@ -29,10 +31,10 @@ bool startWifiStation()
     esp_bt_controller_deinit();
     esp_bt_controller_mem_release(ESP_BT_MODE_BTDM);
 
-    Serial.println("");
+    MSG_INFOLN("");
     MSG_INFOLN("[INFO]: BLE Stopped");
     MSG_INFO("[INFO]: Connected! IP address: ");
-    Serial.println(WiFi.localIP());
+    MSG_INFOLN(WiFi.localIP());
 
     MDNS.begin(wificonfig.hostname);
     MDNS.addService("http", "tcp", 80);
@@ -52,9 +54,9 @@ void startWifiAP()
 {
     WiFi.mode(WIFI_AP);
     WiFi.softAP(wificonfig.ssid, wificonfig.password);
-    Serial.println("");
+    MSG_INFOLN("");
     MSG_INFO("[INFO]: Access Point Started! IP address: ");
-    Serial.println(WiFi.softAPIP());
+    MSG_INFOLN(WiFi.softAPIP());
 
     // Delete the task bleKeyboard had create to free memory and to not interfere with AsyncWebServer
     bleKeyboard.end();
@@ -65,7 +67,7 @@ void startWifiAP()
     esp_bt_controller_deinit();
     esp_bt_controller_mem_release(ESP_BT_MODE_BTDM);
 
-    Serial.println("");
+    MSG_INFOLN("");
     MSG_INFOLN("[INFO]: BLE Stopped");
 
     MDNS.begin(wificonfig.hostname);
@@ -89,7 +91,7 @@ void startDefaultAP()
     WiFi.mode(WIFI_AP);
     WiFi.softAP(ssid, password);
     MSG_INFO("[INFO]: Access Point Started! IP address: ");
-    Serial.println(WiFi.softAPIP());
+    MSG_INFOLN(WiFi.softAPIP());
 
     // Delete the task bleKeyboard had create to free memory and to not interfere with AsyncWebServer
     bleKeyboard.end();

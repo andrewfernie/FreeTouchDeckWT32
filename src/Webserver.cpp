@@ -148,7 +148,7 @@ String handleInfo()
     output += String(wificonfig.wifimode);
     output += "\"},";
 
-#ifdef touchInterruptPin
+#ifdef TOUCH_INTERRUPT_PIN
     output += "{\"";
     output += "Sleep";
     output += "\":\"";
@@ -233,7 +233,7 @@ void handleJSONUpload(AsyncWebServerRequest *request, String filename, size_t in
     }
 
     if (!validMenuName && filename != "general.json" && filename != "wificonfig.json") {
-        Serial.printf("[INFO]: JSON has invalid name: %s\n", filename.c_str());
+        MSG_INFO1F("[INFO]: JSON has invalid name: %s\n", filename.c_str());
         errorCode = "102";
         errorText = "JSON file has an invalid name. You can only upload JSON files with the following file names:";
         errorText += "<ul><li>menu0.json</li><li>menu1.json</li><li>menu2.json</li><li>menu3.json</li><li>menu4.json</li>";
@@ -242,7 +242,7 @@ void handleJSONUpload(AsyncWebServerRequest *request, String filename, size_t in
         return;
     }
     if (!index) {
-        Serial.printf("[INFO]: JSON Upload Start: %s\n", filename.c_str());
+        MSG_INFO1F("[INFO]: JSON Upload Start: %s\n", filename.c_str());
         filename = "/config/" + filename;  // TODO: Does the config directory need to be hardcoded?
 
         // Open the file on first call and store the file handle in the request object
@@ -253,7 +253,7 @@ void handleJSONUpload(AsyncWebServerRequest *request, String filename, size_t in
         request->_tempFile.write(data, len);
     }
     if (final) {
-        Serial.printf("[INFO]: JSON Uploaded: %s\n", filename.c_str());
+        MSG_INFO1F("[INFO]: JSON Uploaded: %s\n", filename.c_str());
         // Close the file handle as the upload is now done
         request->_tempFile.close();
         request->send(FILESYSTEM, "/upload.htm");
@@ -277,7 +277,7 @@ void handleJSONUpload(AsyncWebServerRequest *request, String filename, size_t in
 void handleAPIUpload(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final)
 {
     if (!index) {
-        Serial.printf("[INFO]: API file Upload Start: %s\n", filename.c_str());
+        MSG_INFO1F("[INFO]: API file Upload Start: %s\n", filename.c_str());
         filename = "/uploads/" + filename;  // TODO: Does the uploads directory need to be hardcoded?
 
         // Open the file on first call and store the file handle in the request object
@@ -288,7 +288,7 @@ void handleAPIUpload(AsyncWebServerRequest *request, String filename, size_t ind
         request->_tempFile.write(data, len);
     }
     if (final) {
-        Serial.printf("[INFO]: API file Uploaded: %s\n", filename.c_str());
+        MSG_INFO1F("[INFO]: API file Uploaded: %s\n", filename.c_str());
         // Close the file handle as the upload is now done
         request->_tempFile.close();
         request->send(FILESYSTEM, "/upload.htm");
@@ -306,7 +306,7 @@ bool spaceLeft()
 {
     float minmem = 100000.00;  // Always leave 100 kB free pace on SPIFFS
     float freeMemory = SPIFFS.totalBytes() - SPIFFS.usedBytes();
-    Serial.printf("[INFO]: Free memory left: %f bytes\n", freeMemory);
+    MSG_INFO1F("[INFO]: Free memory left: %f bytes\n", freeMemory);
     if (freeMemory < minmem) {
         return false;
     }
@@ -332,7 +332,7 @@ bool spaceLeft()
 void handleUpload(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final)
 {
     if (!index) {
-        Serial.printf("[INFO]: File Upload Start: %s\n", filename.c_str());
+        MSG_INFO1F("[INFO]: File Upload Start: %s\n", filename.c_str());
         filename = "/logos/" + filename;
         // Open the file on first call and store the file handle in the request object
         request->_tempFile = SPIFFS.open(filename, "w");
@@ -342,7 +342,7 @@ void handleUpload(AsyncWebServerRequest *request, String filename, size_t index,
         request->_tempFile.write(data, len);
     }
     if (final) {
-        Serial.printf("[INFO]: File Uploaded: %s\n", filename.c_str());
+        MSG_INFO1F("[INFO]: File Uploaded: %s\n", filename.c_str());
         // Close the file handle as the upload is now done
         request->_tempFile.close();
 
@@ -365,7 +365,6 @@ void handleUpload(AsyncWebServerRequest *request, String filename, size_t index,
         }
     }
 }
-
 
 /**
  * @brief This function handles delete.htm template processing.
@@ -533,9 +532,12 @@ void handlerSetup()
                 int menuNumber;
                 File file;
 
-                int16_t numScanned = sscanf(savemode.c_str(), "%4s%d", tmp, &menuNumber);
+                AsyncWebParameter *p = request->getParam("menuname", true);
+                String save_menu_number_str = p->value().c_str();
 
-                if ((numScanned == 2) && (menuNumber >= 0) && (menuNumber < NUM_PAGES)) {
+                int16_t numScanned = sscanf(save_menu_number_str.c_str(), "%d", &menuNumber);
+
+                if ((numScanned == 1) && (menuNumber >= 0) && (menuNumber < NUM_PAGES)) {
                     MSG_INFO1("[INFO]: Saving Menu ", menuNumber);
                     fileName += menuNumber;
                     fileName += ".json";
@@ -546,9 +548,13 @@ void handlerSetup()
                         MSG_WARNLN(fileName);
                         return;
                     }
+                    else {
+                        MSG_INFO("[INFO]: Will write to: ");
+                        MSG_INFOLN(fileName);
+                    }
                 }
                 else {
-                    MSG_WARN1("[WARNING]: Invalid menu number ", menuNumber);
+                    MSG_WARN2("[WARNING]: Invalid menu ", savemode.c_str(), save_menu_number_str.c_str());
                     return;
                 }
 
@@ -558,13 +564,16 @@ void handlerSetup()
 
                 for (uint8_t row = 0; row < BUTTON_ROWS; row++) {
                     for (uint8_t col = 0; col < BUTTON_COLS; col++) {
-
-                        String buttonName = "button" + String(row+1) + String(col+1);
+                        String buttonName = "button" + String(row + 1) + String(col + 1);
                         JsonObject buttonObject = doc.createNestedObject(buttonName);
 
                         AsyncWebParameter *buttonXXlogo = request->getParam(buttonName + "logo", true);
-
-                        menu["logo"] = buttonXXlogo->value().c_str();
+                        if (strcmp(buttonXXlogo->value().c_str(), "---") == 0) {
+                            buttonObject["logo"] = "";
+                        }
+                        else {
+                            buttonObject["logo"] = buttonXXlogo->value().c_str();
+                        }
 
                         if (request->hasParam(buttonName + "latch", true)) {
                             buttonObject["latch"] = true;
@@ -574,7 +583,6 @@ void handlerSetup()
                         }
 
                         AsyncWebParameter *buttonXXlatchlogo = request->getParam(buttonName + "latchlogo", true);
-                        Serial.println(buttonXXlatchlogo->value().c_str());
                         if (strcmp(buttonXXlatchlogo->value().c_str(), "---") == 0) {
                             buttonObject["latchlogo"] = "";
                         }
@@ -598,12 +606,18 @@ void handlerSetup()
                         AsyncWebParameter *buttonXXvalue2 = request->getParam(buttonName + "value2", true);
                         buttonObject_valuearray.add(buttonXXvalue2->value().c_str());
                     }
-                    MSG_INFO("[INFO]: handlerSetup(): free heap memory ");
-                    MSG_INFOLN(ESP.getFreeHeap());
                 }
                 if (serializeJsonPretty(doc, file) == 0) {
                     MSG_WARNLN("[WARNING]: Failed to write to file");
                 }
+#ifdef DUMP_JSON_DOC_ON_SAVE
+                else {
+
+                    char buffer[3000];
+                    serializeJsonPretty(doc, buffer);
+                    MSG_INFOLN(buffer);
+                }
+#endif
                 file.close();
             }
             request->send(FILESYSTEM, "/saveconfig.htm");
@@ -689,9 +703,9 @@ void handlerSetup()
     webserver.onRequestBody([](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
         if (!index)
             Serial.printf("BodyStart: %u\n", total);
-        Serial.printf("%s", (const char *)data);
+        MSG_INFO1F("%s", (const char *)data);
         if (index + len == total)
-            Serial.printf("BodyEnd: %u\n", total);
+            MSG_INFO1F("BodyEnd: %u\n", total);
     });
 
     webserver.on(
@@ -724,7 +738,7 @@ void handlerSetup()
         int filecount = 0;
         for (i = 0; i < params; i++) {
             AsyncWebParameter *p = request->getParam(i);
-            Serial.printf("[INFO]: Deleting file: %s\n", p->value().c_str());
+            MSG_INFO1F("[INFO]: Deleting file: %s\n", p->value().c_str());
             String filename = "/logos/";
             filename += p->value().c_str();
             if (SPIFFS.exists(filename)) {
@@ -751,17 +765,17 @@ void handlerSetup()
     webserver.on("/download", HTTP_GET, [](AsyncWebServerRequest *request) {
         AsyncWebParameter *p = request->getParam("file");
         String filerequest = p->value().c_str();
-        Serial.printf("[INFO]: Requested file: %s\n", filerequest.c_str());
+        MSG_INFO1F("[INFO]: Requested file: %s\n", filerequest.c_str());
 
         String downloadfile = "/config/" + filerequest;
-        Serial.printf("[INFO]: Full path: %s\n", downloadfile.c_str());
+        MSG_INFO1F("[INFO]: Full path: %s\n", downloadfile.c_str());
 
         if (FILESYSTEM.exists(downloadfile)) {
-            Serial.printf("[INFO]: Download file %s\n", downloadfile.c_str());
+            MSG_INFO1F("[INFO]: Download file %s\n", downloadfile.c_str());
             request->send(FILESYSTEM, downloadfile, String(), true);
         }
         else {
-            Serial.printf("[INFO]: Download file %s doesn't exits!\n", downloadfile.c_str());
+            MSG_INFO1F("[INFO]: Download file %s doesn't exits!\n", downloadfile.c_str());
         }
     });
 

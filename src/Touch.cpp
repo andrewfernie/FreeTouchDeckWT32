@@ -10,6 +10,9 @@
 *
 * @note If USECAPTOUCH is defined we do not need to calibrate touch
 */
+
+#ifndef USECAPTOUCH
+
 void touch_calibrate()
 {
   uint16_t calData[5];
@@ -74,3 +77,4 @@ void touch_calibrate()
     }
   }
 }
+#endif

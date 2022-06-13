@@ -194,7 +194,7 @@ void printinfo()
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
     tft.printf("Version: %s\n", versionnumber);
 
-#ifdef touchInterruptPin
+#ifdef TOUCH_INTERRUPT_PIN
     if (generalconfig.sleepenable) {
         tft.println("Sleep: Enabled");
         tft.printf("Sleep timer: %u minutes\n", generalconfig.sleeptimer);
@@ -227,8 +227,15 @@ void printinfo()
     tft.println(ARDUINOJSON_VERSION);
     tft.print("TFT_eSPI version: ");
     tft.println(TFT_ESPI_VERSION);
-    tft.println("ESP-IDF: ");
+    tft.print("ESP-IDF: ");
     tft.println(esp_get_idf_version());
-
+    tft.println(esp_get_idf_version());
+    tft.print("Free heap: ");
+    float freeram = esp_get_free_heap_size();
+    tft.print(freeram / 1000);
+    tft.print("kB,");
+    freeram = esp_get_minimum_free_heap_size();
+    tft.print(freeram / 1000);
+    tft.print("kB");
     displayinginfo = true;
 }

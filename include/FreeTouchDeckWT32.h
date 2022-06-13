@@ -61,7 +61,8 @@
 
 // ------- Uncomment the define below if you want to use SLEEP and wake up on touch -------
 // The pin where the IRQ from the touch screen is connected uses ESP-style GPIO_NUM_* instead of just pinnumber
-//#define touchInterruptPin GPIO_NUM_39
+#define TOUCH_INTERRUPT_PIN GPIO_NUM_39
+#define MIN_TO_MS 60 * 1000
 
 // ------- Uncomment the define below if you want to use a piezo buzzer and specify the pin where the speaker is connected -------
 //#define speakerPin 26
@@ -101,7 +102,7 @@ extern const char *versionnumber;
 #define KEY_TEXTSIZE 1
 
 // Touch panel definition
-//#define ENABLE_TOUCH_SCREEN
+#define ENABLE_TOUCH_SCREEN
 #ifdef ENABLE_TOUCH_SCREEN
 #ifdef USECAPTOUCH
 #include <Wire.h>

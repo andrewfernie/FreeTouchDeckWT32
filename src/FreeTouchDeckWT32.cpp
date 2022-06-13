@@ -62,7 +62,7 @@ BleKeyboard bleKeyboard("FreeTouchDeck", "Made by me");
 
 AsyncWebServer webserver(80);
 
-TFT_eSPI tft = TFT_eSPI();
+TFT_eSPI tft = TFT_eSPI(SCREEN_HEIGHT, SCREEN_WIDTH);       // Apparently the display is a portrait mode, but we want landscape
 
 Preferences savedStates;
 
@@ -107,7 +107,7 @@ void setup()
     // Use serial port
     Serial.begin(115200);
     Serial.setDebugOutput(true);
-    Serial.println("");
+    MSG_INFOLN("");
 
     MSG_INFOLN("[INFO]: Loading saved brightness state");
     savedStates.begin("ftd", false);
@@ -124,7 +124,6 @@ void setup()
         MSG_INFOLN("[INFO]: Capacitive touch started!");
     }
 #endif
-    MSG_INFOLN("[INFO]: After ts.begin");
 #endif
 
     // Setup PWM channel and attach pin 32
@@ -141,7 +140,6 @@ void setup()
     // Initialise the TFT screen
     tft.init();
 
-        delay(5000);   //AJF
     // Set the rotation before we calibrate
     tft.setRotation(1);
 
@@ -150,8 +148,6 @@ void setup()
 
     esp_sleep_wakeup_cause_t wakeup_reason;
     wakeup_reason = esp_sleep_get_wakeup_cause();
-
-
 
     // -------------- Start filesystem ----------------------
 
@@ -166,7 +162,7 @@ void setup()
     // Check for free space
 
     MSG_INFO("[INFO]: Free Space: ");
-    Serial.println(SPIFFS.totalBytes() - SPIFFS.usedBytes());
+    MSG_INFOLN(SPIFFS.totalBytes() - SPIFFS.usedBytes());
 
     //------------------ Load Wifi Config ----------------------------------------------
 
@@ -198,7 +194,7 @@ void setup()
         tft.setTextSize(1);
         tft.setTextColor(TFT_WHITE, TFT_BLACK);
         tft.printf("Loading version %s\n", versionnumber);
-        Serial.printf("[INFO]: Loading version %s\n", versionnumber);
+        MSG_INFO1F("[INFO]: Loading version %s\n", versionnumber);
     }
 
 // Calibrate the touch screen and retrieve the scaling factors
@@ -223,8 +219,8 @@ void setup()
 
         if (!checkfile(filename)) {
             MSG_ERROR("[ERROR]: ");
-            Serial.print(filename);
-            Serial.println(" not found!");
+            MSG_ERROR(filename);
+            MSG_INFOLN(" not found!");
             while (1)
                 yield();  // Stop!
         }
@@ -269,10 +265,10 @@ void setup()
             Serial.print("[WARNING]: menu");
             sprintf(menuNumberZeroIndex, "%d", i);
             Serial.print(menuNumberZeroIndex);
-            Serial.println(".json seems to be corrupted!");
+            MSG_INFOLN(".json seems to be corrupted!");
             Serial.print("[WARNING]: To reset to default type 'reset ");
             Serial.print(menuName);
-            Serial.println("'.");
+            MSG_INFOLN("'.");
             strcpy(jsonFileFail, menuName);
             pageNum = SPECIAL_4_PAGE;
         }
@@ -290,11 +286,11 @@ void setup()
 
     // ---------------- Printing version numbers -----------------------------------------------
     MSG_INFO("[INFO]: BLE Keyboard version: ");
-    Serial.println(BLE_KEYBOARD_VERSION);
+    MSG_INFOLN(BLE_KEYBOARD_VERSION);
     MSG_INFO("[INFO]: ArduinoJson version: ");
-    Serial.println(ARDUINOJSON_VERSION);
+    MSG_INFOLN(ARDUINOJSON_VERSION);
     MSG_INFO("[INFO]: TFT_eSPI version: ");
-    Serial.println(TFT_ESPI_VERSION);
+    MSG_INFOLN(TFT_ESPI_VERSION);
 
     // ---------------- Start the first keypad -------------
 
@@ -305,14 +301,14 @@ void setup()
     MSG_INFOLN("[INFO]: Drawing keypad");
     drawKeypad();
 
-#ifdef touchInterruptPin
+#ifdef TOUCH_INTERRUPT_PIN
     if (generalconfig.sleepenable) {
-        pinMode(touchInterruptPin, INPUT_PULLUP);
-        Interval = generalconfig.sleeptimer * 60000;
+        pinMode(TOUCH_INTERRUPT_PIN, INPUT_PULLUP);
+        Interval = generalconfig.sleeptimer * MIN_TO_MS;
         MSG_INFOLN("[INFO]: Sleep enabled.");
         MSG_INFO("[INFO]: Sleep timer = ");
-        Serial.print(generalconfig.sleeptimer);
-        Serial.println(" minutes");
+        MSG_INFO(generalconfig.sleeptimer);
+        MSG_INFOLN(" minutes");
         sleepIsLatched = 1;
     }
 #endif
@@ -328,6 +324,9 @@ void loop(void)
 #endif
 #endif
 
+    bool pressed = false;
+    uint16_t t_x = 0, t_y = 0;
+
     // Check if there is data available on the serial input that needs to be handled.
 
     if (Serial.available()) {
@@ -342,7 +341,7 @@ void loop(void)
             String value = Serial.readString();
             MSG_INFO1("[INFO] received command setssid ", value.c_str());
             if (saveWifiSSID(value)) {
-                Serial.printf("[INFO]: Saved new SSID: %s\n", value.c_str());
+                MSG_INFO1F("[INFO]: Saved new SSID: %s\n", value.c_str());
                 loadMainConfig();
                 MSG_INFOLN("[INFO]: New configuration loaded");
             }
@@ -351,7 +350,7 @@ void loop(void)
             String value = Serial.readString();
             MSG_INFO1("[INFO] received command setpassword ", value.c_str());
             if (saveWifiPW(value)) {
-                Serial.printf("[INFO]: Saved new Password: %s\n", value.c_str());
+                MSG_INFO1F("[INFO]: Saved new Password: %s\n", value.c_str());
                 loadMainConfig();
                 MSG_INFOLN("[INFO]: New configuration loaded");
             }
@@ -360,7 +359,7 @@ void loop(void)
             String value = Serial.readString();
             MSG_INFO1("[INFO] received command setwifimode ", value.c_str());
             if (saveWifiMode(value)) {
-                Serial.printf("[INFO]: Saved new WiFi Mode: %s\n", value.c_str());
+                MSG_INFO1F("[INFO]: Saved new WiFi Mode: %s\n", value.c_str());
                 loadMainConfig();
                 MSG_INFOLN("[INFO]: New configuration loaded");
             }
@@ -369,7 +368,7 @@ void loop(void)
             String value = "WIFI_STA";
             MSG_INFO1("[INFO] received command setwifimode ", value.c_str());
             if (saveWifiMode(value)) {
-                Serial.printf("[INFO]: Saved new WiFi Mode: %s\n", value.c_str());
+                MSG_INFO1F("[INFO]: Saved new WiFi Mode: %s\n", value.c_str());
                 loadMainConfig();
                 MSG_INFOLN("[INFO]: New configuration loaded");
             }
@@ -378,7 +377,7 @@ void loop(void)
             String value = "WIFI_AP";
             MSG_INFO1("[INFO] received command setwifimode ", value.c_str());
             if (saveWifiMode(value)) {
-                Serial.printf("[INFO]: Saved new WiFi Mode: %s\n", value.c_str());
+                MSG_INFO1F("[INFO]: Saved new WiFi Mode: %s\n", value.c_str());
                 loadMainConfig();
                 MSG_INFOLN("[INFO]: New configuration loaded");
             }
@@ -389,7 +388,7 @@ void loop(void)
         }
         else if (command == "reset") {
             String file = Serial.readString();
-            Serial.printf("[INFO]: Resetting %s.json now\n", file.c_str());
+            MSG_INFO1F("[INFO]: Resetting %s.json now\n", file.c_str());
             resetconfig(file);
         }
         else {
@@ -400,49 +399,44 @@ void loop(void)
                 if (command == menuName && pageNum != i && pageNum != WEB_REQUEST_PAGE) {
                     pageNum = i;
                     drawKeypad();
-                    Serial.print("Auto Switched to ");
-                    Serial.println(menuName);
+                    MSG_INFO("Auto Switched to ");
+                    MSG_INFOLN(menuName);
                 }
             }
         }
     }
 
+    touchPos = ts.scan();
+
+    if (touchPos.tp[0].tapped) {
+        MSG_DEBUG(" Tap Detected: ");
+        MSG_DEBUGLN(touchPos.touch_count);
+        MSG_DEBUG(" pageNum: ");
+        MSG_DEBUGLN(pageNum);
+        MSG_DEBUG(" x,y: ");
+        MSG_DEBUG(touchPos.tp[0].x);
+        MSG_DEBUG(" : ");
+        MSG_DEBUGLN(touchPos.tp[0].y);
+
+        // Flip things around so it matches our screen rotation
+        //         p.x = map(p.x, 0, 320, 320, 0);
+
+        t_x = touchPos.tp[0].y;
+        t_y = 320 - touchPos.tp[0].x;
+        pressed = true;
+   }
+    else {
+        pressed = false;
+    }
+
     if (pageNum == WEB_REQUEST_PAGE) {
         // If the pageNum is set to NUM_PAGES+1, do not draw anything on screen or check for touch
-        // and start handeling incomming web requests.
+        // and start handling incomming web requests.
     }
     else if (pageNum == SPECIAL_PAGE_INFO) {
         if (!displayinginfo) {
             printinfo();
         }
-
-        //    uint16_t t_x = 0, t_y = 0;
-
-        // At the beginning of a new loop, make sure we do not use last loop's touch.
-        boolean pressed = false;
-
-#ifdef ENABLE_TOUCH_SCREEN
-#ifdef USECAPTOUCH
-
-        touchPos = ts.scan();
-
-        if (touchPos.touch_count == 1) {
-            // Flip things around so it matches our screen rotation
-            //        p.x = map(p.x, 0, 320, 320, 0);
-            //       t_x = touchPos.xPos;
-            //        t_y = touchPos.yPos;
-
-            pressed = true;
-        }
-
-#else
-        uint16_t t_x = 0, t_y = 0;
-        pressed = tft.getTouch(&t_x, &t_y);
-
-#endif
-#else   
-        pressed = false;
-#endif
 
         if (pressed) {
             displayinginfo = false;
@@ -453,32 +447,6 @@ void loop(void)
     }
     else if (pageNum == SPECIAL_3_PAGE) {
         // We were unable to connect to WiFi. Waiting for touch to get back to the settings menu.
-        //    uint16_t t_x = 0, t_y = 0;
-
-        // At the beginning of a new loop, make sure we do not use last loop's touch.
-        boolean pressed = false;
-
-#ifdef ENABLE_TOUCH_SCREEN
-#ifdef USECAPTOUCH
-        touchPos = ts.scan();
-
-        if (touchPos.touch_count == 1) {
-            // Flip things around so it matches our screen rotation
-            //         p.x = map(p.x, 0, 320, 320, 0);
-            //        t_x = touchPos.xPos;
-            //        t_y = touchPos.yPos;
-
-            pressed = true;
-        }
-
-#else
-        uint16_t t_x = 0, t_y = 0;
-        pressed = tft.getTouch(&t_x, &t_y);
-
-#endif
-#else
-        pressed = false;
-#endif
 
         if (pressed) {
             // Return to Settings page
@@ -490,31 +458,6 @@ void loop(void)
     }
     else if (pageNum == SPECIAL_4_PAGE) {
         // A JSON file failed to load. We are drawing an error message. And waiting for a touch.
-        // uint16_t t_x = 0, t_y = 0;
-
-        // At the beginning of a new loop, make sure we do not use last loop's touch.
-        boolean pressed = false;
-#ifdef ENABLE_TOUCH_SCREEN
-#ifdef USECAPTOUCH
-        touchPos = ts.scan();
-
-        if (touchPos.touch_count == 1) {
-            // Flip things around so it matches our screen rotation
-            //         p.x = map(p.x, 0, 320, 320, 0);
-            //      t_x = touchPos.xPos;
-            //     t_y = touchPos.yPos;
-
-            pressed = true;
-        }
-
-#else
-        uint16_t t_x = 0, t_y = 0;
-        pressed = tft.getTouch(&t_x, &t_y);
-
-#endif
-#else
-        pressed = false;
-#endif
 
         if (pressed) {
             // Load home screen
@@ -527,7 +470,7 @@ void loop(void)
     else {
         // Check if sleep is enabled and if our timer has ended.
 
-#ifdef touchInterruptPin
+#ifdef TOUCH_INTERRUPT_PIN
         if (generalconfig.sleepenable) {
             if (millis() > previousMillis + Interval) {
                 // The timer has ended and we are going to sleep  .
@@ -556,38 +499,13 @@ void loop(void)
 #endif
                 MSG_INFOLN("[INFO]: Saving latched states");
 
-                esp_sleep_enable_ext0_wakeup(touchInterruptPin, 0);
+                esp_sleep_enable_ext0_wakeup(TOUCH_INTERRUPT_PIN, 0);
                 esp_deep_sleep_start();
             }
         }
 #endif
 
-        // Touch coordinates are stored here
-        uint16_t t_x = 0, t_y = 0;
-
-        // At the beginning of a new loop, make sure we do not use last loop's touch.
-        boolean pressed = false;
-
-#ifdef ENABLE_TOUCH_SCREEN
-#ifdef USECAPTOUCH
-        touchPos = ts.scan();
-
-        if (touchPos.touch_count == 1) {
-            // Flip things around so it matches our screen rotation
-            //         p.x = map(p.x, 0, 320, 320, 0);
-            t_x = touchPos.tp[0].x;
-            t_y = touchPos.tp[0].y;
-
-            pressed = true;
-        }
-#else
-
-        pressed = tft.getTouch(&t_x, &t_y);
-
-#endif
-#else
-        pressed = false;
-#endif
+        // // Touch coordinates are stored here
 
         // Check if the X and Y coordinates of the touch are within one of our buttons
         for (uint8_t i = 0; i < BUTTON_ROWS; i++) {

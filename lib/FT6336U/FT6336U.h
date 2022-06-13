@@ -88,6 +88,7 @@ enum TouchStatusEnum
 struct TouchPointType
 {
     TouchStatusEnum status;
+    bool tapped;
     uint16_t x;
     uint16_t y;
 };
@@ -194,7 +195,10 @@ public:
     // Scan Function
     FT6336U_TouchPointType scan(void);
 
-private:
+    // Detect tap - valid on release
+    FT6336U_TouchPointType touch1_tapped(void);
+
+   private:
     int8_t sda = -1;
     int8_t scl = -1;
 

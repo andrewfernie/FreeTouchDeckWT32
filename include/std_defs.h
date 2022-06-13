@@ -36,6 +36,10 @@
         MSG_PORT.print(" "); \
         MSG_PORT.println(y); \
     }
+#define MSG_BASIC1F(x, y)       \
+    if (LOG_MSG_BASIC) {        \
+        MSG_PORT.printf(x, y);  \
+    }
 #define MSG_BASIC2(x, y, z)  \
     if (LOG_MSG_BASIC) {     \
         MSG_PORT.print(x);   \
@@ -68,6 +72,10 @@
         MSG_PORT.print(x);   \
         MSG_PORT.print(" "); \
         MSG_PORT.println(y); \
+    }
+#define MSG_ERROR1F(x, y)      \
+    if (LOG_MSG_LEVEL > 0) {   \
+        MSG_PORT.printf(x, y); \
     }
 #define MSG_ERROR2(x, y, z)  \
     if (LOG_MSG_LEVEL > 0) { \
@@ -102,6 +110,10 @@
         MSG_PORT.print(" "); \
         MSG_PORT.println(y); \
     }
+#define MSG_WARN1F(x, y)      \
+    if (LOG_MSG_LEVEL > 1) {   \
+        MSG_PORT.printf(x, y); \
+    }
 #define MSG_WARN2(x, y, z)   \
     if (LOG_MSG_LEVEL > 1) { \
         MSG_PORT.print(x);   \
@@ -135,6 +147,10 @@
         MSG_PORT.print(" "); \
         MSG_PORT.println(y); \
     }
+#define MSG_INFO1F(x, y)       \
+    if (LOG_MSG_LEVEL > 2) {   \
+        MSG_PORT.printf(x, y); \
+    }
 #define MSG_INFO2(x, y, z)   \
     if (LOG_MSG_LEVEL > 2) { \
         MSG_PORT.print(x);   \
@@ -167,6 +183,10 @@
         MSG_PORT.print(x);   \
         MSG_PORT.print(" "); \
         MSG_PORT.println(y); \
+    }
+#define MSG_DEBUG1F(x, y)      \
+    if (LOG_MSG_DEBUG > 0) {   \
+        MSG_PORT.printf(x, y); \
     }
 #define MSG_DEBUG2(x, y, z)  \
     if (LOG_MSG_DEBUG > 0) { \

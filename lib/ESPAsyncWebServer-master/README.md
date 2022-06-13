@@ -1373,7 +1373,7 @@ void setup(){
 
 void loop(){
   if(shouldReboot){
-    Serial.println("Rebooting...");
+    MSG_INFOLN("Rebooting...");
     delay(100);
     ESP.restart();
   }

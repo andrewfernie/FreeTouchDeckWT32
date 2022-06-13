@@ -246,22 +246,19 @@
 			<br>
 			<h3>Menu</h3>
 			<p>
-			<div id="container">
-				<form>
-					<label for="framework">Select Menu</label>
-					<!--					<select onchange="updateMenuItems(this)" class="menunumber" id='menunumber' name='menunumber'> -->
-					<select onchange="updateMenuItems(this)">
-						<option value="0">Home Menu</option>
-						<option value="1">Menu 1</option>
-						<option value="2">Menu 2</option>
-						<option value="3">Menu 3</option>
-						<option value="4">Menu 4</option>
-						<option value="5">Menu 5</option>
-						<option value="6">Menu 6</option>
-					</select>
-				</form>
-			</div>
 			<form method='post' id="savemenu" action='/saveconfig'>
+				<label for="framework">Select Menu</label>
+				<!--					<select onchange="updateMenuItems(this)" class="menunumber" id='menunumber' name='menunumber'> -->
+				<select name="menuname" id="menuname" onchange="updateMenuItems(this)">
+					<option value="0">Home Menu</option>
+					<option value="1">Menu 1</option>
+					<option value="2">Menu 2</option>
+					<option value="3">Menu 3</option>
+					<option value="4">Menu 4</option>
+					<option value="5">Menu 5</option>
+					<option value="6">Menu 6</option>
+				</select>
+				<div></div>		<!-- Add a little space -->
 				<table style="height: 250px; width: 100%; border: 1px solid #000088; text-align: left;">
 					<tbody>
 						<tr>

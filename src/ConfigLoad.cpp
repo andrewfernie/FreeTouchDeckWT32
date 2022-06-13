@@ -43,8 +43,8 @@ bool loadMainConfig()
     configfile.close();
 
     if (error) {
-        MSG_ERRORLN("[ERROR]: deserializeJson() error");
-        Serial.println(error.c_str());
+        MSG_ERROR("[ERROR]: deserializeJson() error");
+        MSG_ERRORLN(error.c_str());
         return false;
     }
 
@@ -135,8 +135,8 @@ bool loadConfig(String value)
         configfile.close();
 
         if (error) {
-            MSG_ERRORLN("[ERROR]: deserializeJson() error");
-            Serial.println(error.c_str());
+            MSG_ERROR("[ERROR]: deserializeJson() error");
+            MSG_ERRORLN(error.c_str());
             return false;
         }
         return true;
@@ -223,8 +223,8 @@ bool loadConfig(String value)
         configfile.close();
 
         if (error) {
-            MSG_ERRORLN("[ERROR]: deserializeJson() error");
-            Serial.println(error.c_str());
+            MSG_ERROR("[ERROR]: deserializeJson() error");
+            MSG_ERRORLN(error.c_str());
             return false;
         }
         return true;
