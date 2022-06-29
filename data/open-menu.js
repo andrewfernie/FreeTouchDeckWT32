@@ -17,11 +17,13 @@ function openMenu(evt, menuitem) {
     }
 
     // Show the current tab, and add an "active" class to the button that opened the tab
-    console.log("openMenu");
-    console.log(menuitem);
+    console.log("openMenu():", menuitem);
+
+    if (menuitem == 'menu') {
+        getMenuConfig(0);
+    }
     document.getElementById(menuitem).style.display = "block";
     evt.currentTarget.className += " active";
 }
 
-//document.addEventListener('DOMContentLoaded', openMenu(event, 'intro'), false);
-
+document.addEventListener('DOMContentLoaded', openMenu(event, 'intro'), false);
