@@ -1,0 +1,182 @@
+{
+  "button11": {
+    "logo": "refresh.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "5",
+      "6",
+      "0"
+    ],
+    "valuearray": [
+      "2",
+      "5",
+      "0"
+    ]
+  },
+  "button12": {
+    "logo": "devtools.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "6",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "12",
+      "0",
+      "0"
+    ]
+  },
+  "button13": {
+    "logo": "closetab.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "5",
+      "4",
+      "0"
+    ],
+    "valuearray": [
+      "1",
+      "w",
+      "0"
+    ]
+  },
+  "button14": {
+    "logo": "closetab.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "5",
+      "4",
+      "0"
+    ],
+    "valuearray": [
+      "1",
+      "w",
+      "0"
+    ]
+  },
+  "button21": {
+    "logo": "sp.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "5",
+      "7",
+      "0"
+    ],
+    "valuearray": [
+      "1",
+      "2",
+      "0"
+    ]
+  },
+  "button22": {
+    "logo": "sp.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "5",
+      "7",
+      "0"
+    ],
+    "valuearray": [
+      "1",
+      "1",
+      "0"
+    ]
+  },
+  "button23": {
+    "logo": "home.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "11",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "6",
+      "0",
+      "0"
+    ]
+  },
+  "button24": {
+    "logo": "home.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "11",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "6",
+      "0",
+      "0"
+    ]
+  },
+  "button31": {
+    "logo": "sp.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "5",
+      "7",
+      "0"
+    ],
+    "valuearray": [
+      "1",
+      "2",
+      "0"
+    ]
+  },
+  "button32": {
+    "logo": "sp.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "5",
+      "7",
+      "0"
+    ],
+    "valuearray": [
+      "1",
+      "1",
+      "0"
+    ]
+  },
+  "button33": {
+    "logo": "home.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "11",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "6",
+      "0",
+      "0"
+    ]
+  },
+  "button34": {
+    "logo": "home.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "11",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "6",
+      "0",
+      "0"
+    ]
+  }
+}

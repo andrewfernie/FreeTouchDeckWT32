@@ -1,0 +1,182 @@
+{
+  "button11": {
+    "logo": "videooff.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "5",
+      "4",
+      "0"
+    ],
+    "valuearray": [
+      "3",
+      "v",
+      "0"
+    ]
+  },
+  "button12": {
+    "logo": "mute.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "5",
+      "4",
+      "0"
+    ],
+    "valuearray": [
+      "3",
+      "a",
+      "0"
+    ]
+  },
+  "button13": {
+    "logo": "raisehand.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "5",
+      "4",
+      "0"
+    ],
+    "valuearray": [
+      "3",
+      "y",
+      "0"
+    ]
+  },
+  "button14": {
+    "logo": "raisehand.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "5",
+      "4",
+      "0"
+    ],
+    "valuearray": [
+      "3",
+      "y",
+      "0"
+    ]
+  },
+  "button21": {
+    "logo": "OnePerson.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "5",
+      "6",
+      "0"
+    ],
+    "valuearray": [
+      "3",
+      "1",
+      "0"
+    ]
+  },
+  "button22": {
+    "logo": "People.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "5",
+      "6",
+      "0"
+    ],
+    "valuearray": [
+      "3",
+      "2",
+      "0"
+    ]
+  },
+  "button23": {
+    "logo": "home.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "11",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "6",
+      "0",
+      "0"
+    ]
+  },
+  "button24": {
+    "logo": "home.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "11",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "6",
+      "0",
+      "0"
+    ]
+  },
+  "button31": {
+    "logo": "OnePerson.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "5",
+      "6",
+      "0"
+    ],
+    "valuearray": [
+      "3",
+      "1",
+      "0"
+    ]
+  },
+  "button32": {
+    "logo": "People.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "5",
+      "6",
+      "0"
+    ],
+    "valuearray": [
+      "3",
+      "2",
+      "0"
+    ]
+  },
+  "button33": {
+    "logo": "home.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "11",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "6",
+      "0",
+      "0"
+    ]
+  },
+  "button34": {
+    "logo": "home.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "11",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "6",
+      "0",
+      "0"
+    ]
+  }
+}
