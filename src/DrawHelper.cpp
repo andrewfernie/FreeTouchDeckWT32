@@ -218,7 +218,7 @@ void printinfo()
 #endif
 
     tft.print("Free Storage: ");
-    float freemem = SPIFFS.totalBytes() - SPIFFS.usedBytes();
+    float freemem = FILESYSTEM.totalBytes() - FILESYSTEM.usedBytes();
     tft.print(freemem / 1000);
     tft.println(" kB");
     tft.print("BLE Keyboard version: ");

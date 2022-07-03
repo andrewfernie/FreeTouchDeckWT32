@@ -10,9 +10,19 @@
 #include <BleKeyboard.h> // BleKeyboard is used to communicate over BLE
 #include <FS.h>          // Filesystem support header
 #include <Preferences.h> // Used to store states before sleep/reboot
-#include <SPIFFS.h>      // Filesystem support header
 #include <TFT_eSPI.h>    // The TFT_eSPI library
 #include <pgmspace.h>    // PROGMEM support header
+
+// Define the storage to be used. For now just SPIFFS.
+#define FILESYSTEM_LITTLEFS
+
+#ifdef FILESYSTEM_LITTLEFS
+#define FILESYSTEM LittleFS
+#include <LITTLEFS.h>  // https://github.com/lorol/LITTLEFS
+#else
+#define FILESYSTEM SPIFFS
+#include <SPIFFS.h>    // Filesystem support header
+#endif
 
 #if defined(USE_NIMBLE)
 
@@ -80,9 +90,9 @@ extern const char *versionnumber;
 // Logo Size
 #define LOGO_SIZE_X_Y 75
 
-// Button layout and number of paghes with buttons
-#define BUTTON_ROWS 2
-#define BUTTON_COLS 3
+// Button layout and number of pages with buttons
+#define BUTTON_ROWS 3
+#define BUTTON_COLS 4
 #define BUTTONS_PER_PAGE (BUTTON_ROWS * BUTTON_COLS)
 #define NUM_PAGES 7 // Includes Menu0 which is the home page
 
@@ -121,9 +131,6 @@ extern AsyncWebServer webserver;
 extern TFT_eSPI tft;
 
 extern Preferences savedStates;
-
-// Define the storage to be used. For now just SPIFFS.
-#define FILESYSTEM SPIFFS
 
 // This is the file name used to store the calibration data
 // You can change this to create new calibration files.

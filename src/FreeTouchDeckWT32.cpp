@@ -41,7 +41,7 @@
 
 #include "FreeTouchDeckWT32.h"
 
-const char *versionnumber = "WT32-0.9.17";
+const char *versionnumber = "WT32-0.9.20";
 
 /* Version 0.9.16.
  *
@@ -152,17 +152,17 @@ void setup()
     // -------------- Start filesystem ----------------------
 
     if (!FILESYSTEM.begin()) {
-        MSG_ERRORLN("[ERROR]: SPIFFS initialisation failed!");
-        drawErrorMessage("Failed to init SPIFFS! Did you upload the data folder?");
+        MSG_ERRORLN("[ERROR]: LittleFS initialisation failed!");
+        drawErrorMessage("Failed to init LittleFS! Did you upload the data folder?");
         while (1)
             yield();  // We stop here
     }
-    MSG_INFOLN("[INFO]: SPIFFS initialised.");
+    MSG_INFOLN("[INFO]: LittleFS initialised.");
 
     // Check for free space
 
     MSG_INFO("[INFO]: Free Space: ");
-    MSG_INFOLN(SPIFFS.totalBytes() - SPIFFS.usedBytes());
+    MSG_INFOLN(FILESYSTEM.totalBytes() - FILESYSTEM.usedBytes());
 
     //------------------ Load Wifi Config ----------------------------------------------
 
