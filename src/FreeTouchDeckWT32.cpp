@@ -409,14 +409,14 @@ void loop(void)
     touchPos = ts.scan();
 
     if (touchPos.tp[0].tapped) {
-        MSG_DEBUG(" Tap Detected: ");
-        MSG_DEBUGLN(touchPos.touch_count);
-        MSG_DEBUG(" pageNum: ");
-        MSG_DEBUGLN(pageNum);
-        MSG_DEBUG(" x,y: ");
-        MSG_DEBUG(touchPos.tp[0].x);
-        MSG_DEBUG(" : ");
-        MSG_DEBUGLN(touchPos.tp[0].y);
+        // MSG_DEBUG(" Tap Detected: ");
+        // MSG_DEBUGLN(touchPos.touch_count);
+        // MSG_DEBUG(" pageNum: ");
+        // MSG_DEBUGLN(pageNum);
+        // MSG_DEBUG(" x,y: ");
+        // MSG_DEBUG(touchPos.tp[0].x);
+        // MSG_DEBUG(" : ");
+        // MSG_DEBUGLN(touchPos.tp[0].y);
 
         // Flip things around so it matches our screen rotation
         //         p.x = map(p.x, 0, 320, 320, 0);

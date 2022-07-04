@@ -612,7 +612,6 @@ void handlerSetup()
                 }
 #ifdef DUMP_JSON_DOC_ON_SAVE
                 else {
-
                     char buffer[3000];
                     serializeJsonPretty(doc, buffer);
                     MSG_INFOLN(buffer);
@@ -760,7 +759,7 @@ void handlerSetup()
         resultFiles = "";
     });
 
-    // ----------------------------- JSON Download Handle ---------------------------------
+    // ----------------------------- Download Handle ---------------------------------
 
     webserver.on("/download", HTTP_GET, [](AsyncWebServerRequest *request) {
         AsyncWebParameter *p = request->getParam("file");
@@ -780,7 +779,27 @@ void handlerSetup()
     });
 
     // ----------------------------- JSON Upload Handle ---------------------------------
-
     webserver.on(
         "/uploadJSON", HTTP_POST, [](AsyncWebServerRequest *request) {}, handleJSONUpload);
+
+    // ----------------------------- JSON Download Handle ---------------------------------
+    webserver.on("/downloadJSON", HTTP_GET, [](AsyncWebServerRequest *request) {
+        MSG_INFOLN("webserver.on downloadJSON");
+        
+        AsyncWebParameter *p = request->getParam("menuname");
+        String filerequest = "menu" + p->value() + ".json";
+
+        MSG_INFO1F("[INFO]: Requested file: %s\n", filerequest.c_str());
+
+        String downloadfile = "/config/" + filerequest;
+        MSG_INFO1F("[INFO]: Full path: %s\n", downloadfile.c_str());
+
+        if (FILESYSTEM.exists(downloadfile)) {
+            MSG_INFO1F("[INFO]: Download file %s\n", downloadfile.c_str());
+            request->send(FILESYSTEM, downloadfile, String(), true);
+        }
+        else {
+            MSG_INFO1F("[INFO]: Download file %s doesn't exits!\n", downloadfile.c_str());
+        }
+    });
 }
