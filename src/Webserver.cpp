@@ -532,7 +532,7 @@ void handlerSetup()
                 int menuNumber;
                 File file;
 
-                AsyncWebParameter *p = request->getParam("menuname", true);
+                AsyncWebParameter *p = request->getParam("menunumberlist_save", true);
                 String save_menu_number_str = p->value().c_str();
 
                 int16_t numScanned = sscanf(save_menu_number_str.c_str(), "%d", &menuNumber);
@@ -558,7 +558,7 @@ void handlerSetup()
                     return;
                 }
 
-                DynamicJsonDocument doc(2400);
+                DynamicJsonDocument doc(5000);
 
                 JsonObject menu = doc.to<JsonObject>();
 
@@ -612,7 +612,7 @@ void handlerSetup()
                 }
 #ifdef DUMP_JSON_DOC_ON_SAVE
                 else {
-                    char buffer[3000];
+                    char buffer[5000];
                     serializeJsonPretty(doc, buffer);
                     MSG_INFOLN(buffer);
                 }
@@ -785,8 +785,8 @@ void handlerSetup()
     // ----------------------------- JSON Download Handle ---------------------------------
     webserver.on("/downloadJSON", HTTP_GET, [](AsyncWebServerRequest *request) {
         MSG_INFOLN("webserver.on downloadJSON");
-        
-        AsyncWebParameter *p = request->getParam("menuname");
+
+        AsyncWebParameter *p = request->getParam("menunumberlist_download");
         String filerequest = "menu" + p->value() + ".json";
 
         MSG_INFO1F("[INFO]: Requested file: %s\n", filerequest.c_str());

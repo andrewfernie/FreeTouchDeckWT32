@@ -18,7 +18,7 @@ bool loadMainConfig()
     }
     File configfile = FILESYSTEM.open("/config/wificonfig.json");
 
-    DynamicJsonDocument doc(256);
+    DynamicJsonDocument doc(384);
 
     DeserializationError error = deserializeJson(doc, configfile);
 
@@ -151,7 +151,7 @@ bool loadConfig(String value)
         MSG_DEBUG1("[INFO] load_config opening file ", configFileName);
         File configfile = FILESYSTEM.open(configFileName, "r");
 
-        DynamicJsonDocument doc(3000);
+        DynamicJsonDocument doc(5000);
 
         DeserializationError error = deserializeJson(doc, configfile);
 

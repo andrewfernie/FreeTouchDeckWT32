@@ -235,8 +235,7 @@
 			<p>
 			<form method='post' id="savemenu" action='/saveconfig'>
 				<label for="framework">Select Menu</label>
-				<!--					<select onchange="updateMenuItems(this)" class="menunumber" id='menunumber' name='menunumber'> -->
-				<select name="menuname" id="menuname" onchange="updateMenuItems(this)">
+				<select name="menunumberlist_save" id="menunumberlist_save" onchange="updateMenuItems(this)">
 					<option value="0">Home Menu</option>
 					<option value="1">Menu 1</option>
 					<option value="2">Menu 2</option>
@@ -249,27 +248,30 @@
 				<table style="height: 250px; width: 100%; border: 1px solid #000088; text-align: left;">
 					<tbody>
 						<tr>
-							<td style="width: 8%;">
+							<td style="width: 10%;">
 								Row/Col
 							</td>
-							<td style="width: 23%;">
+							<td style="width: 18%;">
 								Col 1
 							</td>
-							<td style="width: 23%;">
+							<td style="width: 18%;">
 								Col 2
 							</td>
-							<td style="width: 23%;">
+							<td style="width: 18%;">
 								Col 3
 							</td>
-							<td style="width: 23%;">
+							<td style="width: 18%;">
 								Col 4
+							</td>
+							<td style="width: 18%;">
+								Col 5
 							</td>
 						</tr>
 						<tr>
-							<td style="width: 8%;">
+							<td style="width: 10%;">
 								Row 1
 							</td>
-							<td style="width: 23%;">
+							<td style="width: 18%;">
 								Button 1-1
 								<br />Image:
 								<select class="images" id='button11logo' name='button11logo'></select>
@@ -286,7 +288,7 @@
 								latch to: <select class="images" id='button11latchlogo'
 									name='button11latchlogo'></select>
 							</td>
-							<td style="width: 23%;">
+							<td style="width: 18%;">
 								Button 1-2
 								<br />Image:
 								<select class="images" id='button12logo' name='button12logo'></select>
@@ -303,7 +305,7 @@
 								latch to: <select class="images" id='button12latchlogo'
 									name='button12latchlogo'></select>
 							</td>
-							<td style="width: 23%;">
+							<td style="width: 18%;">
 								Button 1-3
 								<br />Image:
 								<select class="images" id='button13logo' name='button13logo'></select>
@@ -320,7 +322,7 @@
 								latch to: <select class="images" id='button13latchlogo'
 									name='button13latchlogo'></select>
 							</td>
-							<td style="width: 23%;">
+							<td style="width: 18%;">
 								Button 1-4
 								<br />Image:
 								<select class="images" id='button14logo' name='button14logo'></select>
@@ -337,12 +339,29 @@
 								latch to: <select class="images" id='button14latchlogo'
 									name='button14latchlogo'></select>
 							</td>
+							<td style="width: 18%;">
+								Button 1-5
+								<br />Image:
+								<select class="images" id='button15logo' name='button15logo'></select>
+								<br />Action 1:
+								<select class="actions" id='button15action0' name='button15action0'></select>
+								<select class="actions" id='button15value0' name='button15value0'></select>
+								<br />Action 2:
+								<select class="actions" id='button15action1' name='button15action1'></select>
+								<select class="actions" id='button15value1' name='button15value1'></select>
+								<br />Action 3:
+								<select class="actions" id='button15action2' name='button15action2'></select>
+								<select class="actions" id='button15value2' name='button15value2'></select>
+								<br />Latch? <input type="checkbox" id="button15latch" name="button15latch">
+								latch to: <select class="images" id='button15latchlogo'
+									name='button15latchlogo'></select>
+							</td>
 						</tr>
 						<tr>
-							<td style="width: 8%;">
+							<td style="width: 10%;">
 								Row 2
 							</td>
-							<td style="width: 23%;">
+							<td style="width: 18%;">
 								Button 2-1
 								<br />Image:
 								<select class="images" id='button21logo' name='button21logo'></select>
@@ -359,7 +378,7 @@
 								latch to: <select class="images" id='button21latchlogo'
 									name='button21latchlogo'></select>
 							</td>
-							<td style="width: 23%;">
+							<td style="width: 18%;">
 								Button 2-2
 								<br />Image:
 								<select class="images" id='button22logo' name='button22logo'></select>
@@ -376,7 +395,7 @@
 								latch to: <select class="images" id='button22latchlogo'
 									name='button22latchlogo'></select>
 							</td>
-							<td style="width: 23%;">
+							<td style="width: 18%;">
 								Button 2-3
 								<br />Image:
 								<select class="images" id='button23logo' name='button23logo'></select>
@@ -393,7 +412,7 @@
 								latch to: <select class="images" id='button23latchlogo'
 									name='button23latchlogo'></select>
 							</td>
-							<td style="width: 23%;">
+							<td style="width: 18%;">
 								Button 2-4
 								<br />Image:
 								<select class="images" id='button24logo' name='button24logo'></select>
@@ -410,12 +429,29 @@
 								latch to: <select class="images" id='button24latchlogo'
 									name='button24latchlogo'></select>
 							</td>
+							<td style="width: 18%;">
+								Button 2-5
+								<br />Image:
+								<select class="images" id='button25logo' name='button25logo'></select>
+								<br />Action 1:
+								<select class="actions" id='button25action0' name='button25action0'></select>
+								<select class="actions" id='button25value0' name='button25value0'></select>
+								<br />Action 2:
+								<select class="actions" id='button25action1' name='button25action1'></select>
+								<select class="actions" id='button25value1' name='button25value1'></select>
+								<br />Action 3:
+								<select class="actions" id='button25action2' name='button25action2'></select>
+								<select class="actions" id='button25value2' name='button25value2'></select>
+								<br />Latch? <input type="checkbox" id="button25latch" name="button25latch">
+								latch to: <select class="images" id='button25latchlogo'
+									name='button25latchlogo'></select>
+							</td>
 						</tr>
 						<tr>
-							<td style="width: 8%;">
+							<td style="width: 10%;">
 								Row 3
 							</td>
-							<td style="width: 23%;">
+							<td style="width: 18%;">
 								Button 3-1
 								<br />Image:
 								<select class="images" id='button31logo' name='button31logo'></select>
@@ -432,7 +468,7 @@
 								latch to: <select class="images" id='button31latchlogo'
 									name='button31latchlogo'></select>
 							</td>
-							<td style="width: 23%;">
+							<td style="width: 18%;">
 								Button 3-2
 								<br />Image:
 								<select class="images" id='button32logo' name='button32logo'></select>
@@ -449,7 +485,7 @@
 								latch to: <select class="images" id='button32latchlogo'
 									name='button32latchlogo'></select>
 							</td>
-							<td style="width: 23%;">
+							<td style="width: 18%;">
 								Button 3-3
 								<br />Image:
 								<select class="images" id='button33logo' name='button33logo'></select>
@@ -466,7 +502,7 @@
 								latch to: <select class="images" id='button33latchlogo'
 									name='button33latchlogo'></select>
 							</td>
-							<td style="width: 23%;">
+							<td style="width: 18%;">
 								Button 3-4
 								<br />Image:
 								<select class="images" id='button34logo' name='button34logo'></select>
@@ -482,6 +518,23 @@
 								<br />Latch? <input type="checkbox" id="button34latch" name="button34latch">
 								latch to: <select class="images" id='button34latchlogo'
 									name='button34latchlogo'></select>
+							</td>
+							<td style="width: 18%;">
+								Button 3-5
+								<br />Image:
+								<select class="images" id='button35logo' name='button35logo'></select>
+								<br />Action 1:
+								<select class="actions" id='button35action0' name='button35action0'></select>
+								<select class="actions" id='button35value0' name='button35value0'></select>
+								<br />Action 2:
+								<select class="actions" id='button35action1' name='button35action1'></select>
+								<select class="actions" id='button35value1' name='button35value1'></select>
+								<br />Action 3:
+								<select class="actions" id='button35action2' name='button35action2'></select>
+								<select class="actions" id='button35value2' name='button35value2'></select>
+								<br />Latch? <input type="checkbox" id="button35latch" name="button35latch">
+								latch to: <select class="images" id='button35latchlogo'
+									name='button35latchlogo'></select>
 							</td>
 						</tr>
 					</tbody>
@@ -557,7 +610,7 @@
 			<div class="form" style="width: 20%; text-align: center; margin: auto;">
 				<label for="framework">Select Menu</label>
 				<!--					<select onchange="updateMenuItems(this)" class="menunumber" id='menunumber' name='menunumber'> -->
-				<select name="menuname" id="menuname" form="downloadjsonfile">
+				<select name="menunumberlist_download" id="menunumberlist_download" form="downloadjsonfile">
 					<option value="0">Home Menu</option>
 					<option value="1">Menu 1</option>
 					<option value="2">Menu 2</option>
@@ -1691,6 +1744,75 @@
 				})
 				.change();
 
+			// menu button15
+			$.each(items, function () {
+				$('<option />')
+					.attr('value', this.value)
+					.html(this.name)
+					.appendTo('#button15action0');
+				temp[this.value] = this.subitems;
+			});
+
+			$('#button15action0')
+				.change(function () {
+					var value = $(this).val();
+					var menu = $('#button15value0');
+
+					menu.empty();
+					$.each(temp[value], function () {
+						$('<option />')
+							.attr('value', this.value)
+							.html(this.name)
+							.appendTo(menu);
+					});
+				})
+				.change();
+
+			$.each(items, function () {
+				$('<option />')
+					.attr('value', this.value)
+					.html(this.name)
+					.appendTo('#button15action1');
+				temp[this.value] = this.subitems;
+			});
+
+			$('#button15action1')
+				.change(function () {
+					var value = $(this).val();
+					var menu = $('#button15value1');
+
+					menu.empty();
+					$.each(temp[value], function () {
+						$('<option />')
+							.attr('value', this.value)
+							.html(this.name)
+							.appendTo(menu);
+					});
+				})
+				.change();
+
+			$.each(items, function () {
+				$('<option />')
+					.attr('value', this.value)
+					.html(this.name)
+					.appendTo('#button15action2');
+				temp[this.value] = this.subitems;
+			});
+
+			$('#button15action2')
+				.change(function () {
+					var value = $(this).val();
+					var menu = $('#button15value2');
+
+					menu.empty();
+					$.each(temp[value], function () {
+						$('<option />')
+							.attr('value', this.value)
+							.html(this.name)
+							.appendTo(menu);
+					});
+				})
+				.change();
 			////////////////////////// Row 2 ///////////////////////////
 			// menu button21
 			$.each(items, function () {
@@ -1762,7 +1884,7 @@
 				})
 				.change();
 
-			// menuButton 12
+			// menuButton 22
 			$.each(items, function () {
 				$('<option />')
 					.attr('value', this.value)
@@ -1961,6 +2083,76 @@
 				.change(function () {
 					var value = $(this).val();
 					var menu = $('#button24value2');
+
+					menu.empty();
+					$.each(temp[value], function () {
+						$('<option />')
+							.attr('value', this.value)
+							.html(this.name)
+							.appendTo(menu);
+					});
+				})
+				.change();
+
+			// menu button25
+			$.each(items, function () {
+				$('<option />')
+					.attr('value', this.value)
+					.html(this.name)
+					.appendTo('#button25action0');
+				temp[this.value] = this.subitems;
+			});
+
+			$('#button25action0')
+				.change(function () {
+					var value = $(this).val();
+					var menu = $('#button25value0');
+
+					menu.empty();
+					$.each(temp[value], function () {
+						$('<option />')
+							.attr('value', this.value)
+							.html(this.name)
+							.appendTo(menu);
+					});
+				})
+				.change();
+
+			$.each(items, function () {
+				$('<option />')
+					.attr('value', this.value)
+					.html(this.name)
+					.appendTo('#button25action1');
+				temp[this.value] = this.subitems;
+			});
+
+			$('#button25action1')
+				.change(function () {
+					var value = $(this).val();
+					var menu = $('#button25value1');
+
+					menu.empty();
+					$.each(temp[value], function () {
+						$('<option />')
+							.attr('value', this.value)
+							.html(this.name)
+							.appendTo(menu);
+					});
+				})
+				.change();
+
+			$.each(items, function () {
+				$('<option />')
+					.attr('value', this.value)
+					.html(this.name)
+					.appendTo('#button25action2');
+				temp[this.value] = this.subitems;
+			});
+
+			$('#button25action2')
+				.change(function () {
+					var value = $(this).val();
+					var menu = $('#button25value2');
 
 					menu.empty();
 					$.each(temp[value], function () {
@@ -2253,6 +2445,75 @@
 				})
 				.change();
 
+			// menu button35
+			$.each(items, function () {
+				$('<option />')
+					.attr('value', this.value)
+					.html(this.name)
+					.appendTo('#button35action0');
+				temp[this.value] = this.subitems;
+			});
+
+			$('#button35action0')
+				.change(function () {
+					var value = $(this).val();
+					var menu = $('#button35value0');
+
+					menu.empty();
+					$.each(temp[value], function () {
+						$('<option />')
+							.attr('value', this.value)
+							.html(this.name)
+							.appendTo(menu);
+					});
+				})
+				.change();
+
+			$.each(items, function () {
+				$('<option />')
+					.attr('value', this.value)
+					.html(this.name)
+					.appendTo('#button35action1');
+				temp[this.value] = this.subitems;
+			});
+
+			$('#button35action1')
+				.change(function () {
+					var value = $(this).val();
+					var menu = $('#button35value1');
+
+					menu.empty();
+					$.each(temp[value], function () {
+						$('<option />')
+							.attr('value', this.value)
+							.html(this.name)
+							.appendTo(menu);
+					});
+				})
+				.change();
+
+			$.each(items, function () {
+				$('<option />')
+					.attr('value', this.value)
+					.html(this.name)
+					.appendTo('#button35action2');
+				temp[this.value] = this.subitems;
+			});
+
+			$('#button35action2')
+				.change(function () {
+					var value = $(this).val();
+					var menu = $('#button35value2');
+
+					menu.empty();
+					$.each(temp[value], function () {
+						$('<option />')
+							.attr('value', this.value)
+							.html(this.name)
+							.appendTo(menu);
+					});
+				})
+				.change();
 
 		});
 		</script>
@@ -2290,270 +2551,53 @@
 				.then((data) => {
 					console.log('getMenuConfig(): loading menu ' + menuFileName);
 
-					////////////////////////// Row 1 ///////////////////////////
-					document.getElementById('button11logo').value = data.button11.logo;
+					for (let row = 1; row <= 3; row++){
+						for (let col = 1; col <= 5; col++){
+							
+							buttonName = 'button' + row + col
 
-					if (data.button11.latch) {
-						document.getElementById("button11latch").checked = true;
+							if(data[buttonName] !== undefined){
+								document.getElementById(buttonName + 'logo').value = data[buttonName]['logo'];
+
+								if (data[buttonName]['latch']) {
+									document.getElementById(buttonName + 'latch').checked = true;
+								} else {
+									document.getElementById(buttonName + 'latch').checked = false;
+								}
+
+								if (data[buttonName]['latchlogo'] == '') {
+									document.getElementById(buttonName + 'latchlogo').value = '---';
+								} else {
+									document.getElementById(buttonName + 'latchlogo').value = data[buttonName]['latchlogo'];
+								}
+
+								document.getElementById(buttonName + 'action0').value = data[buttonName]['actionarray'][0];
+								document.getElementById(buttonName + 'action1').value = data[buttonName]['actionarray'][1];
+								document.getElementById(buttonName + 'action2').value = data[buttonName]['actionarray'][2];
+
+								fillvaluelist(document.getElementById(buttonName + 'value0'), selecteditems[data[buttonName]['actionarray'][0]].subitems);
+								document.getElementById(buttonName + 'value0').value = data[buttonName]['valuearray'][0];
+								fillvaluelist(document.getElementById(buttonName + 'value1'), selecteditems[data[buttonName]['actionarray'][1]].subitems);
+								document.getElementById(buttonName + 'value1').value = data[buttonName]['valuearray'][1];
+								fillvaluelist(document.getElementById(buttonName + 'value2'), selecteditems[data[buttonName]['actionarray'][2]].subitems);
+								document.getElementById(buttonName + 'value2').value = data[buttonName]['valuearray'][2];
+							} else {
+								console.log('Button ' + buttonName+' not found');
+								document.getElementById(buttonName + 'logo').value = 'question.bmp';
+
+								document.getElementById(buttonName + 'latch').checked = false;
+
+								document.getElementById(buttonName + 'latchlogo').value = '---';
+
+								document.getElementById(buttonName + 'action0').value = 0;
+								document.getElementById(buttonName + 'action1').value = 0;
+								document.getElementById(buttonName + 'action2').value = 0;
+								document.getElementById(buttonName + 'value0').value = 0;
+								document.getElementById(buttonName + 'value1').value = 0;
+								document.getElementById(buttonName + 'value2').value = 0;
+							}
+						}
 					}
-
-					if (data.button11.latchlogo == "") {
-						document.getElementById("button11latchlogo").value = "---";
-					} else {
-						document.getElementById("button11latchlogo").value = data.button11.latchlogo;
-					}
-
-					document.getElementById('button11action0').value = data.button11.actionarray[0];
-					document.getElementById('button11action1').value = data.button11.actionarray[1];
-					document.getElementById('button11action2').value = data.button11.actionarray[2];
-					fillvaluelist(button11value0, selecteditems[data.button11.actionarray[0]].subitems);
-					document.getElementById('button11value0').value = data.button11.valuearray[0];
-					fillvaluelist(button11value1, selecteditems[data.button11.actionarray[1]].subitems);
-					document.getElementById('button11value1').value = data.button11.valuearray[1];
-					fillvaluelist(button11value2, selecteditems[data.button11.actionarray[2]].subitems);
-					document.getElementById('button11value2').value = data.button11.valuearray[2];
-
-
-					document.getElementById("button12logo").value = data.button12.logo;
-					if (data.button12.latch) {
-						document.getElementById("button12latch").checked = true;
-					}
-
-					if (data.button12.latchlogo == "") {
-						document.getElementById("button12latchlogo").value = "---";
-					} else {
-						document.getElementById("button12latchlogo").value = data.button12.latchlogo;
-					}
-
-
-					document.getElementById('button12action0').value = data.button12.actionarray[0];
-					document.getElementById('button12action1').value = data.button12.actionarray[1];
-					document.getElementById('button12action2').value = data.button12.actionarray[2];
-					fillvaluelist(button12value0, selecteditems[data.button12.actionarray[0]].subitems);
-					document.getElementById('button12value0').value = data.button12.valuearray[0];
-					fillvaluelist(button12value1, selecteditems[data.button12.actionarray[1]].subitems);
-					document.getElementById('button12value1').value = data.button12.valuearray[1];
-					fillvaluelist(button12value2, selecteditems[data.button12.actionarray[2]].subitems);
-					document.getElementById('button12value2').value = data.button12.valuearray[2];
-
-					document.getElementById("button13logo").value = data.button13.logo;
-					if (data.button13.latch) {
-						document.getElementById("button13latch").checked = true;
-					}
-
-					if (data.button13.latchlogo == "") {
-						document.getElementById("button13latchlogo").value = "---";
-					} else {
-						document.getElementById("button13latchlogo").value = data.button13.latchlogo;
-					}
-
-					document.getElementById('button13action0').value = data.button13.actionarray[0];
-					document.getElementById('button13action1').value = data.button13.actionarray[1];
-					document.getElementById('button13action2').value = data.button13.actionarray[2];
-					fillvaluelist(button13value0, selecteditems[data.button13.actionarray[0]].subitems);
-					document.getElementById('button13value0').value = data.button13.valuearray[0];
-					fillvaluelist(button13value1, selecteditems[data.button13.actionarray[1]].subitems);
-					document.getElementById('button13value1').value = data.button13.valuearray[1];
-					fillvaluelist(button13value2, selecteditems[data.button13.actionarray[2]].subitems);
-					document.getElementById('button13value2').value = data.button13.valuearray[2];
-
-					document.getElementById("button14logo").value = data.button14.logo;
-					if (data.button14.latch) {
-						document.getElementById("button14latch").checked = true;
-					}
-
-					if (data.button14.latchlogo == "") {
-						document.getElementById("button14latchlogo").value = "---";
-					} else {
-						document.getElementById("button14latchlogo").value = data.button14.latchlogo;
-					}
-
-					document.getElementById('button14action0').value = data.button14.actionarray[0];
-					document.getElementById('button14action1').value = data.button14.actionarray[1];
-					document.getElementById('button14action2').value = data.button14.actionarray[2];
-					fillvaluelist(button14value0, selecteditems[data.button14.actionarray[0]].subitems);
-					document.getElementById('button14value0').value = data.button14.valuearray[0];
-					fillvaluelist(button14value1, selecteditems[data.button14.actionarray[1]].subitems);
-					document.getElementById('button14value1').value = data.button14.valuearray[1];
-					fillvaluelist(button14value2, selecteditems[data.button14.actionarray[2]].subitems);
-					document.getElementById('button14value2').value = data.button14.valuearray[2];
-
-					////////////////////////// Row 2 ///////////////////////////
-					document.getElementById("button21logo").value = data.button21.logo;
-
-					if (data.button21.latch) {
-						document.getElementById("button21latch").checked = true;
-					}
-
-					if (data.button21.latchlogo == "") {
-						document.getElementById("button21latchlogo").value = "---";
-					} else {
-						document.getElementById("button21latchlogo").value = data.button21.latchlogo;
-					}
-
-					document.getElementById('button21action0').value = data.button21.actionarray[0];
-					document.getElementById('button21action1').value = data.button21.actionarray[1];
-					document.getElementById('button21action2').value = data.button21.actionarray[2];
-					fillvaluelist(button21value0, selecteditems[data.button21.actionarray[0]].subitems);
-					document.getElementById('button21value0').value = data.button21.valuearray[0];
-					fillvaluelist(button21value1, selecteditems[data.button21.actionarray[1]].subitems);
-					document.getElementById('button21value1').value = data.button21.valuearray[1];
-					fillvaluelist(button21value2, selecteditems[data.button21.actionarray[2]].subitems);
-					document.getElementById('button21value2').value = data.button21.valuearray[2];
-
-
-					document.getElementById("button22logo").value = data.button22.logo;
-					if (data.button22.latch) {
-						document.getElementById("button22latch").checked = true;
-					}
-
-					if (data.button22.latchlogo == "") {
-						document.getElementById("button22latchlogo").value = "---";
-					} else {
-						document.getElementById("button22latchlogo").value = data.button22.latchlogo;
-					}
-
-
-					document.getElementById('button22action0').value = data.button22.actionarray[0];
-					document.getElementById('button22action1').value = data.button22.actionarray[1];
-					document.getElementById('button22action2').value = data.button22.actionarray[2];
-					fillvaluelist(button22value0, selecteditems[data.button22.actionarray[0]].subitems);
-					document.getElementById('button22value0').value = data.button22.valuearray[0];
-					fillvaluelist(button22value1, selecteditems[data.button22.actionarray[1]].subitems);
-					document.getElementById('button22value1').value = data.button22.valuearray[1];
-					fillvaluelist(button22value2, selecteditems[data.button22.actionarray[2]].subitems);
-					document.getElementById('button22value2').value = data.button22.valuearray[2];
-
-					document.getElementById("button23logo").value = data.button23.logo;
-					if (data.button23.latch) {
-						document.getElementById("button23latch").checked = true;
-					}
-
-					if (data.button23.latchlogo == "") {
-						document.getElementById("button23latchlogo").value = "---";
-					} else {
-						document.getElementById("button23latchlogo").value = data.button23.latchlogo;
-					}
-
-					document.getElementById('button23action0').value = data.button23.actionarray[0];
-					document.getElementById('button23action1').value = data.button23.actionarray[1];
-					document.getElementById('button23action2').value = data.button23.actionarray[2];
-					fillvaluelist(button23value0, selecteditems[data.button23.actionarray[0]].subitems);
-					document.getElementById('button23value0').value = data.button23.valuearray[0];
-					fillvaluelist(button23value1, selecteditems[data.button23.actionarray[1]].subitems);
-					document.getElementById('button23value1').value = data.button23.valuearray[1];
-					fillvaluelist(button23value2, selecteditems[data.button23.actionarray[2]].subitems);
-					document.getElementById('button23value2').value = data.button23.valuearray[2];
-
-					document.getElementById("button24logo").value = data.button24.logo;
-					if (data.button24.latch) {
-						document.getElementById("button24latch").checked = true;
-					}
-
-					if (data.button24.latchlogo == "") {
-						document.getElementById("button24latchlogo").value = "---";
-					} else {
-						document.getElementById("button24latchlogo").value = data.button24.latchlogo;
-					}
-
-					document.getElementById('button24action0').value = data.button24.actionarray[0];
-					document.getElementById('button24action1').value = data.button24.actionarray[1];
-					document.getElementById('button24action2').value = data.button24.actionarray[2];
-					fillvaluelist(button24value0, selecteditems[data.button24.actionarray[0]].subitems);
-					document.getElementById('button24value0').value = data.button24.valuearray[0];
-					fillvaluelist(button24value1, selecteditems[data.button24.actionarray[1]].subitems);
-					document.getElementById('button24value1').value = data.button24.valuearray[1];
-					fillvaluelist(button24value2, selecteditems[data.button24.actionarray[2]].subitems);
-					document.getElementById('button24value2').value = data.button24.valuearray[2];           
-
-					////////////////////////// Row 3 ///////////////////////////
-					document.getElementById("button31logo").value = data.button31.logo;
-
-					if (data.button31.latch) {
-						document.getElementById("button31latch").checked = true;
-					}
-
-					if (data.button31.latchlogo == "") {
-						document.getElementById("button31latchlogo").value = "---";
-					} else {
-						document.getElementById("button31latchlogo").value = data.button31.latchlogo;
-					}
-
-					document.getElementById('button31action0').value = data.button31.actionarray[0];
-					document.getElementById('button31action1').value = data.button31.actionarray[1];
-					document.getElementById('button31action2').value = data.button31.actionarray[2];
-					fillvaluelist(button31value0, selecteditems[data.button31.actionarray[0]].subitems);
-					document.getElementById('button31value0').value = data.button31.valuearray[0];
-					fillvaluelist(button31value1, selecteditems[data.button31.actionarray[1]].subitems);
-					document.getElementById('button31value1').value = data.button31.valuearray[1];
-					fillvaluelist(button31value2, selecteditems[data.button31.actionarray[2]].subitems);
-					document.getElementById('button31value2').value = data.button31.valuearray[2];
-
-
-					document.getElementById("button32logo").value = data.button32.logo;
-					if (data.button32.latch) {
-						document.getElementById("button32latch").checked = true;
-					}
-
-					if (data.button32.latchlogo == "") {
-						document.getElementById("button32latchlogo").value = "---";
-					} else {
-						document.getElementById("button32latchlogo").value = data.button32.latchlogo;
-					}
-
-
-					document.getElementById('button32action0').value = data.button32.actionarray[0];
-					document.getElementById('button32action1').value = data.button32.actionarray[1];
-					document.getElementById('button32action2').value = data.button32.actionarray[2];
-					fillvaluelist(button32value0, selecteditems[data.button32.actionarray[0]].subitems);
-					document.getElementById('button32value0').value = data.button32.valuearray[0];
-					fillvaluelist(button32value1, selecteditems[data.button32.actionarray[1]].subitems);
-					document.getElementById('button32value1').value = data.button32.valuearray[1];
-					fillvaluelist(button32value2, selecteditems[data.button32.actionarray[2]].subitems);
-					document.getElementById('button32value2').value = data.button32.valuearray[2];
-
-					document.getElementById("button33logo").value = data.button33.logo;
-					if (data.button33.latch) {
-						document.getElementById("button33latch").checked = true;
-					}
-
-					if (data.button33.latchlogo == "") {
-						document.getElementById("button33latchlogo").value = "---";
-					} else {
-						document.getElementById("button33latchlogo").value = data.button33.latchlogo;
-					}
-
-					document.getElementById('button33action0').value = data.button33.actionarray[0];
-					document.getElementById('button33action1').value = data.button33.actionarray[1];
-					document.getElementById('button33action2').value = data.button33.actionarray[2];
-					fillvaluelist(button33value0, selecteditems[data.button33.actionarray[0]].subitems);
-					document.getElementById('button33value0').value = data.button33.valuearray[0];
-					fillvaluelist(button33value1, selecteditems[data.button33.actionarray[1]].subitems);
-					document.getElementById('button33value1').value = data.button33.valuearray[1];
-					fillvaluelist(button33value2, selecteditems[data.button33.actionarray[2]].subitems);
-					document.getElementById('button33value2').value = data.button33.valuearray[2];
-
-					document.getElementById("button34logo").value = data.button34.logo;
-					if (data.button34.latch) {
-						document.getElementById("button34latch").checked = true;
-					}
-
-					if (data.button34.latchlogo == "") {
-						document.getElementById("button34latchlogo").value = "---";
-					} else {
-						document.getElementById("button34latchlogo").value = data.button34.latchlogo;
-					}
-
-					document.getElementById('button34action0').value = data.button34.actionarray[0];
-					document.getElementById('button34action1').value = data.button34.actionarray[1];
-					document.getElementById('button34action2').value = data.button34.actionarray[2];
-					fillvaluelist(button34value0, selecteditems[data.button34.actionarray[0]].subitems);
-					document.getElementById('button34value0').value = data.button34.valuearray[0];
-					fillvaluelist(button34value1, selecteditems[data.button34.actionarray[1]].subitems);
-					document.getElementById('button34value1').value = data.button34.valuearray[1];
-					fillvaluelist(button34value2, selecteditems[data.button34.actionarray[2]].subitems);
-					document.getElementById('button34value2').value = data.button34.valuearray[2];
-
 				})
 				.catch((err) => {
 					console.log(err)

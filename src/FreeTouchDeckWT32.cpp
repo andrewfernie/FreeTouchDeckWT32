@@ -589,7 +589,7 @@ void loop(void)
                                              (char *)"", KEY_TEXTSIZE);
                     key[row][col].drawButton();
 
-                    //---------------------------------------- Button press handeling --------------------------------------------------
+                    //---------------------------------------- Button press handling --------------------------------------------------
 
                     if ((pageNum >= 0) && (pageNum < NUM_PAGES)) {
                         if (row < BUTTON_ROWS && col < BUTTON_COLS) {

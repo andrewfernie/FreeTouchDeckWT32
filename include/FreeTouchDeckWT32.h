@@ -92,7 +92,7 @@ extern const char *versionnumber;
 
 // Button layout and number of pages with buttons
 #define BUTTON_ROWS 3
-#define BUTTON_COLS 4
+#define BUTTON_COLS 5
 #define BUTTONS_PER_PAGE (BUTTON_ROWS * BUTTON_COLS)
 #define NUM_PAGES 7 // Includes Menu0 which is the home page
 
@@ -110,6 +110,8 @@ extern const char *versionnumber;
 
 // Font size multiplier
 #define KEY_TEXTSIZE 1
+
+#define DUMP_JSON_DOC_ON_SAVE
 
 // Touch panel definition
 #define ENABLE_TOUCH_SCREEN
