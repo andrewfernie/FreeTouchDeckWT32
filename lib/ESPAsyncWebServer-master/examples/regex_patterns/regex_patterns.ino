@@ -49,7 +49,7 @@ void setup() {
     }
 
     Serial.print("IP Address: ");
-    Serial.println(WiFi.localIP());
+    MSG_INFOLN(WiFi.localIP());
 
     server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send(200, "text/plain", "Hello, world");

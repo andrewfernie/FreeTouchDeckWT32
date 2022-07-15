@@ -18,17 +18,17 @@ void loop() {
 
     delay(1000);
 
-    Serial.println("Sending Enter key...");
+    MSG_INFOLN("Sending Enter key...");
     bleKeyboard.write(KEY_RETURN);
 
     delay(1000);
 
-    Serial.println("Sending Play/Pause media key...");
+    MSG_INFOLN("Sending Play/Pause media key...");
     bleKeyboard.write(KEY_MEDIA_PLAY_PAUSE);
 
     delay(1000);
 
-    Serial.println("Sending Ctrl+Alt+Delete...");
+    MSG_INFOLN("Sending Ctrl+Alt+Delete...");
     bleKeyboard.press(KEY_LEFT_CTRL);
     bleKeyboard.press(KEY_LEFT_ALT);
     bleKeyboard.press(KEY_DELETE);
@@ -36,6 +36,6 @@ void loop() {
     bleKeyboard.releaseAll();
   }
 
-  Serial.println("Waiting 5 seconds...");
+  MSG_INFOLN("Waiting 5 seconds...");
   delay(5000);
 }

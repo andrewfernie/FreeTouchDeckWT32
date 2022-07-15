@@ -1,0 +1,41 @@
+{
+	"folders": [
+		{
+			"name": "FreeTouchDeckWT32",
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"*.cps": "javascript",
+			"*.tcc": "c",
+			"iomanip": "c",
+			"limits": "c",
+			"numeric": "c",
+			"streambuf": "c",
+			"tuple": "c",
+			"type_traits": "c",
+			"utility": "c",
+			"cmath": "c",
+			"ctime": "c",
+			"cstring": "cpp",
+			"array": "cpp",
+			"deque": "cpp",
+			"string": "cpp",
+			"unordered_map": "cpp",
+			"unordered_set": "cpp",
+			"vector": "cpp",
+			"string_view": "cpp",
+			"memory": "cpp",
+			"random": "cpp",
+			"initializer_list": "cpp",
+			"regex": "cpp",
+			"optional": "cpp",
+			"system_error": "cpp",
+			"fstream": "cpp",
+			"iosfwd": "cpp",
+			"istream": "cpp",
+			"sstream": "cpp"
+		}
+	}
+}
