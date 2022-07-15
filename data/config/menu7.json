@@ -1,0 +1,227 @@
+{
+  "button11": {
+    "logo": "blank.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "0",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "0",
+      "0",
+      "0"
+    ]
+  },
+  "button12": {
+    "logo": "VSC_Run.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "6",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "5",
+      "0",
+      "0"
+    ]
+  },
+  "button13": {
+    "logo": "blank.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "0",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "0",
+      "0",
+      "0"
+    ]
+  },
+  "button14": {
+    "logo": "VSC_Stop.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "5",
+      "6",
+      "0"
+    ],
+    "valuearray": [
+      "2",
+      "5",
+      "0"
+    ]
+  },
+  "button15": {
+    "logo": "VSC_TglBreakpoint.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "6",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "9",
+      "0",
+      "0"
+    ]
+  },
+  "button21": {
+    "logo": "VSC_StepInto.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "6",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "11",
+      "0",
+      "0"
+    ]
+  },
+  "button22": {
+    "logo": "VSC_StepOut.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "5",
+      "6",
+      "0"
+    ],
+    "valuearray": [
+      "2",
+      "11",
+      "0"
+    ]
+  },
+  "button23": {
+    "logo": "VSC_StepOver.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "6",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "10",
+      "0",
+      "0"
+    ]
+  },
+  "button24": {
+    "logo": "blank.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "0",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "0",
+      "0",
+      "0"
+    ]
+  },
+  "button25": {
+    "logo": "blank.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "0",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "0",
+      "0",
+      "0"
+    ]
+  },
+  "button31": {
+    "logo": "blank.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "0",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "0",
+      "0",
+      "0"
+    ]
+  },
+  "button32": {
+    "logo": "blank.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "0",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "0",
+      "0",
+      "0"
+    ]
+  },
+  "button33": {
+    "logo": "blank.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "0",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "0",
+      "0",
+      "0"
+    ]
+  },
+  "button34": {
+    "logo": "blank.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "0",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "0",
+      "0",
+      "0"
+    ]
+  },
+  "button35": {
+    "logo": "home.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "14",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "0",
+      "0",
+      "0"
+    ]
+  }
+}
