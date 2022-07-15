@@ -1,6 +1,6 @@
 {
   "button11": {
-    "logo": "question.bmp",
+    "logo": "blank.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
@@ -15,7 +15,7 @@
     ]
   },
   "button12": {
-    "logo": "question.bmp",
+    "logo": "blank.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
@@ -30,7 +30,7 @@
     ]
   },
   "button13": {
-    "logo": "question.bmp",
+    "logo": "blank.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
@@ -45,7 +45,7 @@
     ]
   },
   "button14": {
-    "logo": "question.bmp",
+    "logo": "blank.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
@@ -60,7 +60,7 @@
     ]
   },
   "button15": {
-    "logo": "question.bmp",
+    "logo": "blank.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
@@ -75,7 +75,7 @@
     ]
   },
   "button21": {
-    "logo": "question.bmp",
+    "logo": "blank.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
@@ -90,7 +90,7 @@
     ]
   },
   "button22": {
-    "logo": "question.bmp",
+    "logo": "blank.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
@@ -105,11 +105,11 @@
     ]
   },
   "button23": {
-    "logo": "home.bmp",
+    "logo": "blank.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "14",
+      "0",
       "0",
       "0"
     ],
@@ -120,7 +120,7 @@
     ]
   },
   "button24": {
-    "logo": "question.bmp",
+    "logo": "blank.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
@@ -135,7 +135,7 @@
     ]
   },
   "button25": {
-    "logo": "question.bmp",
+    "logo": "blank.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
@@ -150,7 +150,7 @@
     ]
   },
   "button31": {
-    "logo": "question.bmp",
+    "logo": "blank.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
@@ -165,7 +165,7 @@
     ]
   },
   "button32": {
-    "logo": "question.bmp",
+    "logo": "blank.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
@@ -180,7 +180,7 @@
     ]
   },
   "button33": {
-    "logo": "question.bmp",
+    "logo": "blank.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
@@ -195,11 +195,11 @@
     ]
   },
   "button34": {
-    "logo": "home.bmp",
+    "logo": "blank.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "14",
+      "0",
       "0",
       "0"
     ],

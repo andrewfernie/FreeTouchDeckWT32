@@ -192,7 +192,7 @@ void configmode()
         tft.print("The IP is: ");
         tft.println(WiFi.softAPIP());
     }
-    else{
+    else {
         MSG_WARNLN("[WARNING]: No valid config mode identified.");
     }
 }
@@ -279,7 +279,7 @@ bool saveWifiMode(String wifimode)
 {
     if (wifimode != "WIFI_STA" && wifimode != "WIFI_AP") {
         MSG_WARNLN("")
-        MSG_WARN2("[WARNING]: WiFi Mode:",wifimode.c_str(),": not supported. Try WIFI_STA or WIFI_AP.");
+        MSG_WARN2("[WARNING]: WiFi Mode:", wifimode.c_str(), ": not supported. Try WIFI_STA or WIFI_AP.");
         return false;
     }
 
@@ -315,17 +315,19 @@ bool saveWifiMode(String wifimode)
 *
 * @note Pass the filename including a leading /
 */
-bool checkfile(const char* filename)
+bool checkfile(const char* filename, bool showMessage)
 {
     if (!FILESYSTEM.exists(filename)) {
-        tft.fillScreen(TFT_BLACK);
-        tft.setCursor(1, 3);
-        tft.setTextFont(2);
-        tft.setTextSize(2);
-        tft.setTextColor(TFT_WHITE, TFT_BLACK);
-        tft.printf("%s not found!\n\n", filename);
-        tft.setTextSize(1);
-        tft.printf("If this has happend after confguration, the data on the ESP may \nbe corrupted.");
+        if (showMessage) {
+            tft.fillScreen(TFT_BLACK);
+            tft.setCursor(1, 3);
+            tft.setTextFont(2);
+            tft.setTextSize(2);
+            tft.setTextColor(TFT_WHITE, TFT_BLACK);
+            tft.printf("%s not found!\n\n", filename);
+            tft.setTextSize(1);
+            tft.printf("If this has happend after confguration, the data on the ESP may \nbe corrupted.");
+        }
         return false;
     }
     else {
@@ -400,8 +402,8 @@ bool resetconfig(String file)
         newfile.println("}");
 
         newfile.close();
-        MSG_INFOLN("[INFO]: Done resetting general config.");
-        MSG_INFOLN("[INFO]: Type \"restart\" to reload configuration.");
+        MSG_BASICLN("[INFO]: Done resetting general config.");
+        MSG_BASICLN("[INFO]: Type \"restart\" to reload configuration.");
         return true;
     }
     else {
@@ -410,4 +412,49 @@ bool resetconfig(String file)
     }
 
     return false;
+}
+
+bool CopyFile(String FileOriginal, String FileCopy)
+{
+    bool success = true;
+
+    uint8_t ibuffer[64];  // declare a buffer
+
+    MSG_INFOLN("[INFO] In CopyFile()");
+
+    if (LittleFS.exists(FileCopy) == true)  // remove file copy
+    {
+        LittleFS.remove(FileCopy);
+    }
+
+    File f1 = LittleFS.open(FileOriginal, "r");  // open source file to read
+    if (f1) {
+        File f2 = LittleFS.open(FileCopy, "w");  // open destination file to write
+        if (f2) {
+            while (f1.available() > 0) {
+                size_t i = f1.read(ibuffer, 64);  // i = number of bytes placed in buffer from file f1
+                f2.write(ibuffer, i);             // write i bytes from buffer to file f2
+            }
+            f2.close();  // done, close the destination file
+        }
+        else {
+            MSG_ERROR1("[ERROR] CopyFile() can't open destination file ", FileCopy.c_str());  // debug
+            success = false;
+        }
+
+        f1.close();  // done, close the source file
+    }
+    else {
+        MSG_ERROR1("[ERROR] CopyFile() can't open source file ", FileOriginal.c_str());  // debug
+        success = false;
+    }
+
+    if (success) {
+        MSG_INFOLN("[INFO] End CopyFile() with success");
+    }
+    else {
+        MSG_ERRORLN("[ERRROR] End CopyFile() with failure.");
+    }
+
+    return success;
 }

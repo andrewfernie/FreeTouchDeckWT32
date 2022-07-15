@@ -41,9 +41,27 @@
 
 #include "FreeTouchDeckWT32.h"
 
-const char *versionnumber = "WT32-0.9.20";
+const char *versionnumber = "WT32-0.1.0-AF";
 
-/* Version 0.9.16.
+/*
+ * Version 0.1.0-AF  - A.Fernie 2022-7-15
+ *
+ * Started from 0.9.16 and added/modified:
+ * 1. Now iterates through arrays of buttons rather than using repeated code for each button in
+ *    most cases. Still two sections in index.htm that use repeated code.
+ * 2. Support up to a 3x5 array of buttons (limited by index.htm)
+ * 3. Home page is no longer a special page that just links to five other pages, and the other pages
+ *    are no longer simply five action buttons plus a link back to the home page. All buttons on
+ *    each page can be actions or links. Just make sure you always have a way back.
+ * 4. There are now 10 pages. This includes Menu0 (home).
+ * 5. Updated to latest platformio Arduino platform (2.x)
+ * 6. Changed from SPIFFS to LittleFS. Note that if you check the serial monitor output you will see
+ *    some error messages like "[vfs_api.cpp:104] open(): /littlefs/list does not exist". This is a
+ *    known issue with ESPAsyncWebsServer related to LittleFS supporting folders while SPIFFS does not.
+ *    see https://github.com/lorol/LITTLEFS/issues/2 for more on the topic.
+ * 7. Currently only working on WT32-SC01 card http://www.wireless-tag.com/portfolio/wt32-sc01/
+ *
+ * Version 0.9.16.
  *
  * Added UserActions. In the UserAction.h file there are a few functions you can define and
  * select through the configurator. The functions have to written before compiling. These functions
@@ -62,7 +80,7 @@ BleKeyboard bleKeyboard("FreeTouchDeck", "Made by me");
 
 AsyncWebServer webserver(80);
 
-TFT_eSPI tft = TFT_eSPI(SCREEN_HEIGHT, SCREEN_WIDTH);       // Apparently the display is a portrait mode, but we want landscape
+TFT_eSPI tft = TFT_eSPI(SCREEN_HEIGHT, SCREEN_WIDTH);  // Apparently the display is a portrait mode, but we want landscape
 
 Preferences savedStates;
 
@@ -203,7 +221,7 @@ void setup()
 #endif
 
     // Let's first check if all the files we need exist
-    if (!checkfile("/config/general.json")) {
+    if (!checkfile("/config/general.json", true)) {
         MSG_ERRORLN("[ERROR]: /config/general.json not found!");
         while (1)
             yield();  // Stop!
@@ -217,12 +235,18 @@ void setup()
         strcat(filename, filenumber);
         strcat(filename, ".json");
 
-        if (!checkfile(filename)) {
-            MSG_ERROR("[ERROR]: ");
-            MSG_ERROR(filename);
-            MSG_INFOLN(" not found!");
-            while (1)
-                yield();  // Stop!
+        if (!checkfile(filename, false)) {
+            MSG_WARN2("[WARNING]: ", filename, " not found. Initializing to default.json");
+            if (CopyFile("/config/default.json", filename)) {
+                MSG_INFO2("[WARN]: Successful initialization of ", filename, " to default.json");
+            }
+            else {
+                MSG_ERROR1("[ERROR]: Failed to initialize ", filename);
+                checkfile(filename, true);  // This will force a message to the TFT screen
+
+                while (1)
+                    yield();  // Stop!
+            }
         }
     }
 
@@ -424,7 +448,7 @@ void loop(void)
         t_x = touchPos.tp[0].y;
         t_y = 320 - touchPos.tp[0].x;
         pressed = true;
-   }
+    }
     else {
         pressed = false;
     }

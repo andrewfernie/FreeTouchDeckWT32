@@ -7,5 +7,5 @@ void configmode();
 bool saveWifiSSID(String ssid);
 bool saveWifiPW(String password);
 bool saveWifiMode(String wifimode);
-bool checkfile(const char* filename);
+bool checkfile(const char* filename, bool showMessage);
 bool resetconfig(String file);

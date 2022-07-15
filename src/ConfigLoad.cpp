@@ -22,11 +22,11 @@ bool loadMainConfig()
 
     DeserializationError error = deserializeJson(doc, configfile);
 
-    if (error == DeserializationError::Ok){
+    if (error == DeserializationError::Ok) {
         MSG_INFOLN("[INFO]: wificonfig.json deserialized loaded OK");
     }
-    else{
-        MSG_WARN1("[WARN]: wificonfig.json deserialization error: ", error.c_str());
+    else {
+        MSG_WARN1("[WARNING]: wificonfig.json deserialization error: ", error.c_str());
     }
 
     strlcpy(wificonfig.ssid, doc["ssid"] | "FAILED", sizeof(wificonfig.ssid));
@@ -67,7 +67,7 @@ bool loadConfig(String value)
     int fileNameMenuNumber = 0;
     int numConverted = 0;
     numConverted = sscanf(value.c_str(), "%4s%d", fileNameType, &fileNameMenuNumber);
-    MSG_DEBUG2("[INFO] load_config parameter", value.c_str(),numConverted);
+    MSG_INFO2("[INFO] load_config parameter", value.c_str(), numConverted);
 
     if (value == "general") {
         File configfile = FILESYSTEM.open("/config/general.json", "r");
@@ -135,20 +135,19 @@ bool loadConfig(String value)
         configfile.close();
 
         if (error) {
-            MSG_ERROR("[ERROR]: deserializeJson() error");
-            MSG_ERRORLN(error.c_str());
+            MSG_ERROR1("[ERROR]: deserializeJson() error", error.c_str());
             return false;
         }
         return true;
     }
 
     // --------------------- Loading menu ----------------------
-    else if ((numConverted == 2) && (strncmp("menu", value.c_str(), 4)==0) && (fileNameMenuNumber >= 0) && (fileNameMenuNumber < NUM_PAGES)) {
+    else if ((numConverted == 2) && (strncmp("menu", value.c_str(), 4) == 0) && (fileNameMenuNumber >= 0) && (fileNameMenuNumber < NUM_PAGES)) {
         char configFileName[30];
 
         snprintf(configFileName, sizeof(configFileName), "/config/menu%d.json", fileNameMenuNumber);
 
-        MSG_DEBUG1("[INFO] load_config opening file ", configFileName);
+        MSG_INFO1("[INFO] load_config opening file ", configFileName);
         File configfile = FILESYSTEM.open(configFileName, "r");
 
         DynamicJsonDocument doc(5000);
@@ -160,14 +159,14 @@ bool loadConfig(String value)
                 {
                     char objectName[10];
 
-                    snprintf(objectName, sizeof(objectName), "button%d%d", row+1, col+1);
+                    snprintf(objectName, sizeof(objectName), "button%d%d", row + 1, col + 1);
 
                     const char *logo = doc[objectName]["logo"] | "question.bmp";
 
                     strcpy(templogopath, logopath);
                     strcat(templogopath, logo);
                     strcpy(menu[fileNameMenuNumber].button[row][col].logo, templogopath);
-                    MSG_DEBUG2("[INFO] load_config loading logo", objectName, templogopath);
+                    MSG_INFO2("[INFO] load_config loading logo", objectName, templogopath);
 
                     const char *latchlogo = doc[objectName]["latchlogo"] | "question.bmp";
 
@@ -176,7 +175,7 @@ bool loadConfig(String value)
                     strcpy(templogopath, logopath);
                     strcat(templogopath, latchlogo);
                     strcpy(menu[fileNameMenuNumber].button[row][col].latchlogo, templogopath);
-                    MSG_DEBUG2("[INFO] load_config loading latchlogo", objectName, templogopath);
+                    MSG_INFO2("[INFO] load_config loading latchlogo", objectName, templogopath);
 
                     JsonArray button_actionarray = doc[objectName]["actionarray"];
 
@@ -223,13 +222,27 @@ bool loadConfig(String value)
         configfile.close();
 
         if (error) {
-            MSG_ERROR("[ERROR]: deserializeJson() error");
-            MSG_ERRORLN(error.c_str());
-            return false;
+            MSG_ERROR1("[ERROR]: deserializeJson() error", error.c_str());
+            MSG_ERROR2("[ERROR]: Will initialize ", configFileName, " to default.json");
+
+            if (CopyFile("/config/default.json", configFileName)) {
+                MSG_INFO2("[INFO]: Successful initialization of ", configFileName, " to default.json");
+            }
+            else {
+                MSG_ERROR1("[ERROR]: Failed to initialize ", configFileName);
+                checkfile(configFileName, true);  // This will force a message to the TFT screen
+
+                while (1)
+                    yield();  // Stop!
+
+                return false;
+            }
+
         }
         return true;
     }
     else {
+        MSG_ERROR1("[ERROR] Invalid call to loadConfig(). Argument was ", value.c_str());
         return false;
     }
 }

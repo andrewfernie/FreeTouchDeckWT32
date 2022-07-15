@@ -2,16 +2,16 @@
 
 // Basic macros for debug and info messages to the serial port
 #define LOG_MSG_BASIC 1
-#define LOG_MSG_LEVEL 3
+#define LOG_MSG_LEVEL 2  // 1=ERROR, 2=ERROR+WARN, 3=ERROR+WARN+INFO
 #define LOG_MSG_DEBUG 1
 
 #include "std_defs.h"
 
-#include <BleKeyboard.h> // BleKeyboard is used to communicate over BLE
-#include <FS.h>          // Filesystem support header
-#include <Preferences.h> // Used to store states before sleep/reboot
-#include <TFT_eSPI.h>    // The TFT_eSPI library
-#include <pgmspace.h>    // PROGMEM support header
+#include <BleKeyboard.h>  // BleKeyboard is used to communicate over BLE
+#include <FS.h>           // Filesystem support header
+#include <Preferences.h>  // Used to store states before sleep/reboot
+#include <TFT_eSPI.h>     // The TFT_eSPI library
+#include <pgmspace.h>     // PROGMEM support header
 
 // Define the storage to be used. For now just SPIFFS.
 #define FILESYSTEM_LITTLEFS
@@ -21,32 +21,32 @@
 #include <LITTLEFS.h>  // https://github.com/lorol/LITTLEFS
 #else
 #define FILESYSTEM SPIFFS
-#include <SPIFFS.h>    // Filesystem support header
+#include <SPIFFS.h>  // Filesystem support header
 #endif
 
 #if defined(USE_NIMBLE)
 
-#include "NimBLEBeacon.h" // Additional BLE functionaity using NimBLE
-#include "NimBLEDevice.h" // Additional BLE functionaity using NimBLE
-#include "NimBLEUtils.h"  // Additional BLE functionaity using NimBLE
+#include "NimBLEBeacon.h"  // Additional BLE functionaity using NimBLE
+#include "NimBLEDevice.h"  // Additional BLE functionaity using NimBLE
+#include "NimBLEUtils.h"   // Additional BLE functionaity using NimBLE
 
 #else
 
-#include "BLEBeacon.h" // Additional BLE functionaity
-#include "BLEDevice.h" // Additional BLE functionaity
-#include "BLEUtils.h"  // Additional BLE functionaity
+#include "BLEBeacon.h"  // Additional BLE functionaity
+#include "BLEDevice.h"  // Additional BLE functionaity
+#include "BLEUtils.h"   // Additional BLE functionaity
 
-#endif // USE_NIMBLE
+#endif  // USE_NIMBLE
 
-#include <ArduinoJson.h>       // Using ArduinoJson to read and write config files
-#include <AsyncTCP.h>          //Async Webserver support header
-#include <ESPAsyncWebServer.h> //Async Webserver support header
-#include <ESPmDNS.h>           // DNS functionality
-#include <WiFi.h>              // Wifi support
+#include <ArduinoJson.h>        // Using ArduinoJson to read and write config files
+#include <AsyncTCP.h>           //Async Webserver support header
+#include <ESPAsyncWebServer.h>  //Async Webserver support header
+#include <ESPmDNS.h>            // DNS functionality
+#include <WiFi.h>               // Wifi support
 
-#include "esp_bt_device.h" // Additional BLE functionaity
-#include "esp_bt_main.h"   // Additional BLE functionaity
-#include "esp_sleep.h"     // Additional BLE functionaity
+#include "esp_bt_device.h"  // Additional BLE functionaity
+#include "esp_bt_main.h"    // Additional BLE functionaity
+#include "esp_sleep.h"      // Additional BLE functionaity
 
 #include "DrawHelper.h"
 #include "Action.h"
@@ -94,7 +94,7 @@ extern const char *versionnumber;
 #define BUTTON_ROWS 3
 #define BUTTON_COLS 5
 #define BUTTONS_PER_PAGE (BUTTON_ROWS * BUTTON_COLS)
-#define NUM_PAGES 7 // Includes Menu0 which is the home page
+#define NUM_PAGES 10  // Includes Menu0 which is the home page
 
 // Keypad start position, centre of the first button
 #define KEY_X SCREEN_WIDTH / (BUTTON_COLS * 2)
@@ -111,7 +111,7 @@ extern const char *versionnumber;
 // Font size multiplier
 #define KEY_TEXTSIZE 1
 
-#define DUMP_JSON_DOC_ON_SAVE
+// #define DUMP_JSON_DOC_ON_SAVE
 
 // Touch panel definition
 #define ENABLE_TOUCH_SCREEN
@@ -161,16 +161,14 @@ extern char logopath[64];
 extern char templogopath[64];
 
 // Struct Action: actions and value
-struct Actions
-{
+struct Actions {
     uint8_t action;
     uint8_t value;
     char symbol[64];
 };
 
 // Each button has an action struct in it
-struct Button
-{
+struct Button {
     Actions actions[3];
     bool latch;
     bool islatched;
@@ -179,21 +177,18 @@ struct Button
 };
 
 // Each menu has an array of buttons
-struct Menu
-{
+struct Menu {
     Button button[BUTTON_ROWS][BUTTON_COLS];
 };
 
 // Struct to hold the general logos.
-struct Generallogos
-{
+struct Generallogos {
     char homebutton[64];
     char configurator[64];
 };
 
 // Struct to hold the general config like colours.
-struct Config
-{
+struct Config {
     uint16_t menuButtonColour;
     uint16_t functionButtonColour;
     uint16_t backgroundColour;
@@ -207,8 +202,7 @@ struct Config
     uint16_t helperdelay;
 };
 
-struct Wificonfig
-{
+struct Wificonfig {
     char ssid[64];
     char password[64];
     char wifimode[9];
@@ -253,8 +247,7 @@ extern uint8_t sleepIsLatched;
 
 //--------- Internal references ------------
 // (this needs to be below all structs etc..)
-enum ActionEnum
-{
+enum ActionEnum {
     Action_NoAction = 0,
     Action_Delay = 1,
     Action_TabArrow = 2,

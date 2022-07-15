@@ -31,7 +31,11 @@
 			"initializer_list": "cpp",
 			"regex": "cpp",
 			"optional": "cpp",
-			"system_error": "cpp"
+			"system_error": "cpp",
+			"fstream": "cpp",
+			"iosfwd": "cpp",
+			"istream": "cpp",
+			"sstream": "cpp"
 		}
 	}
 }

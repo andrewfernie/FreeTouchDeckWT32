@@ -110,7 +110,7 @@ void drawKeypad()
     }
 
     else if (pageNum == SPECIAL_4_PAGE) {
-        // Pagenum 10 means that a JSON config failed to load completely.
+        // Pagenum max + 4 means that a JSON config failed to load completely.
         tft.fillScreen(TFT_BLACK);
         tft.setCursor(0, 0);
         tft.setTextFont(2);

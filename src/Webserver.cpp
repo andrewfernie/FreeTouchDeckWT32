@@ -422,7 +422,7 @@ void handlerSetup()
                 FILESYSTEM.remove("/config/general.json");
                 File file = FILESYSTEM.open("/config/general.json", "w");
                 if (!file) {
-                    MSG_WARNLN("[WARNING]: Failed to create file");
+                    MSG_WARNLN("[WARNING]: Failed to create /config/general.json file");
                     return;
                 }
 
@@ -484,7 +484,7 @@ void handlerSetup()
                 general["helperdelay"] = Helperdelay.toInt();
 
                 if (serializeJsonPretty(doc, file) == 0) {
-                    MSG_WARNLN("[WARNING]: Failed to write to file");
+                    MSG_WARNLN("[WARNING]: Failed to write to /config/general.json file");
                 }
                 file.close();
             }
@@ -495,7 +495,7 @@ void handlerSetup()
                 FILESYSTEM.remove("/config/wificonfig.json");
                 File file = FILESYSTEM.open("/config/wificonfig.json", "w");
                 if (!file) {
-                    MSG_WARNLN("[WARNING]: Failed to create file");
+                    MSG_WARNLN("[WARNING]: Failed to create /config/wificonfig.json file");
                     return;
                 }
 
@@ -521,7 +521,7 @@ void handlerSetup()
                 wifi["attemptdelay"] = Attemptdelay.toInt();
 
                 if (serializeJsonPretty(doc, file) == 0) {
-                    MSG_WARNLN("[WARNING]: Failed to write to file");
+                    MSG_WARNLN("[WARNING]: Failed to write to /config/wificonfig.json file");
                 }
                 file.close();
             }
@@ -544,13 +544,11 @@ void handlerSetup()
                     FILESYSTEM.remove(fileName.c_str());
                     file = FILESYSTEM.open(fileName.c_str(), "w");
                     if (!file) {
-                        MSG_WARN("[WARNING]: Failed to create ");
-                        MSG_WARNLN(fileName);
+                        MSG_WARN1("[WARNING]: Failed to create ", fileName.c_str());
                         return;
                     }
                     else {
-                        MSG_INFO("[INFO]: Will write to: ");
-                        MSG_INFOLN(fileName);
+                        MSG_INFO1("[INFO]: Will write to: ", fileName.c_str());
                     }
                 }
                 else {
@@ -565,46 +563,85 @@ void handlerSetup()
                 for (uint8_t row = 0; row < BUTTON_ROWS; row++) {
                     for (uint8_t col = 0; col < BUTTON_COLS; col++) {
                         String buttonName = "button" + String(row + 1) + String(col + 1);
-                        JsonObject buttonObject = doc.createNestedObject(buttonName);
+                        MSG_INFO1("Starting button ", buttonName.c_str());
 
-                        AsyncWebParameter *buttonXXlogo = request->getParam(buttonName + "logo", true);
-                        if (strcmp(buttonXXlogo->value().c_str(), "---") == 0) {
-                            buttonObject["logo"] = "";
-                        }
-                        else {
-                            buttonObject["logo"] = buttonXXlogo->value().c_str();
-                        }
+                        try {
+                            JsonObject buttonObject = doc.createNestedObject(buttonName);
 
-                        if (request->hasParam(buttonName + "latch", true)) {
-                            buttonObject["latch"] = true;
-                        }
-                        else {
-                            buttonObject["latch"] = false;
-                        }
+                            AsyncWebParameter *buttonXXlogo = request->getParam(buttonName + "logo", true);
+                            if (buttonXXlogo != nullptr) {
+                                if (strcmp(buttonXXlogo->value().c_str(), "---") == 0) {
+                                    buttonObject["logo"] = "question.bmp";
+                                }
+                                else {
+                                    buttonObject["logo"] = buttonXXlogo->value().c_str();
+                                }
+                            }
+                            else {
+                                buttonObject["logo"] = "question.bmp";
+                            }
+                            MSG_INFOLN("... finished logo");
 
-                        AsyncWebParameter *buttonXXlatchlogo = request->getParam(buttonName + "latchlogo", true);
-                        if (strcmp(buttonXXlatchlogo->value().c_str(), "---") == 0) {
-                            buttonObject["latchlogo"] = "";
-                        }
-                        else {
-                            buttonObject["latchlogo"] = buttonXXlatchlogo->value().c_str();
-                        }
+                            if (request->hasParam(buttonName + "latch", true)) {
+                                buttonObject["latch"] = true;
+                            }
+                            else {
+                                buttonObject["latch"] = false;
+                            }
+                            MSG_INFOLN("... finished latch");
 
-                        JsonArray buttonObject_actionarray = buttonObject.createNestedArray("actionarray");
-                        AsyncWebParameter *buttonXXaction0 = request->getParam(buttonName + "action0", true);
-                        buttonObject_actionarray.add(buttonXXaction0->value().c_str());
-                        AsyncWebParameter *buttonXXaction1 = request->getParam(buttonName + "action1", true);
-                        buttonObject_actionarray.add(buttonXXaction1->value().c_str());
-                        AsyncWebParameter *buttonXXaction2 = request->getParam(buttonName + "action2", true);
-                        buttonObject_actionarray.add(buttonXXaction2->value().c_str());
+                            AsyncWebParameter *buttonXXlatchlogo = request->getParam(buttonName + "latchlogo", true);
+                            if (buttonXXlatchlogo != nullptr) {
+                                if (strcmp(buttonXXlatchlogo->value().c_str(), "---") == 0) {
+                                    buttonObject["latchlogo"] = "";
+                                }
+                                else {
+                                    buttonObject["latchlogo"] = buttonXXlatchlogo->value().c_str();
+                                }
+                            }
+                            else {
+                                buttonObject["latchlogo"] = "";
+                            }
+                            MSG_INFOLN("... finished latchlogo");
 
-                        JsonArray buttonObject_valuearray = buttonObject.createNestedArray("valuearray");
-                        AsyncWebParameter *buttonXXvalue0 = request->getParam(buttonName + "value0", true);
-                        buttonObject_valuearray.add(buttonXXvalue0->value().c_str());
-                        AsyncWebParameter *buttonXXvalue1 = request->getParam(buttonName + "value1", true);
-                        buttonObject_valuearray.add(buttonXXvalue1->value().c_str());
-                        AsyncWebParameter *buttonXXvalue2 = request->getParam(buttonName + "value2", true);
-                        buttonObject_valuearray.add(buttonXXvalue2->value().c_str());
+                            JsonArray buttonObject_actionarray = buttonObject.createNestedArray("actionarray");
+                            AsyncWebParameter *buttonXXaction0 = request->getParam(buttonName + "action0", true);
+                            AsyncWebParameter *buttonXXaction1 = request->getParam(buttonName + "action1", true);
+                            AsyncWebParameter *buttonXXaction2 = request->getParam(buttonName + "action2", true);
+
+                            if (buttonXXaction0 != nullptr && buttonXXaction1 != nullptr && buttonXXaction2 != nullptr) {
+                                buttonObject_actionarray.add(buttonXXaction0->value().c_str());
+                                buttonObject_actionarray.add(buttonXXaction1->value().c_str());
+                                buttonObject_actionarray.add(buttonXXaction2->value().c_str());
+                            }
+                            else {
+                                buttonObject_actionarray.add("0");
+                                buttonObject_actionarray.add("0");
+                                buttonObject_actionarray.add("0");
+                            }
+                            MSG_INFOLN("... finished actionarray");
+
+                            JsonArray buttonObject_valuearray = buttonObject.createNestedArray("valuearray");
+                            AsyncWebParameter *buttonXXvalue0 = request->getParam(buttonName + "value0", true);
+                            AsyncWebParameter *buttonXXvalue1 = request->getParam(buttonName + "value1", true);
+                            AsyncWebParameter *buttonXXvalue2 = request->getParam(buttonName + "value2", true);
+
+                            if (buttonXXvalue0 != nullptr && buttonXXvalue1 != nullptr && buttonXXvalue2 != nullptr) {
+                                buttonObject_valuearray.add(buttonXXvalue0->value().c_str());
+                                buttonObject_valuearray.add(buttonXXvalue1->value().c_str());
+                                buttonObject_valuearray.add(buttonXXvalue2->value().c_str());
+                            }
+                            else {
+                                buttonObject_valuearray.add("0");
+                                buttonObject_valuearray.add("0");
+                                buttonObject_valuearray.add("0");
+                            }
+
+                            MSG_INFOLN("... finished button");
+                        }
+                        catch (...) {
+                            MSG_WARN2("[WARNING] problem accessing data for button ", buttonName, " for save.");
+                        }
                     }
                 }
                 if (serializeJsonPretty(doc, file) == 0) {
