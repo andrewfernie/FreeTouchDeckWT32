@@ -195,11 +195,11 @@
     ]
   },
   "button34": {
-    "logo": "blank.bmp",
+    "logo": "home.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "0",
+      "14",
       "0",
       "0"
     ],

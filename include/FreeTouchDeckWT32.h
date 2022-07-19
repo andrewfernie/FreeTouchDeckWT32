@@ -92,7 +92,7 @@ extern const char *versionnumber;
 
 // Button layout and number of pages with buttons
 #define BUTTON_ROWS 3
-#define BUTTON_COLS 5
+#define BUTTON_COLS 4
 #define BUTTONS_PER_PAGE (BUTTON_ROWS * BUTTON_COLS)
 #define NUM_PAGES 10  // Includes Menu0 which is the home page
 

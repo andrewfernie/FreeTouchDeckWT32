@@ -41,9 +41,11 @@
 
 #include "FreeTouchDeckWT32.h"
 
-const char *versionnumber = "WT32-0.1.0-AF";
+const char *versionnumber = "WT32-0.1.1-AF";
 
 /*
+ * Version 0.1.1-AF  - A.Fernie In Work
+ *
  * Version 0.1.0-AF  - A.Fernie 2022-7-15
  *
  * Started from 0.9.16 and added/modified:

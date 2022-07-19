@@ -1,51 +1,51 @@
 {
   "button11": {
-    "logo": "mute.bmp",
-    "latch": true,
-    "latchlogo": "unmute.bmp",
+    "logo": "question.bmp",
+    "latch": false,
+    "latchlogo": "",
     "actionarray": [
-      "5",
-      "5",
-      "4"
+      "0",
+      "0",
+      "0"
     ],
     "valuearray": [
-      "1",
-      "6",
-      "m"
+      "0",
+      "0",
+      "0"
     ]
   },
   "button12": {
-    "logo": "videooff.bmp",
-    "latch": true,
-    "latchlogo": "videoon.bmp",
+    "logo": "question.bmp",
+    "latch": false,
+    "latchlogo": "",
     "actionarray": [
-      "5",
-      "5",
-      "4"
+      "0",
+      "0",
+      "0"
     ],
     "valuearray": [
-      "1",
-      "6",
-      "o"
+      "0",
+      "0",
+      "0"
     ]
   },
   "button13": {
-    "logo": "share.bmp",
-    "latch": true,
-    "latchlogo": "closeshare.bmp",
+    "logo": "question.bmp",
+    "latch": false,
+    "latchlogo": "",
     "actionarray": [
-      "5",
-      "5",
-      "4"
+      "0",
+      "0",
+      "0"
     ],
     "valuearray": [
-      "1",
-      "6",
-      "e"
+      "0",
+      "0",
+      "0"
     ]
   },
   "button14": {
-    "logo": "blank.bmp",
+    "logo": "question.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
@@ -60,7 +60,7 @@
     ]
   },
   "button15": {
-    "logo": "blank.bmp",
+    "logo": "question.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
@@ -75,41 +75,41 @@
     ]
   },
   "button21": {
-    "logo": "raisehand.bmp",
-    "latch": false,
-    "latchlogo": "",
-    "actionarray": [
-      "5",
-      "5",
-      "4"
-    ],
-    "valuearray": [
-      "1",
-      "6",
-      "k"
-    ]
-  },
-  "button22": {
-    "logo": "off.bmp",
-    "latch": false,
-    "latchlogo": "",
-    "actionarray": [
-      "5",
-      "5",
-      "4"
-    ],
-    "valuearray": [
-      "1",
-      "6",
-      "b"
-    ]
-  },
-  "button23": {
-    "logo": "blank.bmp",
+    "logo": "question.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
       "0",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "0",
+      "0",
+      "0"
+    ]
+  },
+  "button22": {
+    "logo": "question.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "0",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "0",
+      "0",
+      "0"
+    ]
+  },
+  "button23": {
+    "logo": "home.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "14",
       "0",
       "0"
     ],
@@ -120,22 +120,22 @@
     ]
   },
   "button24": {
-    "logo": "play.bmp",
+    "logo": "question.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "3",
+      "0",
       "0",
       "0"
     ],
     "valuearray": [
-      "4",
+      "0",
       "0",
       "0"
     ]
   },
   "button25": {
-    "logo": "blank.bmp",
+    "logo": "question.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
@@ -150,46 +150,46 @@
     ]
   },
   "button31": {
-    "logo": "volumedown.bmp",
+    "logo": "question.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "3",
+      "0",
       "0",
       "0"
     ],
     "valuearray": [
-      "2",
+      "0",
       "0",
       "0"
     ]
   },
   "button32": {
-    "logo": "volumeup.bmp",
+    "logo": "question.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "3",
+      "0",
       "0",
       "0"
     ],
     "valuearray": [
-      "3",
+      "0",
       "0",
       "0"
     ]
   },
   "button33": {
-    "logo": "nosound.bmp",
+    "logo": "question.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "3",
+      "0",
       "0",
       "0"
     ],
     "valuearray": [
-      "1",
+      "0",
       "0",
       "0"
     ]

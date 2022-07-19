@@ -1,10 +1,10 @@
 {
   "button11": {
-    "logo": "wifi.bmp",
+    "logo": "mute.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "11",
+      "3",
       "0",
       "0"
     ],
@@ -15,11 +15,11 @@
     ]
   },
   "button12": {
-    "logo": "brightnessdown.bmp",
+    "logo": "blank.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "11",
+      "0",
       "0",
       "0"
     ],
@@ -30,16 +30,16 @@
     ]
   },
   "button13": {
-    "logo": "brightnessup.bmp",
+    "logo": "blank.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "11",
+      "0",
       "0",
       "0"
     ],
     "valuearray": [
-      "3",
+      "0",
       "0",
       "0"
     ]
@@ -59,92 +59,62 @@
       "0"
     ]
   },
-  "button15": {
-    "logo": "blank.bmp",
-    "latch": false,
-    "latchlogo": "",
-    "actionarray": [
-      "0",
-      "0",
-      "0"
-    ],
-    "valuearray": [
-      "0",
-      "0",
-      "0"
-    ]
-  },
   "button21": {
-    "logo": "sleep.bmp",
+    "logo": "skip-previous.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "11",
+      "3",
       "0",
       "0"
     ],
     "valuearray": [
-      "4",
+      "7",
       "0",
       "0"
     ]
   },
   "button22": {
-    "logo": "info.bmp",
+    "logo": "skip-next.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "11",
+      "3",
       "0",
       "0"
     ],
     "valuearray": [
-      "0",
+      "6",
       "0",
       "0"
     ]
   },
   "button23": {
-    "logo": "blank.bmp",
+    "logo": "stop.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "0",
+      "3",
       "0",
       "0"
     ],
     "valuearray": [
-      "0",
+      "5",
       "0",
       "0"
     ]
   },
   "button24": {
-    "logo": "blank.bmp",
+    "logo": "play.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "0",
+      "3",
       "0",
       "0"
     ],
     "valuearray": [
-      "0",
-      "0",
-      "0"
-    ]
-  },
-  "button25": {
-    "logo": "blank.bmp",
-    "latch": false,
-    "latchlogo": "",
-    "actionarray": [
-      "0",
-      "0",
-      "0"
-    ],
-    "valuearray": [
-      "0",
+      "4",
       "0",
       "0"
     ]
@@ -195,21 +165,6 @@
     ]
   },
   "button34": {
-    "logo": "play.bmp",
-    "latch": false,
-    "latchlogo": "",
-    "actionarray": [
-      "3",
-      "0",
-      "0"
-    ],
-    "valuearray": [
-      "4",
-      "0",
-      "0"
-    ]
-  },
-  "button35": {
     "logo": "home.bmp",
     "latch": false,
     "latchlogo": "",

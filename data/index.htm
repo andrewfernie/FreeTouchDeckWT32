@@ -1463,6 +1463,28 @@
 		];
 		</script>
 
+		<!-- Look for change in savemenu form. Then find out what was changed so that value lists can be updated -->
+		<script>
+		$(function () {
+			$('#savemenu')
+					.change(function () {
+						// var value = $(this).val();
+						// var menu = $('#button11value0');
+
+						// menu.empty();
+						// $.each(temp[value], function () {
+						// 	$('<option />')
+						// 		.attr('value', this.value)
+						// 		.html(this.name)
+						// 		.appendTo(menu);
+						// });
+						console.log("Change detected in form savemenu.")
+					});
+		});	
+
+		</script>
+
+
 		<!-- Loading button function -->
 		<script>
 

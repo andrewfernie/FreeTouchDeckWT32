@@ -120,16 +120,16 @@
     ]
   },
   "button24": {
-    "logo": "play.bmp",
+    "logo": "blank.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "3",
+      "0",
       "0",
       "0"
     ],
     "valuearray": [
-      "4",
+      "0",
       "0",
       "0"
     ]
@@ -195,16 +195,16 @@
     ]
   },
   "button34": {
-    "logo": "home.bmp",
+    "logo": "play.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "14",
+      "3",
       "0",
       "0"
     ],
     "valuearray": [
-      "0",
+      "4",
       "0",
       "0"
     ]
