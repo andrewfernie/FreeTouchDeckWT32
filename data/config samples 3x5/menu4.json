@@ -195,7 +195,7 @@
     ]
   },
   "button34": {
-    "logo": "play.bmp",
+    "logo": "playpause.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
