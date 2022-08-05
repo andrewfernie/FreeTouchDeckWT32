@@ -32,8 +32,8 @@ bool startWifiStation()
     esp_bt_controller_mem_release(ESP_BT_MODE_BTDM);
 
     MSG_INFOLN("");
-    MSG_INFOLN("[INFO]: BLE Stopped");
-    MSG_INFO("[INFO]: Connected! IP address: ");
+    MSG_INFOLN("[INFO] BLE Stopped");
+    MSG_INFO("[INFO] Connected! IP address: ");
     MSG_INFOLN(WiFi.localIP());
 
     MDNS.begin(wificonfig.hostname);
@@ -44,7 +44,7 @@ bool startWifiStation()
 
     // Start the webserver
     webserver.begin();
-    MSG_INFOLN("[INFO]: Webserver started");
+    MSG_INFOLN("[INFO] Webserver started");
     return true;
 }
 
@@ -55,7 +55,7 @@ void startWifiAP()
     WiFi.mode(WIFI_AP);
     WiFi.softAP(wificonfig.ssid, wificonfig.password);
     MSG_INFOLN("");
-    MSG_INFO("[INFO]: Access Point Started! IP address: ");
+    MSG_INFO("[INFO] Access Point Started! IP address: ");
     MSG_INFOLN(WiFi.softAPIP());
 
     // Delete the task bleKeyboard had create to free memory and to not interfere with AsyncWebServer
@@ -68,7 +68,7 @@ void startWifiAP()
     esp_bt_controller_mem_release(ESP_BT_MODE_BTDM);
 
     MSG_INFOLN("");
-    MSG_INFOLN("[INFO]: BLE Stopped");
+    MSG_INFOLN("[INFO] BLE Stopped");
 
     MDNS.begin(wificonfig.hostname);
     MDNS.addService("http", "tcp", 80);
@@ -78,7 +78,7 @@ void startWifiAP()
 
     // Start the webserver
     webserver.begin();
-    MSG_INFOLN("[INFO]: Webserver started");
+    MSG_INFOLN("[INFO] Webserver started");
 }
 
 // Start the default AP
@@ -90,7 +90,7 @@ void startDefaultAP()
 
     WiFi.mode(WIFI_AP);
     WiFi.softAP(ssid, password);
-    MSG_INFO("[INFO]: Access Point Started! IP address: ");
+    MSG_INFO("[INFO] Access Point Started! IP address: ");
     MSG_INFOLN(WiFi.softAPIP());
 
     // Delete the task bleKeyboard had create to free memory and to not interfere with AsyncWebServer
@@ -102,7 +102,7 @@ void startDefaultAP()
     esp_bt_controller_deinit();
     esp_bt_controller_mem_release(ESP_BT_MODE_BTDM);
 
-    MSG_INFOLN("[INFO]: BLE Stopped");
+    MSG_INFOLN("[INFO] BLE Stopped");
 
     MDNS.begin("freetouchdeck");
     MDNS.addService("http", "tcp", 80);
@@ -112,7 +112,7 @@ void startDefaultAP()
 
     // Start the webserver
     webserver.begin();
-    MSG_INFOLN("[INFO]: Webserver started");
+    MSG_INFOLN("[INFO] Webserver started");
 }
 
 /**
@@ -134,7 +134,7 @@ void configmode()
     tft.setTextSize(1);
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
 
-    MSG_INFOLN("[INFO]: Entering Config Mode");
+    MSG_INFOLN("[INFO] Entering Config Mode");
     tft.println("Connecting to Wifi...");
     MSG_INFO1("[INFO] configmode ssid", wificonfig.ssid);
     MSG_INFO1("[INFO] configmode pwd", wificonfig.password);
@@ -367,8 +367,8 @@ bool resetconfig(String file)
                 // Close the newly created file
                 newfile.close();
             }
-            MSG_INFOLN("[INFO]: Done resetting.");
-            MSG_INFOLN("[INFO]: Type \"restart\" to reload configuration.");
+            MSG_INFOLN("[INFO] Done resetting.");
+            MSG_INFOLN("[INFO] Type \"restart\" to reload configuration.");
 
             // Close the default.json file
             defaultfile.close();
@@ -402,8 +402,8 @@ bool resetconfig(String file)
         newfile.println("}");
 
         newfile.close();
-        MSG_BASICLN("[INFO]: Done resetting general config.");
-        MSG_BASICLN("[INFO]: Type \"restart\" to reload configuration.");
+        MSG_BASICLN("[INFO] Done resetting general config.");
+        MSG_BASICLN("[INFO] Type \"restart\" to reload configuration.");
         return true;
     }
     else {

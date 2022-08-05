@@ -233,7 +233,7 @@ void handleJSONUpload(AsyncWebServerRequest *request, String filename, size_t in
     }
 
     if (!validMenuName && filename != "general.json" && filename != "wificonfig.json") {
-        MSG_INFO1F("[INFO]: JSON has invalid name: %s\n", filename.c_str());
+        MSG_INFO1F("[INFO] JSON has invalid name: %s\n", filename.c_str());
         errorCode = "102";
         errorText = "JSON file has an invalid name. You can only upload JSON files with the following file names:";
         errorText += "<ul><li>menu0.json</li><li>menu1.json</li><li>menu2.json</li><li>menu3.json</li><li>menu4.json</li>";
@@ -242,7 +242,7 @@ void handleJSONUpload(AsyncWebServerRequest *request, String filename, size_t in
         return;
     }
     if (!index) {
-        MSG_INFO1F("[INFO]: JSON Upload Start: %s\n", filename.c_str());
+        MSG_INFO1F("[INFO] JSON Upload Start: %s\n", filename.c_str());
         filename = "/config/" + filename;  // TODO: Does the config directory need to be hardcoded?
 
         // Open the file on first call and store the file handle in the request object
@@ -253,7 +253,7 @@ void handleJSONUpload(AsyncWebServerRequest *request, String filename, size_t in
         request->_tempFile.write(data, len);
     }
     if (final) {
-        MSG_INFO1F("[INFO]: JSON Uploaded: %s\n", filename.c_str());
+        MSG_INFO1F("[INFO] JSON Uploaded: %s\n", filename.c_str());
         // Close the file handle as the upload is now done
         request->_tempFile.close();
         request->send(FILESYSTEM, "/upload.htm");
@@ -277,7 +277,7 @@ void handleJSONUpload(AsyncWebServerRequest *request, String filename, size_t in
 void handleAPIUpload(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final)
 {
     if (!index) {
-        MSG_INFO1F("[INFO]: API file Upload Start: %s\n", filename.c_str());
+        MSG_INFO1F("[INFO] API file Upload Start: %s\n", filename.c_str());
         filename = "/uploads/" + filename;  // TODO: Does the uploads directory need to be hardcoded?
 
         // Open the file on first call and store the file handle in the request object
@@ -288,7 +288,7 @@ void handleAPIUpload(AsyncWebServerRequest *request, String filename, size_t ind
         request->_tempFile.write(data, len);
     }
     if (final) {
-        MSG_INFO1F("[INFO]: API file Uploaded: %s\n", filename.c_str());
+        MSG_INFO1F("[INFO] API file Uploaded: %s\n", filename.c_str());
         // Close the file handle as the upload is now done
         request->_tempFile.close();
         request->send(FILESYSTEM, "/upload.htm");
@@ -306,7 +306,7 @@ bool spaceLeft()
 {
     float minmem = 100000.00;  // Always leave 100 kB free pace on FILESYSTEM
     float freeMemory = FILESYSTEM.totalBytes() - FILESYSTEM.usedBytes();
-    MSG_INFO1F("[INFO]: Free memory left: %f bytes\n", freeMemory);
+    MSG_INFO1F("[INFO] Free memory left: %f bytes\n", freeMemory);
     if (freeMemory < minmem) {
         return false;
     }
@@ -332,7 +332,7 @@ bool spaceLeft()
 void handleUpload(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final)
 {
     if (!index) {
-        MSG_INFO1F("[INFO]: File Upload Start: %s\n", filename.c_str());
+        MSG_INFO1F("[INFO] File Upload Start: %s\n", filename.c_str());
         filename = "/logos/" + filename;
         // Open the file on first call and store the file handle in the request object
         request->_tempFile = FILESYSTEM.open(filename, "w");
@@ -342,7 +342,7 @@ void handleUpload(AsyncWebServerRequest *request, String filename, size_t index,
         request->_tempFile.write(data, len);
     }
     if (final) {
-        MSG_INFO1F("[INFO]: File Uploaded: %s\n", filename.c_str());
+        MSG_INFO1F("[INFO] File Uploaded: %s\n", filename.c_str());
         // Close the file handle as the upload is now done
         request->_tempFile.close();
 
@@ -417,7 +417,7 @@ void handlerSetup()
 
             if (savemode == "general") {
                 // --- Saving general config
-                MSG_INFOLN("[INFO]: Saving General Config");
+                MSG_INFOLN("[INFO] Saving General Config");
 
                 FILESYSTEM.remove("/config/general.json");
                 File file = FILESYSTEM.open("/config/general.json", "w");
@@ -490,7 +490,7 @@ void handlerSetup()
             }
             else if (savemode == "wifi") {
                 // --- Saving wifi config
-                MSG_INFOLN("[INFO]: Saving Wifi Config");
+                MSG_INFOLN("[INFO] Saving Wifi Config");
 
                 FILESYSTEM.remove("/config/wificonfig.json");
                 File file = FILESYSTEM.open("/config/wificonfig.json", "w");
@@ -538,7 +538,7 @@ void handlerSetup()
                 int16_t numScanned = sscanf(save_menu_number_str.c_str(), "%d", &menuNumber);
 
                 if ((numScanned == 1) && (menuNumber >= 0) && (menuNumber < NUM_PAGES)) {
-                    MSG_INFO1("[INFO]: Saving Menu ", menuNumber);
+                    MSG_INFO1("[INFO] Saving Menu ", menuNumber);
                     fileName += menuNumber;
                     fileName += ".json";
                     FILESYSTEM.remove(fileName.c_str());
@@ -548,7 +548,7 @@ void handlerSetup()
                         return;
                     }
                     else {
-                        MSG_INFO1("[INFO]: Will write to: ", fileName.c_str());
+                        MSG_INFO1("[INFO] Will write to: ", fileName.c_str());
                     }
                 }
                 else {
@@ -774,7 +774,7 @@ void handlerSetup()
         int filecount = 0;
         for (i = 0; i < params; i++) {
             AsyncWebParameter *p = request->getParam(i);
-            MSG_INFO1F("[INFO]: Deleting file: %s\n", p->value().c_str());
+            MSG_INFO1F("[INFO] Deleting file: %s\n", p->value().c_str());
             String filename = "/logos/";
             filename += p->value().c_str();
             if (FILESYSTEM.exists(filename)) {
@@ -801,17 +801,17 @@ void handlerSetup()
     webserver.on("/download", HTTP_GET, [](AsyncWebServerRequest *request) {
         AsyncWebParameter *p = request->getParam("file");
         String filerequest = p->value().c_str();
-        MSG_INFO1F("[INFO]: Requested file: %s\n", filerequest.c_str());
+        MSG_INFO1F("[INFO] Requested file: %s\n", filerequest.c_str());
 
         String downloadfile = "/config/" + filerequest;
-        MSG_INFO1F("[INFO]: Full path: %s\n", downloadfile.c_str());
+        MSG_INFO1F("[INFO] Full path: %s\n", downloadfile.c_str());
 
         if (FILESYSTEM.exists(downloadfile)) {
-            MSG_INFO1F("[INFO]: Download file %s\n", downloadfile.c_str());
+            MSG_INFO1F("[INFO] Download file %s\n", downloadfile.c_str());
             request->send(FILESYSTEM, downloadfile, String(), true);
         }
         else {
-            MSG_INFO1F("[INFO]: Download file %s doesn't exits!\n", downloadfile.c_str());
+            MSG_INFO1F("[INFO] Download file %s doesn't exits!\n", downloadfile.c_str());
         }
     });
 
@@ -826,17 +826,17 @@ void handlerSetup()
         AsyncWebParameter *p = request->getParam("menunumberlist_download");
         String filerequest = "menu" + p->value() + ".json";
 
-        MSG_INFO1F("[INFO]: Requested file: %s\n", filerequest.c_str());
+        MSG_INFO1F("[INFO] Requested file: %s\n", filerequest.c_str());
 
         String downloadfile = "/config/" + filerequest;
-        MSG_INFO1F("[INFO]: Full path: %s\n", downloadfile.c_str());
+        MSG_INFO1F("[INFO] Full path: %s\n", downloadfile.c_str());
 
         if (FILESYSTEM.exists(downloadfile)) {
-            MSG_INFO1F("[INFO]: Download file %s\n", downloadfile.c_str());
+            MSG_INFO1F("[INFO] Download file %s\n", downloadfile.c_str());
             request->send(FILESYSTEM, downloadfile, String(), true);
         }
         else {
-            MSG_INFO1F("[INFO]: Download file %s doesn't exits!\n", downloadfile.c_str());
+            MSG_INFO1F("[INFO] Download file %s doesn't exits!\n", downloadfile.c_str());
         }
     });
 }

@@ -18,7 +18,7 @@
 
 void bleKeyboardAction(int action, int value, char *symbol)
 {
-    MSG_DEBUG3("[INFO]: BLE Keyboard action received:", action, value, symbol);
+    MSG_DEBUG3("[INFO] BLE Keyboard action received:", action, value, symbol);
     switch (action) {
         case Action_NoAction:
             // No Action
@@ -458,7 +458,7 @@ void bleKeyboardAction(int action, int value, char *symbol)
                         ledBrightness = ledBrightness - 25;
                         ledcWrite(0, ledBrightness);
                         savedStates.putInt("ledBrightness", ledBrightness);
-                        MSG_INFOLN("[INFO]: Brightness down.");
+                        MSG_INFOLN("[INFO] Brightness down.");
                     }
                     break;
                 case 3:  // Display Brightness Up
@@ -466,19 +466,19 @@ void bleKeyboardAction(int action, int value, char *symbol)
                         ledBrightness = ledBrightness + 25;
                         ledcWrite(0, ledBrightness);
                         savedStates.putInt("ledBrightness", ledBrightness);
-                        MSG_INFOLN("[INFO]: Brightness up.");
+                        MSG_INFOLN("[INFO] Brightness up.");
                     }
                     break;
                 case 4:  // Sleep Enabled
                     if (generalconfig.sleepenable) {
                         generalconfig.sleepenable = false;
-                        MSG_INFOLN("[INFO]: Sleep disabled.");
+                        MSG_INFOLN("[INFO] Sleep disabled.");
                     }
                     else {
                         generalconfig.sleepenable = true;
                         Interval = generalconfig.sleeptimer * MIN_TO_MS;
-                        MSG_INFOLN("[INFO]: Sleep enabled.");
-                        MSG_INFO("[INFO]: Timer set to: ");
+                        MSG_INFOLN("[INFO] Sleep enabled.");
+                        MSG_INFO("[INFO] Timer set to: ");
                         MSG_INFOLN(generalconfig.sleeptimer);
                     }
                     break;

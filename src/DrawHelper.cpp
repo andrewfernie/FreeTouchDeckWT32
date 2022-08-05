@@ -89,8 +89,14 @@ void drawKeypad()
                     drawTransparent = false;
                 }
                 else {
-                    buttonBG = generalconfig.functionButtonColour;
-                    drawTransparent = true;
+                    if (menu[pageNum].button[row][col].actions[0].action == Action_ChangePage) {
+                        buttonBG = generalconfig.menuButtonColour;
+                        drawTransparent = true;
+                    }
+                    else {
+                        buttonBG = generalconfig.functionButtonColour;
+                        drawTransparent = true;
+                    }
                 }
                 tft.setFreeFont(LABEL_FONT);
                 key[row][col].initButton(&tft, KEY_X + col * (KEY_W + KEY_SPACING_X),

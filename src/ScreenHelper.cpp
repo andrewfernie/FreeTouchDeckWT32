@@ -210,7 +210,7 @@ void drawBmp(const char *filename, int16_t x, int16_t y)
             tft.setSwapBytes(oldSwapBytes);
         }
         else
-            MSG_ERRORLN("[ERROR]: BMP format not recognized.");
+            MSG_ERRORLN("[ERROR] BMP format not recognized.");
     }
     bmpFS.close();
 }
@@ -263,7 +263,7 @@ uint16_t getBMPColor(const char *filename)
     int16_t pixelsize = readNbytesInt(&bmpImage, 0x1C, 2);
 
     if (pixelsize != 24) {
-        MSG_ERRORLN("[ERROR]: getBMPColor: Image is not 24 bpp");
+        MSG_ERRORLN("[ERROR] getBMPColor: Image is not 24 bpp");
         return 0x0000;
     }
 
@@ -297,12 +297,12 @@ uint16_t getImageBG(int row, int col)
             return getBMPColor(menu[pageNum].button[row][col].logo);
         }
         else {
-            MSG_ERRORLN("[ERROR]: getImageBG: Invalid logo index");
+            MSG_ERRORLN("[ERROR] getImageBG: Invalid logo index");
             return 0x0000;
         }
     }
     else {
-        MSG_ERRORLN("[ERROR]: getImageBG: Invalid pageNum");
+        MSG_ERRORLN("[ERROR] getImageBG: Invalid pageNum");
         return 0x0000;
     }
 }
@@ -327,12 +327,12 @@ uint16_t getLatchImageBG(uint8_t row, uint8_t col)
             return getBMPColor(menu[pageNum - 1].button[row][col].latchlogo);
         }
         else {
-            MSG_ERRORLN("[ERROR]: getLatchImageBG: Invalid latch logo index");
+            MSG_ERRORLN("[ERROR] getLatchImageBG: Invalid latch logo index");
             return 0x0000;
         }
     }
     else {
-        MSG_ERRORLN("[ERROR]: getLatchImageBG: Invalid pageNum");
+        MSG_ERRORLN("[ERROR] getLatchImageBG: Invalid pageNum");
         return 0x0000;
     }
 }

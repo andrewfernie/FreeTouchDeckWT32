@@ -11,7 +11,7 @@
  */
 bool loadMainConfig()
 {
-    MSG_INFOLN("[INFO]: Entering loadMainConfig");
+    MSG_INFOLN("[INFO] Entering loadMainConfig");
     if (!FILESYSTEM.exists("/config/wificonfig.json")) {
         MSG_WARNLN("[WARNING]: Config file not found!");
         return false;
@@ -23,7 +23,7 @@ bool loadMainConfig()
     DeserializationError error = deserializeJson(doc, configfile);
 
     if (error == DeserializationError::Ok) {
-        MSG_INFOLN("[INFO]: wificonfig.json deserialized loaded OK");
+        MSG_INFOLN("[INFO] wificonfig.json deserialized loaded OK");
     }
     else {
         MSG_WARN1("[WARNING]: wificonfig.json deserialization error: ", error.c_str());
@@ -43,7 +43,7 @@ bool loadMainConfig()
     configfile.close();
 
     if (error) {
-        MSG_ERROR("[ERROR]: deserializeJson() error");
+        MSG_ERROR("[ERROR] deserializeJson() error");
         MSG_ERRORLN(error.c_str());
         return false;
     }
@@ -87,20 +87,33 @@ bool loadConfig(String value)
         unsigned long rgb888menubuttoncolor = convertHTMLtoRGB888(menubuttoncolorchar);
         generalconfig.menuButtonColour = convertRGB888ToRGB565(rgb888menubuttoncolor);
 
+        char colorbuf[64];
+        snprintf(colorbuf, sizeof(colorbuf), "[INFO] menuButtonColour (RGB565) = 0x%06X", generalconfig.menuButtonColour);
+        MSG_INFOLN(colorbuf);
+
         char functionbuttoncolorchar[64];
         strcpy(functionbuttoncolorchar, functionbuttoncolor);
         unsigned long rgb888functionbuttoncolor = convertHTMLtoRGB888(functionbuttoncolorchar);
         generalconfig.functionButtonColour = convertRGB888ToRGB565(rgb888functionbuttoncolor);
+
+        snprintf(colorbuf, sizeof(colorbuf), "[INFO] functionButtonColour (RGB565) = 0x%06X", generalconfig.functionButtonColour);
+        MSG_INFOLN(colorbuf);
 
         char latchcolorchar[64];
         strcpy(latchcolorchar, latchcolor);
         unsigned long rgb888latchcolor = convertHTMLtoRGB888(latchcolorchar);
         generalconfig.latchedColour = convertRGB888ToRGB565(rgb888latchcolor);
 
+        snprintf(colorbuf, sizeof(colorbuf), "[INFO] latchedColour (RGB565) = 0x%06X", generalconfig.latchedColour);
+        MSG_INFOLN(colorbuf);
+
         char backgroundcolorchar[64];
         strcpy(backgroundcolorchar, bgcolor);
         unsigned long rgb888backgroundcolor = convertHTMLtoRGB888(backgroundcolorchar);
         generalconfig.backgroundColour = convertRGB888ToRGB565(rgb888backgroundcolor);
+
+        snprintf(colorbuf, sizeof(colorbuf), "[INFO] backgroundColour (RGB565) = 0x%06X", generalconfig.backgroundColour);
+        MSG_INFOLN(colorbuf);
 
         // Loading general settings
 
@@ -135,7 +148,7 @@ bool loadConfig(String value)
         configfile.close();
 
         if (error) {
-            MSG_ERROR1("[ERROR]: deserializeJson() error", error.c_str());
+            MSG_ERROR1("[ERROR] deserializeJson() error", error.c_str());
             return false;
         }
         return true;
@@ -222,14 +235,14 @@ bool loadConfig(String value)
         configfile.close();
 
         if (error) {
-            MSG_ERROR1("[ERROR]: deserializeJson() error", error.c_str());
-            MSG_ERROR2("[ERROR]: Will initialize ", configFileName, " to default.json");
+            MSG_ERROR1("[ERROR] deserializeJson() error", error.c_str());
+            MSG_ERROR2("[ERROR] Will initialize ", configFileName, " to default.json");
 
             if (CopyFile("/config/default.json", configFileName)) {
-                MSG_INFO2("[INFO]: Successful initialization of ", configFileName, " to default.json");
+                MSG_INFO2("[INFO] Successful initialization of ", configFileName, " to default.json");
             }
             else {
-                MSG_ERROR1("[ERROR]: Failed to initialize ", configFileName);
+                MSG_ERROR1("[ERROR] Failed to initialize ", configFileName);
                 checkfile(configFileName, true);  // This will force a message to the TFT screen
 
                 while (1)

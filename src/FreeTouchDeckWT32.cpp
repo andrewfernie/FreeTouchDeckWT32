@@ -41,10 +41,23 @@
 
 #include "FreeTouchDeckWT32.h"
 
-const char *versionnumber = "WT32-0.1.1-AF";
+const char *versionnumber = "WT32-0.1.2-AF";
 
 /*
- * Version 0.1.1-AF  - A.Fernie In Work
+ * Version 0.1.2-AF  - A.Fernie 2022-08-04
+ * 1. Load config.json file (wasn't being read, so always used defaults)
+ * 2. Fix logic for button background color so that it is based on the action for that button being
+ *    a menu change or not
+ * 3. Fix VSCode.bmp background color (was not completely back)
+ * 4. Added some "[INFO]" messages for colors and sleepenable/sleeptimer. Note that yuou need to enable
+ *    [INFO] messages by setting "#define LOG_MSG_LEVEL 3  // 1=ERROR, 2=ERROR+WARN, 3=ERROR+WARN+INFO"
+ *    in FreeTouchDeckWT32.h to see them
+ * 5. No colons after [INFO], [WARN], [ERROR]
+ *
+ *
+ * Version 0.1.1-AF  - A.Fernie 2022-07-18
+ * 1. Store sample 3x5 menus
+ * 2. Switch to 3x4 (more readable).
  *
  * Version 0.1.0-AF  - A.Fernie 2022-7-15
  *
@@ -129,11 +142,11 @@ void setup()
     Serial.setDebugOutput(true);
     MSG_INFOLN("");
 
-    MSG_INFOLN("[INFO]: Loading saved brightness state");
+    MSG_INFOLN("[INFO] Loading saved brightness state");
     savedStates.begin("ftd", false);
 
     ledBrightness = savedStates.getInt("ledBrightness", 255);
-    MSG_INFOLN("[INFO]: Brightness has been set");
+    MSG_INFOLN("[INFO] Brightness has been set");
 
 #ifdef ENABLE_TOUCH_SCREEN
 #ifdef USECAPTOUCH
@@ -141,7 +154,7 @@ void setup()
         MSG_WARNLN("[WARNING]: Unable to start the capacitive touchscreen.");
     }
     else {
-        MSG_INFOLN("[INFO]: Capacitive touch started!");
+        MSG_INFOLN("[INFO] Capacitive touch started!");
     }
 #endif
 #endif
@@ -172,26 +185,26 @@ void setup()
     // -------------- Start filesystem ----------------------
 
     if (!FILESYSTEM.begin()) {
-        MSG_ERRORLN("[ERROR]: LittleFS initialisation failed!");
+        MSG_ERRORLN("[ERROR] LittleFS initialisation failed!");
         drawErrorMessage("Failed to init LittleFS! Did you upload the data folder?");
         while (1)
             yield();  // We stop here
     }
-    MSG_INFOLN("[INFO]: LittleFS initialised.");
+    MSG_INFOLN("[INFO] LittleFS initialised.");
 
     // Check for free space
 
-    MSG_INFO("[INFO]: Free Space: ");
+    MSG_INFO("[INFO] Free Space: ");
     MSG_INFOLN(FILESYSTEM.totalBytes() - FILESYSTEM.usedBytes());
 
     //------------------ Load Wifi Config ----------------------------------------------
 
-    MSG_INFOLN("[INFO]: Loading Wifi Config");
+    MSG_INFOLN("[INFO] Loading Wifi Config");
     if (!loadMainConfig()) {
         MSG_WARNLN("[WARNING]: Failed to load WiFi Credentials!");
     }
     else {
-        MSG_INFOLN("[INFO]: WiFi Credentials Loaded");
+        MSG_INFOLN("[INFO] WiFi Credentials Loaded");
     }
 
     // ----------------- Load webserver ---------------------
@@ -208,13 +221,18 @@ void setup()
     }
     else {
         // Draw a splash screen
-        drawBmp("/logos/freetouchdeck_logo.bmp", 0, 0);
+        if (checkfile("/logos/freetouchdeck_logo.bmp", false)) {
+            drawBmp("/logos/freetouchdeck_logo.bmp", 0, 0);
+        }
+        else{
+            MSG_INFOLN("[INFO] No \"/logos/freetouchdeck_logo.bmp\" file found for splash screen.");
+        }
         tft.setCursor(1, 3);
         tft.setTextFont(2);
         tft.setTextSize(1);
         tft.setTextColor(TFT_WHITE, TFT_BLACK);
         tft.printf("Loading version %s\n", versionnumber);
-        MSG_INFO1F("[INFO]: Loading version %s\n", versionnumber);
+        MSG_INFO1F("[INFO] Loading version %s\n", versionnumber);
     }
 
 // Calibrate the touch screen and retrieve the scaling factors
@@ -224,10 +242,11 @@ void setup()
 
     // Let's first check if all the files we need exist
     if (!checkfile("/config/general.json", true)) {
-        MSG_ERRORLN("[ERROR]: /config/general.json not found!");
+        MSG_ERRORLN("[ERROR] /config/general.json not found!");
         while (1)
             yield();  // Stop!
     }
+    
 
     for (size_t i = 0; i < NUM_PAGES; i++) {
         char filename[32];
@@ -240,10 +259,10 @@ void setup()
         if (!checkfile(filename, false)) {
             MSG_WARN2("[WARNING]: ", filename, " not found. Initializing to default.json");
             if (CopyFile("/config/default.json", filename)) {
-                MSG_INFO2("[WARN]: Successful initialization of ", filename, " to default.json");
+                MSG_INFO2("[WARN] Successful initialization of ", filename, " to default.json");
             }
             else {
-                MSG_ERROR1("[ERROR]: Failed to initialize ", filename);
+                MSG_ERROR1("[ERROR] Failed to initialize ", filename);
                 checkfile(filename, true);  // This will force a message to the TFT screen
 
                 while (1)
@@ -279,6 +298,32 @@ void setup()
 
 #endif
 
+    // Now load the config files, starting with general.json
+    if (!loadConfig("general")) {
+        Serial.print("[WARNING]: general.json failed to load!");
+        Serial.print("[WARNING]: To reset to default type \'reset general\'");
+        pageNum = SPECIAL_4_PAGE;
+    } else{
+#ifdef TOUCH_INTERRUPT_PIN
+        Interval = generalconfig.sleeptimer * MIN_TO_MS;
+        if (generalconfig.sleepenable) {
+            pinMode(TOUCH_INTERRUPT_PIN, INPUT_PULLUP);
+            MSG_INFOLN("[INFO] Sleep enabled.");
+            MSG_INFO("[INFO] Sleep timer = ");
+            MSG_INFO(generalconfig.sleeptimer);
+            MSG_INFOLN(" minutes");
+            sleepIsLatched = 1;
+        }
+        else {
+            MSG_INFOLN("[INFO] Sleep not enabled.");
+            MSG_INFO("[INFO] Sleep timer = ");
+            MSG_INFO(generalconfig.sleeptimer);
+            MSG_INFOLN(" minutes");
+        }
+#endif
+    }
+
+    // Next, load the menu pages
     for (size_t i = 0; i < NUM_PAGES; i++) {
         char menuName[16];
         char menuNumber[4];
@@ -300,22 +345,22 @@ void setup()
         }
     }
 
-    MSG_INFOLN("[INFO]: All configs loaded");
+    MSG_INFOLN("[INFO] All configs loaded");
 
     // Setup the Font used for plain text
     tft.setFreeFont(LABEL_FONT);
 
     //------------------BLE Initialization ------------------------------------------------------------------------
 
-    MSG_INFOLN("[INFO]: Starting BLE");
+    MSG_INFOLN("[INFO] Starting BLE");
     bleKeyboard.begin();
 
     // ---------------- Printing version numbers -----------------------------------------------
-    MSG_INFO("[INFO]: BLE Keyboard version: ");
+    MSG_INFO("[INFO] BLE Keyboard version: ");
     MSG_INFOLN(BLE_KEYBOARD_VERSION);
-    MSG_INFO("[INFO]: ArduinoJson version: ");
+    MSG_INFO("[INFO] ArduinoJson version: ");
     MSG_INFOLN(ARDUINOJSON_VERSION);
-    MSG_INFO("[INFO]: TFT_eSPI version: ");
+    MSG_INFO("[INFO] TFT_eSPI version: ");
     MSG_INFOLN(TFT_ESPI_VERSION);
 
     // ---------------- Start the first keypad -------------
@@ -324,20 +369,8 @@ void setup()
     tft.fillScreen(generalconfig.backgroundColour);
 
     // Draw keypad
-    MSG_INFOLN("[INFO]: Drawing keypad");
+    MSG_INFOLN("[INFO] Drawing keypad");
     drawKeypad();
-
-#ifdef TOUCH_INTERRUPT_PIN
-    if (generalconfig.sleepenable) {
-        pinMode(TOUCH_INTERRUPT_PIN, INPUT_PULLUP);
-        Interval = generalconfig.sleeptimer * MIN_TO_MS;
-        MSG_INFOLN("[INFO]: Sleep enabled.");
-        MSG_INFO("[INFO]: Sleep timer = ");
-        MSG_INFO(generalconfig.sleeptimer);
-        MSG_INFOLN(" minutes");
-        sleepIsLatched = 1;
-    }
-#endif
 }
 
 //--------------------- LOOP ---------------------------------------------------------------------
@@ -367,45 +400,45 @@ void loop(void)
             String value = Serial.readString();
             MSG_INFO1("[INFO] received command setssid ", value.c_str());
             if (saveWifiSSID(value)) {
-                MSG_INFO1F("[INFO]: Saved new SSID: %s\n", value.c_str());
+                MSG_INFO1F("[INFO] Saved new SSID: %s\n", value.c_str());
                 loadMainConfig();
-                MSG_INFOLN("[INFO]: New configuration loaded");
+                MSG_INFOLN("[INFO] New configuration loaded");
             }
         }
         else if (command == "setpassword") {
             String value = Serial.readString();
             MSG_INFO1("[INFO] received command setpassword ", value.c_str());
             if (saveWifiPW(value)) {
-                MSG_INFO1F("[INFO]: Saved new Password: %s\n", value.c_str());
+                MSG_INFO1F("[INFO] Saved new Password: %s\n", value.c_str());
                 loadMainConfig();
-                MSG_INFOLN("[INFO]: New configuration loaded");
+                MSG_INFOLN("[INFO] New configuration loaded");
             }
         }
         else if (command == "setwifimode") {
             String value = Serial.readString();
             MSG_INFO1("[INFO] received command setwifimode ", value.c_str());
             if (saveWifiMode(value)) {
-                MSG_INFO1F("[INFO]: Saved new WiFi Mode: %s\n", value.c_str());
+                MSG_INFO1F("[INFO] Saved new WiFi Mode: %s\n", value.c_str());
                 loadMainConfig();
-                MSG_INFOLN("[INFO]: New configuration loaded");
+                MSG_INFOLN("[INFO] New configuration loaded");
             }
         }
         else if (command == "setwifimodesta") {
             String value = "WIFI_STA";
             MSG_INFO1("[INFO] received command setwifimode ", value.c_str());
             if (saveWifiMode(value)) {
-                MSG_INFO1F("[INFO]: Saved new WiFi Mode: %s\n", value.c_str());
+                MSG_INFO1F("[INFO] Saved new WiFi Mode: %s\n", value.c_str());
                 loadMainConfig();
-                MSG_INFOLN("[INFO]: New configuration loaded");
+                MSG_INFOLN("[INFO] New configuration loaded");
             }
         }
         else if (command == "setwifimodeap") {
             String value = "WIFI_AP";
             MSG_INFO1("[INFO] received command setwifimode ", value.c_str());
             if (saveWifiMode(value)) {
-                MSG_INFO1F("[INFO]: Saved new WiFi Mode: %s\n", value.c_str());
+                MSG_INFO1F("[INFO] Saved new WiFi Mode: %s\n", value.c_str());
                 loadMainConfig();
-                MSG_INFOLN("[INFO]: New configuration loaded");
+                MSG_INFOLN("[INFO] New configuration loaded");
             }
         }
         else if (command == "restart") {
@@ -414,7 +447,7 @@ void loop(void)
         }
         else if (command == "reset") {
             String file = Serial.readString();
-            MSG_INFO1F("[INFO]: Resetting %s.json now\n", file.c_str());
+            MSG_INFO1F("[INFO] Resetting %s.json now\n", file.c_str());
             resetconfig(file);
         }
         else {
@@ -501,7 +534,7 @@ void loop(void)
             if (millis() > previousMillis + Interval) {
                 // The timer has ended and we are going to sleep  .
                 tft.fillScreen(TFT_BLACK);
-                MSG_INFOLN("[INFO]: Going to sleep.");
+                MSG_INFOLN("[INFO] Going to sleep.");
 #ifdef speakerPin
                 if (generalconfig.beep) {
                     ledcAttachPin(speakerPin, 2);
@@ -523,7 +556,7 @@ void loop(void)
                     ledcWrite(2, 0);
                 }
 #endif
-                MSG_INFOLN("[INFO]: Saving latched states");
+                MSG_INFOLN("[INFO] Saving latched states");
 
                 esp_sleep_enable_ext0_wakeup(TOUCH_INTERRUPT_PIN, 0);
                 esp_deep_sleep_start();
@@ -571,7 +604,7 @@ void loop(void)
                         drawTransparent = false;
                     }
                     else {
-                        if (pageNum == 0) {
+                        if (menu[pageNum].button[row][col].actions[0].action == Action_ChangePage) {
                             buttonBG = generalconfig.menuButtonColour;
                             drawTransparent = true;
                         }
