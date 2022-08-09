@@ -77,6 +77,14 @@
 // ------- Uncomment the define below if you want to use a piezo buzzer and specify the pin where the speaker is connected -------
 //#define speakerPin 26
 
+// ------- Enable to read and report battery voltage.  -------
+#define READ_EXTERNAL_BATTERY
+#ifdef READ_EXTERNAL_BATTERY
+#define EXTERNAL_BATTERY_PIN 33
+#define EXTERNAL_BATTERY_ADC_SCALE (3.3/4095.0)            // Default attenuation results in 2.6V for full scale on ADC
+#define EXTERNAL_BATTERY_SCALE (EXTERNAL_BATTERY_ADC_SCALE * 2.13)  // include any input voltage dividers here
+#endif
+
 // ------- NimBLE definition, use only if the NimBLE library is installed
 // and if you are using the original ESP32-BLE-Keyboard library by T-VK -------
 //#define USE_NIMBLE

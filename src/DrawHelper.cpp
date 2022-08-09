@@ -1,4 +1,10 @@
 #include "DrawHelper.h"
+
+#ifdef READ_EXTERNAL_BATTERY
+extern float readExternalBattery();
+extern float externalBatteryVoltage;
+#endif
+
 /**
  * @brief This function draws the a "latched" dot. it uses the logonumber, colomn and row to
  *        determine where.
@@ -195,7 +201,7 @@ void printinfo()
         tft.setTextSize(1);
     }
     else {
-        tft.setTextSize(2);
+        tft.setTextSize(1);
     }
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
     tft.printf("Version: %s\n", versionnumber);
@@ -221,6 +227,10 @@ void printinfo()
     }
 #else
     tft.println("Speaker: Disabled");
+#endif
+
+#ifdef READ_EXTERNAL_BATTERY
+    tft.printf("Battery voltage: %f V\n", externalBatteryVoltage);
 #endif
 
     tft.print("Free Storage: ");

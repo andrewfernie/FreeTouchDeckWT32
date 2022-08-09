@@ -41,9 +41,11 @@
 
 #include "FreeTouchDeckWT32.h"
 
-const char *versionnumber = "WT32-0.1.2-AF";
+const char *versionnumber = "WT32-0.1.3-AF";
 
 /*
+ * Version 0.1.3-AF  - A.Fernie In Work
+ *
  * Version 0.1.2-AF  - A.Fernie 2022-08-04
  * 1. Load config.json file (wasn't being read, so always used defaults)
  * 2. Fix logic for button background color so that it is based on the action for that button being
@@ -133,9 +135,16 @@ TFT_eSPI_Button key[BUTTON_ROWS][BUTTON_COLS];
 
 uint8_t sleepIsLatched = false;
 
-//-------------------------------- SETUP --------------------------------------------------------------
+#ifdef READ_EXTERNAL_BATTERY
+float readExternalBattery();
+float externalBatteryVoltage = 0.0;
+long lastADCRead = 0;
+#endif
 
-void setup()
+    //-------------------------------- SETUP --------------------------------------------------------------
+
+    void
+    setup()
 {
     // Use serial port
     Serial.begin(115200);
@@ -224,7 +233,7 @@ void setup()
         if (checkfile("/logos/freetouchdeck_logo.bmp", false)) {
             drawBmp("/logos/freetouchdeck_logo.bmp", 0, 0);
         }
-        else{
+        else {
             MSG_INFOLN("[INFO] No \"/logos/freetouchdeck_logo.bmp\" file found for splash screen.");
         }
         tft.setCursor(1, 3);
@@ -240,13 +249,20 @@ void setup()
     touch_calibrate();
 #endif
 
+#ifdef READ_EXTERNAL_BATTERY
+// External battery read voltage setup
+
+    pinMode(EXTERNAL_BATTERY_PIN, INPUT);
+    analogSetPinAttenuation(EXTERNAL_BATTERY_PIN, ADC_11db);
+    adcAttachPin(EXTERNAL_BATTERY_PIN);
+#endif
+
     // Let's first check if all the files we need exist
     if (!checkfile("/config/general.json", true)) {
         MSG_ERRORLN("[ERROR] /config/general.json not found!");
         while (1)
             yield();  // Stop!
     }
-    
 
     for (size_t i = 0; i < NUM_PAGES; i++) {
         char filename[32];
@@ -303,7 +319,8 @@ void setup()
         Serial.print("[WARNING]: general.json failed to load!");
         Serial.print("[WARNING]: To reset to default type \'reset general\'");
         pageNum = SPECIAL_4_PAGE;
-    } else{
+    }
+    else {
 #ifdef TOUCH_INTERRUPT_PIN
         Interval = generalconfig.sleeptimer * MIN_TO_MS;
         if (generalconfig.sleepenable) {
@@ -671,10 +688,29 @@ void loop(void)
                             drawKeypad();
                         }
                     }
+
+                    MSG_INFO1("Battery voltage:", externalBatteryVoltage);
                 }
 
                 delay(10);  // UI debouncing
             }
         }
     }
+#ifdef READ_EXTERNAL_BATTERY
+    if((millis() - lastADCRead) > 100){
+        float newVoltage = readExternalBattery();
+
+        externalBatteryVoltage = externalBatteryVoltage + 0.1 * (newVoltage - externalBatteryVoltage);
+        lastADCRead = millis();
+    }
+#endif
 }
+
+#ifdef READ_EXTERNAL_BATTERY
+float readExternalBattery()
+{
+    uint16_t voltage = analogRead(EXTERNAL_BATTERY_PIN);
+    float scaledVoltage = (float)voltage  * EXTERNAL_BATTERY_SCALE;
+    return scaledVoltage;
+}
+#endif
