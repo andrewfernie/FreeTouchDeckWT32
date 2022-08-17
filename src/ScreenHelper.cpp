@@ -64,11 +64,8 @@ unsigned long convertHTMLtoRGB888(char *html)
 *
 * @note none
 */
-char *convertRGB888toHTML(unsigned long rgb)
-{
-    char hex[10];
-    sprintf(hex, "#%6.6X", rgb & 0x00ffffff);
-    return hex;
+void convertRGB888toHTML(unsigned long rgb, char *html, unsigned int htmlsize){
+    snprintf(html, htmlsize, "#%6.6X", rgb & 0x00ffffff);
 }
 
 /**
@@ -122,9 +119,9 @@ unsigned int convertHTMLtoRGB565(char *html){
  *
  * @note none
  */
-char *convertRGB565toHTML(unsigned int rgb){
+void convertRGB565toHTML(unsigned int rgb, char *html, unsigned int htmlsize){
     unsigned long rgb888 = convertRGB565ToRGB888(rgb);
-    return convertRGB888toHTML(rgb888);
+    convertRGB888toHTML(rgb888, html, htmlsize);
 }
 
 /**

@@ -100,10 +100,19 @@ int saveCurrentConfigGeneral()
 
     JsonObject general = doc.to<JsonObject>();
 
-    general["menubuttoncolor"] = convertRGB565toHTML(generalconfig.menuButtonColour);
-    general["functionbuttoncolor"] = convertRGB565toHTML(generalconfig.functionButtonColour);
-    general["latchcolor"] = convertRGB565toHTML(generalconfig.latchedColour);
-    general["background"] = convertRGB565toHTML(generalconfig.backgroundColour);
+    char htmlMenuButtonColor[20];
+    char htmlFunctionButtonColour[20];
+    char htmlLatchColor[20];
+    char htmlBackgroundColor[20];
+    
+    convertRGB565toHTML(generalconfig.menuButtonColour, htmlMenuButtonColor, sizeof(htmlMenuButtonColor));
+    general["menubuttoncolor"] = htmlMenuButtonColor;
+    convertRGB565toHTML(generalconfig.functionButtonColour, htmlFunctionButtonColour, sizeof(htmlFunctionButtonColour));
+    general["functionbuttoncolor"] = htmlFunctionButtonColour;
+    convertRGB565toHTML(generalconfig.latchedColour, htmlLatchColor, sizeof(htmlLatchColor));
+    general["latchcolor"] = htmlLatchColor;
+    convertRGB565toHTML(generalconfig.backgroundColour, htmlBackgroundColor, sizeof(htmlBackgroundColor));
+    general["background"] = htmlBackgroundColor;
 
     if (generalconfig.sleepenable) {
         general["sleepenable"] = true;
@@ -117,7 +126,7 @@ int saveCurrentConfigGeneral()
     }
     else {
         general["beep"] = false;
-    }  
+    }
 
     general["sleeptimer"] = generalconfig.sleeptimer;
 
