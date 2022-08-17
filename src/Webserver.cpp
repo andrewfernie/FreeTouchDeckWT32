@@ -1,4 +1,5 @@
 #include "WebServer.h"
+#include "SaveConfig.h"
 
 /**
 * @brief This function returns all the files in a given directory in a json
@@ -416,77 +417,78 @@ void handlerSetup()
             String savemode = p->value().c_str();
 
             if (savemode == "general") {
-                // --- Saving general config
-                MSG_INFOLN("[INFO] Saving General Config");
+                int status = saveConfigGeneral(request);
+                // // --- Saving general config
+                // MSG_INFOLN("[INFO] Saving General Config");
 
-                FILESYSTEM.remove("/config/general.json");
-                File file = FILESYSTEM.open("/config/general.json", "w");
-                if (!file) {
-                    MSG_WARNLN("[WARNING]: Failed to create /config/general.json file");
-                    return;
-                }
+                // FILESYSTEM.remove("/config/general.json");
+                // File file = FILESYSTEM.open("/config/general.json", "w");
+                // if (!file) {
+                //     MSG_WARNLN("[WARNING]: Failed to create /config/general.json file");
+                //     return;
+                // }
 
-                DynamicJsonDocument doc(400);
+                // DynamicJsonDocument doc(400);
 
-                JsonObject general = doc.to<JsonObject>();
+                // JsonObject general = doc.to<JsonObject>();
 
-                AsyncWebParameter *menubuttoncolor = request->getParam("menubuttoncolor", true);
-                general["menubuttoncolor"] = menubuttoncolor->value().c_str();
-                AsyncWebParameter *functionbuttoncolor = request->getParam("functionbuttoncolor", true);
-                general["functionbuttoncolor"] = functionbuttoncolor->value().c_str();
-                AsyncWebParameter *latchcolor = request->getParam("latchcolor", true);
-                general["latchcolor"] = latchcolor->value().c_str();
-                AsyncWebParameter *background = request->getParam("background", true);
-                general["background"] = background->value().c_str();
+                // AsyncWebParameter *menubuttoncolor = request->getParam("menubuttoncolor", true);
+                // general["menubuttoncolor"] = menubuttoncolor->value().c_str();
+                // AsyncWebParameter *functionbuttoncolor = request->getParam("functionbuttoncolor", true);
+                // general["functionbuttoncolor"] = functionbuttoncolor->value().c_str();
+                // AsyncWebParameter *latchcolor = request->getParam("latchcolor", true);
+                // general["latchcolor"] = latchcolor->value().c_str();
+                // AsyncWebParameter *background = request->getParam("background", true);
+                // general["background"] = background->value().c_str();
 
-                AsyncWebParameter *sleepenable = request->getParam("sleepenable", true);
-                String sleepEnable = sleepenable->value().c_str();
+                // AsyncWebParameter *sleepenable = request->getParam("sleepenable", true);
+                // String sleepEnable = sleepenable->value().c_str();
 
-                if (sleepEnable == "true") {
-                    general["sleepenable"] = true;
-                }
-                else {
-                    general["sleepenable"] = false;
-                }
+                // if (sleepEnable == "true") {
+                //     general["sleepenable"] = true;
+                // }
+                // else {
+                //     general["sleepenable"] = false;
+                // }
 
-                AsyncWebParameter *beep = request->getParam("beep", true);
-                String Beep = beep->value().c_str();
+                // AsyncWebParameter *beep = request->getParam("beep", true);
+                // String Beep = beep->value().c_str();
 
-                if (Beep == "true") {
-                    general["beep"] = true;
-                }
-                else {
-                    general["beep"] = false;
-                }
+                // if (Beep == "true") {
+                //     general["beep"] = true;
+                // }
+                // else {
+                //     general["beep"] = false;
+                // }
 
-                // Sleep timer
-                AsyncWebParameter *sleeptimer = request->getParam("sleeptimer", true);
+                // // Sleep timer
+                // AsyncWebParameter *sleeptimer = request->getParam("sleeptimer", true);
 
-                String sleepTimer = sleeptimer->value().c_str();
-                general["sleeptimer"] = sleepTimer.toInt();
+                // String sleepTimer = sleeptimer->value().c_str();
+                // general["sleeptimer"] = sleepTimer.toInt();
 
-                // Modifiers
+                // // Modifiers
 
-                AsyncWebParameter *modifier1 = request->getParam("modifier1", true);
-                String Modifier1 = modifier1->value().c_str();
-                general["modifier1"] = Modifier1.toInt();
+                // AsyncWebParameter *modifier1 = request->getParam("modifier1", true);
+                // String Modifier1 = modifier1->value().c_str();
+                // general["modifier1"] = Modifier1.toInt();
 
-                AsyncWebParameter *modifier2 = request->getParam("modifier2", true);
-                String Modifier2 = modifier2->value().c_str();
-                general["modifier2"] = Modifier2.toInt();
+                // AsyncWebParameter *modifier2 = request->getParam("modifier2", true);
+                // String Modifier2 = modifier2->value().c_str();
+                // general["modifier2"] = Modifier2.toInt();
 
-                AsyncWebParameter *modifier3 = request->getParam("modifier3", true);
-                String Modifier3 = modifier3->value().c_str();
-                general["modifier3"] = Modifier3.toInt();
+                // AsyncWebParameter *modifier3 = request->getParam("modifier3", true);
+                // String Modifier3 = modifier3->value().c_str();
+                // general["modifier3"] = Modifier3.toInt();
 
-                AsyncWebParameter *helperdelay = request->getParam("helperdelay", true);
-                String Helperdelay = helperdelay->value().c_str();
-                general["helperdelay"] = Helperdelay.toInt();
+                // AsyncWebParameter *helperdelay = request->getParam("helperdelay", true);
+                // String Helperdelay = helperdelay->value().c_str();
+                // general["helperdelay"] = Helperdelay.toInt();
 
-                if (serializeJsonPretty(doc, file) == 0) {
-                    MSG_WARNLN("[WARNING]: Failed to write to /config/general.json file");
-                }
-                file.close();
+                // if (serializeJsonPretty(doc, file) == 0) {
+                //     MSG_WARNLN("[WARNING]: Failed to write to /config/general.json file");
+                // }
+                // file.close();
             }
             else if (savemode == "wifi") {
                 // --- Saving wifi config
@@ -528,7 +530,8 @@ void handlerSetup()
             else if (strncmp("menu", savemode.c_str(), 4) == 0) {
                 // --- Save menu
                 char tmp[5];
-                String fileName = String("/config/menu");
+                String fileNameRoot = String("menu");
+                String fileName = String("/config/") + fileNameRoot;
                 int menuNumber;
                 File file;
 
@@ -559,6 +562,8 @@ void handlerSetup()
                 DynamicJsonDocument doc(5000);
 
                 JsonObject menu = doc.to<JsonObject>();
+
+                menu["name"] = fileNameRoot + menuNumber;
 
                 for (uint8_t row = 0; row < BUTTON_ROWS; row++) {
                     for (uint8_t col = 0; col < BUTTON_COLS; col++) {

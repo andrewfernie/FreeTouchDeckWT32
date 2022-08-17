@@ -41,10 +41,13 @@
 
 #include "FreeTouchDeckWT32.h"
 
-const char *versionnumber = "WT32-0.1.3-AF";
+const char *versionnumber = "WT32-0.1.4-AF";
 
 /*
- * Version 0.1.3-AF  - A.Fernie In Work
+ * Version 0.1.4-AF  - A.Fernie In Work
+ *
+ * Version 0.1.3-AF  - A.Fernie 2022-08-08
+ *  Added monitoring of the voltage of an external battery
  *
  * Version 0.1.2-AF  - A.Fernie 2022-08-04
  * 1. Load config.json file (wasn't being read, so always used defaults)
@@ -132,8 +135,6 @@ char jsonFileFail[32] = "";
 
 // Invoke the TFT_eSPI button class and create all the button objects
 TFT_eSPI_Button key[BUTTON_ROWS][BUTTON_COLS];
-
-uint8_t sleepIsLatched = false;
 
 #ifdef READ_EXTERNAL_BATTERY
 float readExternalBattery();
@@ -329,7 +330,6 @@ long lastADCRead = 0;
             MSG_INFO("[INFO] Sleep timer = ");
             MSG_INFO(generalconfig.sleeptimer);
             MSG_INFOLN(" minutes");
-            sleepIsLatched = 1;
         }
         else {
             MSG_INFOLN("[INFO] Sleep not enabled.");

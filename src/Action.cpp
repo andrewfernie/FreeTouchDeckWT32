@@ -1,4 +1,5 @@
 #include "Action.h"
+#include "SaveConfig.h"
 #include "BleKeyboard.h"
 
 /**
@@ -490,6 +491,9 @@ void bleKeyboardAction(int action, int value, char *symbol)
                     callingPageNum = pageNum;
                     pageNum = 0;
                     drawKeypad();
+                    break;
+                case 7:
+                    saveCurrentConfigGeneral();
                     break;
             }
             break;

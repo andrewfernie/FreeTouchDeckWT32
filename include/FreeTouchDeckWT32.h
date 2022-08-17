@@ -186,6 +186,7 @@ struct Button {
 
 // Each menu has an array of buttons
 struct Menu {
+    String name;
     Button button[BUTTON_ROWS][BUTTON_COLS];
 };
 
@@ -250,8 +251,6 @@ extern TFT_eSPI_Button key[BUTTON_ROWS][BUTTON_COLS];
 #define SPECIAL_PAGE_INFO (NUM_PAGES + 2)
 #define SPECIAL_3_PAGE (NUM_PAGES + 3)
 #define SPECIAL_4_PAGE (NUM_PAGES + 4)
-
-extern uint8_t sleepIsLatched;
 
 //--------- Internal references ------------
 // (this needs to be below all structs etc..)
