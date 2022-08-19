@@ -41,10 +41,15 @@
 
 #include "FreeTouchDeckWT32.h"
 
-const char *versionnumber = "WT32-0.1.4-AF";
+const char *versionnumber = "WT32-0.1.5-AF";
 
 /*
- * Version 0.1.4-AF  - A.Fernie In Work
+ * Version 0.1.5-AF  - In work
+ *
+ * Version 0.1.4-AF  - A.Fernie 2022-08-19
+ *    Added ability to locally save general config. Allows
+ *    SleepEnable status to be preserved without going through web page. Later on allow 
+ *    additional params like sleeptimer, colors, etc. 
  *
  * Version 0.1.3-AF  - A.Fernie 2022-08-08
  *  Added monitoring of the voltage of an external battery
