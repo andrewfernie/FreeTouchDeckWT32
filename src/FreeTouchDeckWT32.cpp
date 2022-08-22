@@ -45,6 +45,7 @@ const char *versionnumber = "WT32-0.1.5-AF";
 
 /*
  * Version 0.1.5-AF  - In work
+ *    Added USB Comms functionality (like FreeTeamsDeck)
  *
  * Version 0.1.4-AF  - A.Fernie 2022-08-19
  *    Added ability to locally save general config. Allows
@@ -685,6 +686,26 @@ void loop(void)
                                 else {
                                     menu[pageNum].button[row][col].islatched = true;
                                 }
+                            }
+
+                            if (generalconfig.usbcommsenable){
+                                Serial.print("{");
+                                Serial.print(menu[pageNum].name);
+                                Serial.print(",");
+
+                                //find last "/" in logo
+                                char *lastSlash = strrchr(menu[pageNum].button[row][col].logo, '/');
+
+                                // if lastSlash not equal to null, get a pointer to the rest of the character array
+                                if (lastSlash != NULL) {
+                                    lastSlash++;
+                                }
+                                else {
+                                    lastSlash = menu[pageNum].button[row][col].logo;
+                                }
+
+                                Serial.print(lastSlash);
+                                Serial.println("}");
                             }
                         }
                         else  // Back home

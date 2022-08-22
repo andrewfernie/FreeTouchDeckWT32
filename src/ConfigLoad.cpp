@@ -128,6 +128,14 @@ bool loadConfig(String value)
         uint16_t sleeptimer = doc["sleeptimer"] | 60;
         generalconfig.sleeptimer = sleeptimer;
 
+        bool usbcommsenable = doc["usbcommsenable"] | false;
+        if (usbcommsenable) {
+            generalconfig.usbcommsenable = true;
+        }
+        else {
+            generalconfig.usbcommsenable = false;
+        }
+
         bool beep = doc["beep"] | false;
         generalconfig.beep = beep;
 
@@ -167,8 +175,9 @@ bool loadConfig(String value)
         DeserializationError error = deserializeJson(doc, configfile);
 
         snprintf(menuFileNameRoot, sizeof(menuFileNameRoot), "menu%d", fileNameMenuNumber);
-        const char *menuName = doc["name"] | menuFileNameRoot;
-        menu[fileNameMenuNumber].name = menuName;
+        const char *menuName = doc["menuname"] | menuFileNameRoot;
+        MSG_INFO1("[INFO] load_config menuname is ", menuName);
+        strncpy(menu[fileNameMenuNumber].name, menuName, sizeof(menu[fileNameMenuNumber].name));
 
         for (uint8_t row = 0; row < BUTTON_ROWS; row++) {
             for (uint8_t col = 0; col < BUTTON_COLS; col++) {
@@ -238,6 +247,11 @@ bool loadConfig(String value)
                 if (menu[fileNameMenuNumber].button[row][col].actions[0].action == Action_SpecialFn &&
                     menu[fileNameMenuNumber].button[row][col].actions[0].value == 4) {
                     menu[fileNameMenuNumber].button[row][col].islatched = generalconfig.sleepenable;
+                }
+                // USB comms enable button
+                if (menu[fileNameMenuNumber].button[row][col].actions[0].action == Action_SpecialFn &&
+                    menu[fileNameMenuNumber].button[row][col].actions[0].value == 8) {
+                    menu[fileNameMenuNumber].button[row][col].islatched = generalconfig.usbcommsenable;
                 }
             }
         }

@@ -166,7 +166,11 @@
 					<option value="30">30 Minutes</option>
 					<option value="60">60 Minutes</option>
 				</select>
-
+				&nbsp;&nbsp;USB Comms:&nbsp;
+				<select class="usbcommsenable" id='usbcommsenable' name='usbcommsenable'>
+					<option value="true">Enabled</option>
+					<option value="false">Disabled</option>
+				</select>
 				<div style="font-family: Arial, Helvetica, Sans-Serif; Color: #000088;">
 					<h2>Sound</h2>
 				</div>
@@ -247,6 +251,9 @@
 					<option value="8">Menu 8</option>
 					<option value="9">Menu 9</option>
 				</select>
+				<div></div>		<!-- Add a little space -->
+				<label for="menuname">Menu Name:</label>
+				<input type="text" id="menuname" name="menuname"><br><br>
 				<div></div>		<!-- Add a little space -->
 				<table style="height: 250px; width: 100%; border: 1px solid #000088; text-align: left;">
 					<tbody>
@@ -1328,6 +1335,10 @@
 			{
 				name: 'Save General Config',
 				value: '7'
+			},
+			{
+				name: 'Enable USB Comms',
+				value: '8'
 			}
 			]
 		},
@@ -2584,7 +2595,8 @@
 		function getMenuConfig(loadingMenuNumber) {
 
 			menuFileName = `config/menu${loadingMenuNumber}.json`;
-			console.log('getMenuConfig(): called with menu number ' + loadingMenuNumber);
+			console.log('getMenuConfig(): called with menu number ' + loadingMenuNumber);			
+			console.log('getMenuConfig(): fetching ' + menuFileName);
 
 			// Load Menu
 			fetch(menuFileName)
@@ -2593,6 +2605,11 @@
 				})
 				.then((data) => {
 					console.log('getMenuConfig(): loading menu ' + menuFileName);
+
+					if(data.menuname !== undefined){
+						document.getElementById('menuname').value = data.menuname;
+					}
+
 
 					for (let row = 1; row <= 3; row++){
 						for (let col = 1; col <= 5; col++){
@@ -2779,6 +2796,7 @@
 				document.getElementById("latchcolor").value = data.latchcolor;
 				document.getElementById("background").value = data.background;
 				document.getElementById("sleepenable").value = data.sleepenable;
+				document.getElementById("usbcommsenable").value = data.usbcommsenable;
 				document.getElementById("sleeptimer").value = data.sleeptimer;
 				document.getElementById("beep").value = data.beep;
 				document.getElementById("modifier1").value = data.modifier1;

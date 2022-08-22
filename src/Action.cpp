@@ -486,14 +486,31 @@ void bleKeyboardAction(int action, int value, char *symbol)
                 case 5:
                     callingPageNum = pageNum;
                     pageNum = SPECIAL_PAGE_INFO;
+                    if (generalconfig.usbcommsenable) {
+                        Serial.println("{Newpage, Info}");
+                    }
+
                     break;
                 case 6:
                     callingPageNum = pageNum;
                     pageNum = 0;
+                    if (generalconfig.usbcommsenable) {
+                        Serial.println("{Newpage, Home}");
+                    }
                     drawKeypad();
                     break;
                 case 7:
                     saveCurrentConfigGeneral();
+                    break;
+                case 8:  // USB Comms Enable/Disable
+                    if (generalconfig.usbcommsenable) {
+                        generalconfig.usbcommsenable = false;
+                        MSG_INFOLN("[INFO] USB Comms Disabled.");
+                    }
+                    else {
+                        generalconfig.usbcommsenable = true;
+                        MSG_INFOLN("[INFO] USB Comms Enabled.");
+                    }
                     break;
             }
             break;
@@ -578,6 +595,11 @@ void bleKeyboardAction(int action, int value, char *symbol)
             if ((value >= 0) && (value < NUM_PAGES)) {
                 callingPageNum = pageNum;
                 pageNum = value;
+                if (generalconfig.usbcommsenable) {
+                    Serial.print("{Newpage, ");
+                    Serial.print(menu[pageNum].name);
+                    Serial.println("}");
+                }
                 drawKeypad();
             }
             break;

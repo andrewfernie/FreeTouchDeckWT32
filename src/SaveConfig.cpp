@@ -38,6 +38,16 @@ int saveConfigGeneral(AsyncWebServerRequest *request)
         general["sleepenable"] = false;
     }
 
+    AsyncWebParameter *usbcommsenable = request->getParam("usbcommsenable", true);
+    String usbcommsEnable = usbcommsenable->value().c_str();
+
+    if (usbcommsEnable == "true") {
+        general["usbcommsenable"] = true;
+    }
+    else {
+        general["usbcommsenable"] = false;
+    }
+
     AsyncWebParameter *beep = request->getParam("beep", true);
     String Beep = beep->value().c_str();
 
@@ -119,6 +129,13 @@ int saveCurrentConfigGeneral()
     }
     else {
         general["sleepenable"] = false;
+    }
+
+    if (generalconfig.usbcommsenable) {
+        general["usbcommsenable"] = true;
+    }
+    else {
+        general["usbcommsenable"] = false;
     }
 
     if (generalconfig.beep) {
@@ -231,7 +248,18 @@ int saveConfigMenu(AsyncWebServerRequest *request, String savemode)
 
     JsonObject menu = doc.to<JsonObject>();
 
-    menu["name"] = fileNameRoot + menuNumber;
+    String menuName;
+
+    AsyncWebParameter *aSyncMenuName;
+    try {
+        aSyncMenuName = request->getParam("menuname", true);
+        menuName = aSyncMenuName->value();
+    }
+    catch (...) {
+        MSG_WARNLN("[WARNING] problem accessing data for menu name for save. Using default");
+        menuName = fileNameRoot + menuNumber;
+    }
+    menu["menuname"] = menuName.c_str();
 
     for (uint8_t row = 0; row < BUTTON_ROWS; row++) {
         for (uint8_t col = 0; col < BUTTON_COLS; col++) {

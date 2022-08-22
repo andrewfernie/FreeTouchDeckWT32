@@ -1,60 +1,61 @@
 {
+  "menuname":"Settings", 
   "button11": {
-    "logo": "snip.bmp",
+    "logo": "wifi.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "5",
-      "5",
-      "4"
-    ],
-    "valuearray": [
-      "8",
-      "2",
-      "s"
-    ]
-  },
-  "button12": {
-    "logo": "todo.bmp",
-    "latch": false,
-    "latchlogo": "",
-    "actionarray": [
-      "5",
-      "7",
+      "11",
+      "0",
       "0"
     ],
     "valuearray": [
-      "8",
-      "2",
+      "1",
+      "0",
+      "0"
+    ]
+  },
+  "button12": {
+    "logo": "brightnessdown.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "11",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "0",
+      "0",
       "0"
     ]
   },
   "button13": {
-    "logo": "outlook.bmp",
+    "logo": "brightnessup.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "5",
-      "7",
+      "11",
+      "0",
       "0"
     ],
     "valuearray": [
-      "8",
       "3",
+      "0",
       "0"
     ]
   },
   "button14": {
-    "logo": "blank.bmp",
-    "latch": false,
-    "latchlogo": "",
+    "logo": "USBComm2_off.bmp",
+    "latch": true,
+    "latchlogo": "USBComm2.bmp",
     "actionarray": [
-      "0",
+      "11",
       "0",
       "0"
     ],
     "valuearray": [
-      "0",
+      "8",
       "0",
       "0"
     ]
@@ -75,46 +76,46 @@
     ]
   },
   "button21": {
-    "logo": "explorer.bmp",
-    "latch": false,
-    "latchlogo": "",
+    "logo": "sleep_off.bmp",
+    "latch": true,
+    "latchlogo": "sleep_on.bmp",
     "actionarray": [
-      "5",
-      "4",
+      "11",
+      "0",
       "0"
     ],
     "valuearray": [
-      "8",
-      "e",
+      "4",
+      "0",
       "0"
     ]
   },
   "button22": {
-    "logo": "lock.bmp",
+    "logo": "info.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "5",
-      "4",
+      "11",
+      "0",
       "0"
     ],
     "valuearray": [
-      "8",
-      "l",
+      "5",
+      "0",
       "0"
     ]
   },
   "button23": {
-    "logo": "blank.bmp",
+    "logo": "floppy.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "0",
+      "11",
       "0",
       "0"
     ],
     "valuearray": [
-      "0",
+      "7",
       "0",
       "0"
     ]

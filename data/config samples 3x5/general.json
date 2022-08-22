@@ -5,6 +5,7 @@
 	"background": "#000000",
 	"sleepenable": true,
 	"sleeptimer": 10,
+	"usbcommsenable": false,
 	"beep": true,
 	"modifier1": 130,
 	"modifier2": 129,

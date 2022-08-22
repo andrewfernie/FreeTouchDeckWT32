@@ -173,6 +173,17 @@ String handleInfo()
     output += "\"}";
 
 #endif
+    output += "{\"";
+    output += "USB Comms";
+    output += "\":\"";
+    if (generalconfig.usbcommsenable) {
+        output += String("Enabled. ");
+        output += "\"}";
+    }
+    else {
+        output += String("Disabled");
+        output += "\"}";
+    }
 
     output += "]";
 

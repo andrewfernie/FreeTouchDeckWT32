@@ -228,6 +228,13 @@ void printinfo()
     tft.println("Sleep: Disabled");
 #endif
 
+    if (generalconfig.usbcommsenable) {
+        tft.println("USB Comms: Enabled");
+    }
+    else {
+        tft.println("USB Comms: Disabled");
+    }
+
 #ifdef speakerPin
     if (generalconfig.beep) {
         tft.println("Speaker: Enabled");
