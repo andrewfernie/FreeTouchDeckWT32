@@ -44,7 +44,7 @@
 const char *versionnumber = "WT32-0.1.5-AF";
 
 /*
- * Version 0.1.5-AF  - In work
+ * Version 0.1.5-AF  - A.Fernie 2022-08-27
  *    Added USB Comms functionality (like FreeTeamsDeck)
  *
  * Version 0.1.4-AF  - A.Fernie 2022-08-19
