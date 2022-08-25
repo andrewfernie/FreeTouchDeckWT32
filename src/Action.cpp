@@ -487,7 +487,9 @@ void bleKeyboardAction(int action, int value, char *symbol)
                     callingPageNum = pageNum;
                     pageNum = SPECIAL_PAGE_INFO;
                     if (generalconfig.usbcommsenable) {
-                        Serial.println("{Newpage, Info}");
+                        char usbData[40];
+                        snprintf(usbData, sizeof(usbData), "{NewPage, %s , %s}", menu[callingPageNum].name, "Info");
+                        Serial.println(usbData);
                     }
 
                     break;
@@ -495,7 +497,9 @@ void bleKeyboardAction(int action, int value, char *symbol)
                     callingPageNum = pageNum;
                     pageNum = 0;
                     if (generalconfig.usbcommsenable) {
-                        Serial.println("{Newpage, Home}");
+                        char usbData[40];
+                        snprintf(usbData, sizeof(usbData), "{NewPage, %s , %s}", menu[callingPageNum].name, "Home");
+                        Serial.println(usbData);
                     }
                     drawKeypad();
                     break;
@@ -596,9 +600,9 @@ void bleKeyboardAction(int action, int value, char *symbol)
                 callingPageNum = pageNum;
                 pageNum = value;
                 if (generalconfig.usbcommsenable) {
-                    Serial.print("{Newpage, ");
-                    Serial.print(menu[pageNum].name);
-                    Serial.println("}");
+                    char usbData[40];
+                    snprintf(usbData, sizeof(usbData), "{NewPage, %s , %s}", menu[callingPageNum].name, menu[pageNum].name);
+                    Serial.println(usbData);
                 }
                 drawKeypad();
             }

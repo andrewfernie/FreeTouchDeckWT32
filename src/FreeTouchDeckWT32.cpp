@@ -41,16 +41,18 @@
 
 #include "FreeTouchDeckWT32.h"
 
-const char *versionnumber = "WT32-0.1.5-AF";
+const char *versionnumber = "WT32-0.1.6-AF";
 
 /*
+ * Version 0.1.6-AF  - In Work
+ *
  * Version 0.1.5-AF  - A.Fernie 2022-08-27
  *    Added USB Comms functionality (like FreeTeamsDeck)
  *
  * Version 0.1.4-AF  - A.Fernie 2022-08-19
  *    Added ability to locally save general config. Allows
- *    SleepEnable status to be preserved without going through web page. Later on allow 
- *    additional params like sleeptimer, colors, etc. 
+ *    SleepEnable status to be preserved without going through web page. Later on allow
+ *    additional params like sleeptimer, colors, etc.
  *
  * Version 0.1.3-AF  - A.Fernie 2022-08-08
  *  Added monitoring of the voltage of an external battery
@@ -689,23 +691,25 @@ void loop(void)
                             }
 
                             if (generalconfig.usbcommsenable){
-                                Serial.print("{");
-                                Serial.print(menu[pageNum].name);
-                                Serial.print(",");
 
-                                //find last "/" in logo
-                                char *lastSlash = strrchr(menu[pageNum].button[row][col].logo, '/');
-
-                                // if lastSlash not equal to null, get a pointer to the rest of the character array
-                                if (lastSlash != NULL) {
-                                    lastSlash++;
+                                // separate filename from menu[pageNum].button[row][col].logo path 
+                                char logoname[20];
+                                char *p = strrchr(menu[pageNum].button[row][col].logo, '/');
+                                if (p != NULL) {
+                                    strcpy(logoname, p + 1);
                                 }
                                 else {
-                                    lastSlash = menu[pageNum].button[row][col].logo;
+                                    strcpy(logoname, menu[pageNum].button[row][col].logo);
                                 }
 
-                                Serial.print(lastSlash);
-                                Serial.println("}");
+                                // remove extension from logoname
+                                char *dot = strrchr(logoname, '.');
+                                if (dot != NULL) {
+                                    *dot = '\0';
+                                }
+                                char usbData[40];
+                                snprintf(usbData , sizeof(usbData), "{ButtonPress, %s , %s}", menu[pageNum].name, logoname);
+                                Serial.println(usbData);
                             }
                         }
                         else  // Back home

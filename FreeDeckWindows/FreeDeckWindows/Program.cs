@@ -63,6 +63,16 @@ namespace FreeDeck
 
             string line;
 
+            // Get list of available serial ports and print it
+            string[] ports = SerialPort.GetPortNames();
+            Console.WriteLine("Available serial ports:");
+            foreach (string port in ports)
+            {
+                Console.WriteLine(port);
+            }
+            Console.WriteLine("");
+
+
             //Serial communication parameters
             string comPort = Settings.Default.ComPort;
             Console.Write(" COM Port Number (" + comPort + "): ");
@@ -128,30 +138,9 @@ namespace FreeDeck
                 string serialValue = sp.ReadLine();
                 IntPtr teamsWindow = IntPtr.Zero;
 
-                int commandStart = serialValue.IndexOf('{');
-                int commandEnd = serialValue.IndexOf('}');
-                string[] commands;
-                bool commandsFound = false;
-                int numCommands = 0;
 
-                // Initialize the first elements of commands to empty strings.
-                commands = new string[] { "", "" };
-
-
-                // if the starting "{" and ending "}" were found, and the end was after the start, then the string was valid. If the string is valid, split it into substrings.
-                if (commandStart != -1)
-                {
-
-                    if (commandEnd != -1)
-                    {
-                        if (commandEnd > commandStart)
-                        {
-                            commands = serialValue.Substring(commandStart + 1, commandEnd - commandStart - 1).Split(',');
-                            numCommands = commands.Length;
-                            commandsFound = (numCommands == 2);
-                        }
-                    }
-                }
+                // deserialize serialValue as a JSON foRMATTED string
+                dynamic json = Newtonsoft.Json.JsonConvert.DeserializeObject(serialValue);
 
 
                 //Get the main Teams process of Microsoft Teams
@@ -168,6 +157,8 @@ namespace FreeDeck
                         }
                     }
                 }
+ 
+
 
                 //Loop through the menu options to make and send the keys
                 if (commandsFound)
