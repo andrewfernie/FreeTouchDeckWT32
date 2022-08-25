@@ -43,14 +43,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Free Teams Deck.exe" size="124928">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Free Teams Deck.exe" size="125440">
       <assemblyIdentity name="Free Teams Deck" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>XYGI8NGw7oAzYo98AbqziVpoKuuOo1/fJeYvxYuBkSY=</dsig:DigestValue>
+        <dsig:DigestValue>qmnLdVT8vv4siNo1S8w5HueYqPUaZI+gRP7xDUxQI7k=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
