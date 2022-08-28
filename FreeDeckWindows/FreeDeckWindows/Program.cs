@@ -85,13 +85,13 @@ namespace FreeDeck
             }
 
 
-            int boundRate = Settings.Default.BaudRate;
-            Console.Write(" Bound Rate (" + boundRate.ToString() + "): ");
+            int baudRate = Settings.Default.BaudRate;
+            Console.Write(" Baud Rate (" + baudRate.ToString() + "): ");
             line = Console.ReadLine();
             if (line != "")
             {
-                boundRate = int.Parse(line);
-                Settings.Default.BaudRate = boundRate;
+                baudRate = int.Parse(line);
+                Settings.Default.BaudRate = baudRate;
                 Settings.Default.Save();
             }
 
@@ -100,7 +100,7 @@ namespace FreeDeck
             //Set the datareceived event handler
             try
             {
-                sp = new SerialPort("COM" + comPort, boundRate, Parity.None, 8, StopBits.One);
+                sp = new SerialPort("COM" + comPort, baudRate, Parity.None, 8, StopBits.One);
                 sp.DataReceived += new SerialDataReceivedEventHandler(sp_DataReceived);
                 //Open the serial port
                 sp.Open();
