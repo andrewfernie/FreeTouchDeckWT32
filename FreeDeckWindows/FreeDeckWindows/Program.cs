@@ -131,6 +131,8 @@ namespace FreeDeck
         private void sp_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             IntPtr currentWindow = GetForegroundWindow();
+            int numCommands = 0;
+            string[] commands = { "" };
 
             try
             {
@@ -139,8 +141,20 @@ namespace FreeDeck
                 IntPtr teamsWindow = IntPtr.Zero;
 
 
-                // deserialize serialValue as a JSON foRMATTED string
-                dynamic json = Newtonsoft.Json.JsonConvert.DeserializeObject(serialValue);
+                // extract the text between "{" and "}" from serialValue
+                string[] words = serialValue.Split('{', '}');
+
+                // if "words" has 3 elements, then it contains the text between "{" and "}"
+                if (words.Length == 3)
+                {
+                    commands = words[1].Split(',');
+                    numCommands = commands.Length;
+                }
+                else
+                {
+                    numCommands = 0;
+                }
+
 
 
                 //Get the main Teams process of Microsoft Teams
@@ -150,91 +164,107 @@ namespace FreeDeck
                     if (processes[i].MainWindowHandle.ToString() != "0")
                     {
                         teamsWindow = processes[i].MainWindowHandle;
-                        if (currentWindow == teamsWindow)
-                        {
-                            //Teams is already the Window in focus
-                            return;
-                        }
+
                     }
                 }
- 
+
 
 
                 //Loop through the menu options to make and send the keys
-                if (commandsFound)
+                if (numCommands > 1)
                 {
-                    switch (commands[0])
+                    string callingPage = "";
+                    string newPage = "";
+                    string buttonLogo = "";
+
+                    switch (commands[0].Trim())
                     {
-                        case "Home":
-                            switch (commands[1])
+                        case "ButtonPress":
+                            callingPage = commands[1].Trim(); 
+                            buttonLogo = commands[2].Trim();
+
+                            switch (callingPage)
                             {
-                                case "teams.bmp":
-                                    ShowWindowAsync(teamsWindow, 1);
-                                    SetForegroundWindow(teamsWindow);
+                                case "Teams":
+                                    if (currentWindow != teamsWindow)
+                                    {
+                                        ShowWindowAsync(teamsWindow, 1);
+                                        SetForegroundWindow(teamsWindow);
+                                    }
+                                    
+                                    switch (buttonLogo)
+                                    {
+                                        case "closeshare":
+                                            break;
+
+                                        case "mute":
+                                        case "unmute":
+                                            break;
+
+                                        case "nosound":
+                                            break;
+
+                                        case "hangup":
+                                            break;
+
+                                        case "answer":
+                                            break;
+
+                                        case "raisehand":
+                                            break;
+
+                                        case "share":
+                                            break;
+
+                                        case "videooff":
+                                        case "videoon":
+                                            break;
+                                    }
+                                    break;
+                                    
+                                case "Zoom":
                                     break;
 
+                                case "Media":
+                                    break;
+
+                                case "VSCode":
+                                    break;
 
                                 default:
                                     break;
 
-                            }
+                            }                          
                             break;
 
-                        case "Settings":
-                            switch (commands[1])
-                            {
-                                case "teams.bmp":
-                                    ShowWindowAsync(teamsWindow, 1);
-                                    SetForegroundWindow(teamsWindow);
-                                    break;
+                        case "NewPage":
+                            callingPage = commands[1].Trim();
+                            newPage = commands[2].Trim();
 
+                            switch (newPage)
+                            {
+                                case "Home":
+                                    break;
+                                case "Info":
+                                    break;
+                                case "Settings":
+                                    break;
+                                    
+                                case "Teams":
+                                    if (currentWindow != teamsWindow)
+                                    {
+                                        ShowWindowAsync(teamsWindow, 1);
+                                        SetForegroundWindow(teamsWindow);
+                                    }
+                                    break;
+                                    
                                 default:
                                     break;
-
                             }
+
                             break;
-                        case "Teams":
-                            switch (commands[1])
-                            {
-                                case "closeshare.bmp":
-                                    ShowWindowAsync(teamsWindow, 1);
-                                    SetForegroundWindow(teamsWindow);
-                                    break;
+  
 
-                                case "mute.bmp":
-                                case "unmute.bmp":
-                                    break;
-
-                                case "nosound.bmp":
-                                    break;
-
-                                case "hangup.bmp":
-                                    break;
-
-                                case "answer.bmp":
-                                    break;
-
-                                case "raisehand.bmp":
-                                    break;
-
-                                case "share.bmp":
-                                    break;
-
-                                case "videooff.bmp":
-                                case "videoon.bmp":
-                                    break;
-
-
-                            }
-                            break;
-                        case "Zoom":
-                            break;
-
-                        case "Media":
-                            break;
-
-                        case "VSCode":
-                            break;
                     }
                 }
 
