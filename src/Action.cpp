@@ -1,4 +1,5 @@
 #include "Action.h"
+#include "SaveConfig.h"
 #include "BleKeyboard.h"
 
 /**
@@ -485,11 +486,35 @@ void bleKeyboardAction(int action, int value, char *symbol)
                 case 5:
                     callingPageNum = pageNum;
                     pageNum = SPECIAL_PAGE_INFO;
+                    if (generalconfig.usbcommsenable) {
+                        char usbData[40];
+                        snprintf(usbData, sizeof(usbData), "{NewPage, %s , %s}", menu[callingPageNum].name, "Info");
+                        Serial.println(usbData);
+                    }
+
                     break;
                 case 6:
                     callingPageNum = pageNum;
                     pageNum = 0;
+                    if (generalconfig.usbcommsenable) {
+                        char usbData[40];
+                        snprintf(usbData, sizeof(usbData), "{NewPage, %s , %s}", menu[callingPageNum].name, "Home");
+                        Serial.println(usbData);
+                    }
                     drawKeypad();
+                    break;
+                case 7:
+                    saveCurrentConfigGeneral();
+                    break;
+                case 8:  // USB Comms Enable/Disable
+                    if (generalconfig.usbcommsenable) {
+                        generalconfig.usbcommsenable = false;
+                        MSG_INFOLN("[INFO] USB Comms Disabled.");
+                    }
+                    else {
+                        generalconfig.usbcommsenable = true;
+                        MSG_INFOLN("[INFO] USB Comms Enabled.");
+                    }
                     break;
             }
             break;
@@ -574,6 +599,11 @@ void bleKeyboardAction(int action, int value, char *symbol)
             if ((value >= 0) && (value < NUM_PAGES)) {
                 callingPageNum = pageNum;
                 pageNum = value;
+                if (generalconfig.usbcommsenable) {
+                    char usbData[40];
+                    snprintf(usbData, sizeof(usbData), "{NewPage, %s , %s}", menu[callingPageNum].name, menu[pageNum].name);
+                    Serial.println(usbData);
+                }
                 drawKeypad();
             }
             break;

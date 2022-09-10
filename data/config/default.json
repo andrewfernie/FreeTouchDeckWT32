@@ -1,4 +1,5 @@
 {
+  "menuname":"Menu_Name", 
   "button11": {
     "logo": "question.bmp",
     "latch": false,

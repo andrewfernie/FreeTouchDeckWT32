@@ -1,4 +1,5 @@
 {
+  "menuname":"Home", 
   "button11": {
     "logo": "win.bmp",
     "latch": false,
@@ -144,7 +145,7 @@
       "0"
     ],
     "valuearray": [
-      "6",
+      "1",
       "0",
       "0"
     ]

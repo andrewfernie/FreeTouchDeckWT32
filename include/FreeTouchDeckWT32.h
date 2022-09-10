@@ -2,8 +2,8 @@
 
 // Basic macros for debug and info messages to the serial port
 #define LOG_MSG_BASIC 1
-#define LOG_MSG_LEVEL 2  // 1=ERROR, 2=ERROR+WARN, 3=ERROR+WARN+INFO
-#define LOG_MSG_DEBUG 1
+#define LOG_MSG_LEVEL 1  // 1=ERROR, 2=ERROR+WARN, 3=ERROR+WARN+INFO
+#define LOG_MSG_DEBUG 0
 
 #include "std_defs.h"
 
@@ -186,6 +186,7 @@ struct Button {
 
 // Each menu has an array of buttons
 struct Menu {
+    char name[32];
     Button button[BUTTON_ROWS][BUTTON_COLS];
 };
 
@@ -203,6 +204,7 @@ struct Config {
     uint16_t latchedColour;
     bool sleepenable;
     uint16_t sleeptimer;
+    bool usbcommsenable;
     bool beep;
     uint8_t modifier1;
     uint8_t modifier2;
@@ -250,8 +252,6 @@ extern TFT_eSPI_Button key[BUTTON_ROWS][BUTTON_COLS];
 #define SPECIAL_PAGE_INFO (NUM_PAGES + 2)
 #define SPECIAL_3_PAGE (NUM_PAGES + 3)
 #define SPECIAL_4_PAGE (NUM_PAGES + 4)
-
-extern uint8_t sleepIsLatched;
 
 //--------- Internal references ------------
 // (this needs to be below all structs etc..)

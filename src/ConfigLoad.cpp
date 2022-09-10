@@ -120,15 +120,21 @@ bool loadConfig(String value)
         bool sleepenable = doc["sleepenable"] | false;
         if (sleepenable) {
             generalconfig.sleepenable = true;
-            sleepIsLatched = 1;
         }
         else {
             generalconfig.sleepenable = false;
         }
 
-        // uint16_t sleeptimer = doc["sleeptimer"];
         uint16_t sleeptimer = doc["sleeptimer"] | 60;
         generalconfig.sleeptimer = sleeptimer;
+
+        bool usbcommsenable = doc["usbcommsenable"] | false;
+        if (usbcommsenable) {
+            generalconfig.usbcommsenable = true;
+        }
+        else {
+            generalconfig.usbcommsenable = false;
+        }
 
         bool beep = doc["beep"] | false;
         generalconfig.beep = beep;
@@ -157,6 +163,7 @@ bool loadConfig(String value)
     // --------------------- Loading menu ----------------------
     else if ((numConverted == 2) && (strncmp("menu", value.c_str(), 4) == 0) && (fileNameMenuNumber >= 0) && (fileNameMenuNumber < NUM_PAGES)) {
         char configFileName[30];
+        char menuFileNameRoot[10];
 
         snprintf(configFileName, sizeof(configFileName), "/config/menu%d.json", fileNameMenuNumber);
 
@@ -167,67 +174,84 @@ bool loadConfig(String value)
 
         DeserializationError error = deserializeJson(doc, configfile);
 
+        snprintf(menuFileNameRoot, sizeof(menuFileNameRoot), "menu%d", fileNameMenuNumber);
+        const char *menuName = doc["menuname"] | menuFileNameRoot;
+        MSG_INFO1("[INFO] load_config menuname is ", menuName);
+        strncpy(menu[fileNameMenuNumber].name, menuName, sizeof(menu[fileNameMenuNumber].name));
+
         for (uint8_t row = 0; row < BUTTON_ROWS; row++) {
             for (uint8_t col = 0; col < BUTTON_COLS; col++) {
-                {
-                    char objectName[10];
+                char objectName[10];
 
-                    snprintf(objectName, sizeof(objectName), "button%d%d", row + 1, col + 1);
+                snprintf(objectName, sizeof(objectName), "button%d%d", row + 1, col + 1);
 
-                    const char *logo = doc[objectName]["logo"] | "question.bmp";
+                const char *logo = doc[objectName]["logo"] | "question.bmp";
 
-                    strcpy(templogopath, logopath);
-                    strcat(templogopath, logo);
-                    strcpy(menu[fileNameMenuNumber].button[row][col].logo, templogopath);
-                    MSG_INFO2("[INFO] load_config loading logo", objectName, templogopath);
+                strcpy(templogopath, logopath);
+                strcat(templogopath, logo);
+                strcpy(menu[fileNameMenuNumber].button[row][col].logo, templogopath);
+                MSG_INFO2("[INFO] load_config loading logo", objectName, templogopath);
 
-                    const char *latchlogo = doc[objectName]["latchlogo"] | "question.bmp";
+                const char *latchlogo = doc[objectName]["latchlogo"] | "question.bmp";
 
-                    menu[fileNameMenuNumber].button[row][col].latch = doc[objectName]["latch"] | false;
+                menu[fileNameMenuNumber].button[row][col].latch = doc[objectName]["latch"] | false;
 
-                    strcpy(templogopath, logopath);
-                    strcat(templogopath, latchlogo);
-                    strcpy(menu[fileNameMenuNumber].button[row][col].latchlogo, templogopath);
-                    MSG_INFO2("[INFO] load_config loading latchlogo", objectName, templogopath);
+                strcpy(templogopath, logopath);
+                strcat(templogopath, latchlogo);
+                strcpy(menu[fileNameMenuNumber].button[row][col].latchlogo, templogopath);
+                MSG_INFO2("[INFO] load_config loading latchlogo", objectName, templogopath);
 
-                    JsonArray button_actionarray = doc[objectName]["actionarray"];
+                JsonArray button_actionarray = doc[objectName]["actionarray"];
 
-                    int button_actionarray_0 = button_actionarray[0];
-                    int button_actionarray_1 = button_actionarray[1];
-                    int button_actionarray_2 = button_actionarray[2];
+                int button_actionarray_0 = button_actionarray[0];
+                int button_actionarray_1 = button_actionarray[1];
+                int button_actionarray_2 = button_actionarray[2];
 
-                    JsonArray button_valuearray = doc[objectName]["valuearray"];
+                JsonArray button_valuearray = doc[objectName]["valuearray"];
 
-                    if (button_actionarray_0 == Action_Char || button_actionarray_0 == Action_SpecialChar) {
-                        const char *button_symbolarray_0 = button_valuearray[0];
-                        strcpy(menu[fileNameMenuNumber].button[row][col].actions[0].symbol, button_symbolarray_0);
-                    }
-                    else {
-                        int button_valuearray_0 = button_valuearray[0];
-                        menu[fileNameMenuNumber].button[row][col].actions[0].value = button_valuearray_0;
-                    }
+                if (button_actionarray_0 == Action_Char || button_actionarray_0 == Action_SpecialChar) {
+                    const char *button_symbolarray_0 = button_valuearray[0];
+                    strcpy(menu[fileNameMenuNumber].button[row][col].actions[0].symbol, button_symbolarray_0);
+                }
+                else {
+                    int button_valuearray_0 = button_valuearray[0];
+                    menu[fileNameMenuNumber].button[row][col].actions[0].value = button_valuearray_0;
+                }
 
-                    if (button_actionarray_1 == Action_Char || button_actionarray_1 == Action_SpecialChar) {
-                        const char *button_symbolarray_1 = button_valuearray[1];
-                        strcpy(menu[fileNameMenuNumber].button[row][col].actions[1].symbol, button_symbolarray_1);
-                    }
-                    else {
-                        int button_valuearray_1 = button_valuearray[1];
-                        menu[fileNameMenuNumber].button[row][col].actions[1].value = button_valuearray_1;
-                    }
+                if (button_actionarray_1 == Action_Char || button_actionarray_1 == Action_SpecialChar) {
+                    const char *button_symbolarray_1 = button_valuearray[1];
+                    strcpy(menu[fileNameMenuNumber].button[row][col].actions[1].symbol, button_symbolarray_1);
+                }
+                else {
+                    int button_valuearray_1 = button_valuearray[1];
+                    menu[fileNameMenuNumber].button[row][col].actions[1].value = button_valuearray_1;
+                }
 
-                    if (button_actionarray_2 == Action_Char || button_actionarray_2 == Action_SpecialChar) {
-                        const char *button_symbolarray_2 = button_valuearray[2];
-                        strcpy(menu[fileNameMenuNumber].button[row][col].actions[2].symbol, button_symbolarray_2);
-                    }
-                    else {
-                        int button_valuearray_2 = button_valuearray[2];
-                        menu[fileNameMenuNumber].button[row][col].actions[2].value = button_valuearray_2;
-                    }
+                if (button_actionarray_2 == Action_Char || button_actionarray_2 == Action_SpecialChar) {
+                    const char *button_symbolarray_2 = button_valuearray[2];
+                    strcpy(menu[fileNameMenuNumber].button[row][col].actions[2].symbol, button_symbolarray_2);
+                }
+                else {
+                    int button_valuearray_2 = button_valuearray[2];
+                    menu[fileNameMenuNumber].button[row][col].actions[2].value = button_valuearray_2;
+                }
 
-                    menu[fileNameMenuNumber].button[row][col].actions[0].action = button_actionarray_0;
-                    menu[fileNameMenuNumber].button[row][col].actions[1].action = button_actionarray_1;
-                    menu[fileNameMenuNumber].button[row][col].actions[2].action = button_actionarray_2;
+                menu[fileNameMenuNumber].button[row][col].actions[0].action = button_actionarray_0;
+                menu[fileNameMenuNumber].button[row][col].actions[1].action = button_actionarray_1;
+                menu[fileNameMenuNumber].button[row][col].actions[2].action = button_actionarray_2;
+
+                //
+                // --------------------- Special Cases ----------------------
+                //
+                // Sleep enable button
+                if (menu[fileNameMenuNumber].button[row][col].actions[0].action == Action_SpecialFn &&
+                    menu[fileNameMenuNumber].button[row][col].actions[0].value == 4) {
+                    menu[fileNameMenuNumber].button[row][col].islatched = generalconfig.sleepenable;
+                }
+                // USB comms enable button
+                if (menu[fileNameMenuNumber].button[row][col].actions[0].action == Action_SpecialFn &&
+                    menu[fileNameMenuNumber].button[row][col].actions[0].value == 8) {
+                    menu[fileNameMenuNumber].button[row][col].islatched = generalconfig.usbcommsenable;
                 }
             }
         }
@@ -250,7 +274,6 @@ bool loadConfig(String value)
 
                 return false;
             }
-
         }
         return true;
     }

@@ -1,5 +1,6 @@
 {
-  "button11": {
+ "menuname":"Settings", 
+"button11": {
     "logo": "snip.bmp",
     "latch": false,
     "latchlogo": "",

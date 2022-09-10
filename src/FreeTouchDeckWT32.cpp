@@ -41,10 +41,21 @@
 
 #include "FreeTouchDeckWT32.h"
 
-const char *versionnumber = "WT32-0.1.3-AF";
+const char *versionnumber = "WT32-0.1.6-AF";
 
 /*
- * Version 0.1.3-AF  - A.Fernie In Work
+ * Version 0.1.6-AF  - In Work
+ *
+ * Version 0.1.5-AF  - A.Fernie 2022-08-27
+ *    Added USB Comms functionality (like FreeTeamsDeck)
+ *
+ * Version 0.1.4-AF  - A.Fernie 2022-08-19
+ *    Added ability to locally save general config. Allows
+ *    SleepEnable status to be preserved without going through web page. Later on allow
+ *    additional params like sleeptimer, colors, etc.
+ *
+ * Version 0.1.3-AF  - A.Fernie 2022-08-08
+ *  Added monitoring of the voltage of an external battery
  *
  * Version 0.1.2-AF  - A.Fernie 2022-08-04
  * 1. Load config.json file (wasn't being read, so always used defaults)
@@ -132,8 +143,6 @@ char jsonFileFail[32] = "";
 
 // Invoke the TFT_eSPI button class and create all the button objects
 TFT_eSPI_Button key[BUTTON_ROWS][BUTTON_COLS];
-
-uint8_t sleepIsLatched = false;
 
 #ifdef READ_EXTERNAL_BATTERY
 float readExternalBattery();
@@ -329,7 +338,6 @@ long lastADCRead = 0;
             MSG_INFO("[INFO] Sleep timer = ");
             MSG_INFO(generalconfig.sleeptimer);
             MSG_INFOLN(" minutes");
-            sleepIsLatched = 1;
         }
         else {
             MSG_INFOLN("[INFO] Sleep not enabled.");
@@ -680,6 +688,28 @@ void loop(void)
                                 else {
                                     menu[pageNum].button[row][col].islatched = true;
                                 }
+                            }
+
+                            if (generalconfig.usbcommsenable){
+
+                                // separate filename from menu[pageNum].button[row][col].logo path 
+                                char logoname[20];
+                                char *p = strrchr(menu[pageNum].button[row][col].logo, '/');
+                                if (p != NULL) {
+                                    strcpy(logoname, p + 1);
+                                }
+                                else {
+                                    strcpy(logoname, menu[pageNum].button[row][col].logo);
+                                }
+
+                                // remove extension from logoname
+                                char *dot = strrchr(logoname, '.');
+                                if (dot != NULL) {
+                                    *dot = '\0';
+                                }
+                                char usbData[40];
+                                snprintf(usbData , sizeof(usbData), "{ButtonPress, %s , %s}", menu[pageNum].name, logoname);
+                                Serial.println(usbData);
                             }
                         }
                         else  // Back home

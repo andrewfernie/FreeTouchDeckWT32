@@ -1,4 +1,5 @@
 {
+  "menuname":"Teams", 
   "button11": {
     "logo": "mute.bmp",
     "latch": true,
@@ -90,7 +91,7 @@
     ]
   },
   "button22": {
-    "logo": "off.bmp",
+    "logo": "hangup.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
@@ -105,18 +106,18 @@
     ]
   },
   "button23": {
-    "logo": "blank.bmp",
+    "logo": "answer.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "0",
-      "0",
-      "0"
+      "5",
+      "5",
+      "4"
     ],
     "valuearray": [
-      "0",
-      "0",
-      "0"
+      "1",
+      "6",
+      "s"
     ]
   },
   "button24": {

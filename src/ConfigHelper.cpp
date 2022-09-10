@@ -394,6 +394,7 @@ bool resetconfig(String file)
         newfile.println("\"background\": \"#000000\",");
         newfile.println("\"sleepenable\": true,");
         newfile.println("\"sleeptimer\": 10,");
+        newfile.println("\"usbcommsenable\": false,");
         newfile.println("\"beep\": true,");
         newfile.println("\"modifier1\": 130,");
         newfile.println("\"modifier2\": 129,");

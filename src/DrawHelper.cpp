@@ -55,11 +55,21 @@ void drawlogo(int col, int row, bool transparent, bool latch)
     int16_t y = KEY_Y + row * (KEY_H + KEY_SPACING_Y) - LOGO_SIZE_X_Y / 2;
 
     if ((pageNum >= 0) && (pageNum < NUM_PAGES)) {
-        if (transparent == true) {
-            drawBmpTransparent(menu[pageNum].button[row][col].logo, x, y);
+        if (latch) {
+            if (transparent == true) {
+                drawBmpTransparent(menu[pageNum].button[row][col].latchlogo, x, y);
+            }
+            else {
+                drawBmp(menu[pageNum].button[row][col].latchlogo, x, y);
+            }
         }
         else {
-            drawBmp(menu[pageNum].button[row][col].logo, x, y);
+            if (transparent == true) {
+                drawBmpTransparent(menu[pageNum].button[row][col].logo, x, y);
+            }
+            else {
+                drawBmp(menu[pageNum].button[row][col].logo, x, y);
+            }
         }
     }
 }
@@ -217,6 +227,13 @@ void printinfo()
 #else
     tft.println("Sleep: Disabled");
 #endif
+
+    if (generalconfig.usbcommsenable) {
+        tft.println("USB Comms: Enabled");
+    }
+    else {
+        tft.println("USB Comms: Disabled");
+    }
 
 #ifdef speakerPin
     if (generalconfig.beep) {
