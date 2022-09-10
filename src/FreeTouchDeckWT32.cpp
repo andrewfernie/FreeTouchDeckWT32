@@ -44,7 +44,8 @@
 const char *versionnumber = "WT32-0.1.6-AF";
 
 /*
- * Version 0.1.6-AF  - In Work
+ * Version 0.1.6-AF  - A.Fernie 2022-09-09
+ *    Updates to codes sent on com port for each button press
  *
  * Version 0.1.5-AF  - A.Fernie 2022-08-27
  *    Added USB Comms functionality (like FreeTeamsDeck)
