@@ -41,9 +41,11 @@
 
 #include "FreeTouchDeckWT32.h"
 
-const char *versionnumber = "WT32-0.1.7-AF";
+const char *versionnumber = "WT32-0.1.8-AF";
 
 /*
+ * Version 0.1.8-AF  - In Work
+ *
  * Version 0.1.7-AF  - Fix menu1.json for brightness down button code
  *
  * Version 0.1.6-AF  - A.Fernie 2022-09-09

@@ -1,47 +1,47 @@
 {
   "menuname":"Menu_6", 
   "button11": {
-    "logo": "snip.bmp",
+    "logo": "wifi.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "5",
-      "5",
-      "4"
-    ],
-    "valuearray": [
-      "8",
-      "2",
-      "s"
-    ]
-  },
-  "button12": {
-    "logo": "todo.bmp",
-    "latch": false,
-    "latchlogo": "",
-    "actionarray": [
-      "5",
-      "7",
+      "11",
+      "0",
       "0"
     ],
     "valuearray": [
-      "8",
-      "2",
+      "1",
+      "0",
+      "0"
+    ]
+  },
+  "button12": {
+    "logo": "brightnessdown.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "11",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "0",
+      "0",
       "0"
     ]
   },
   "button13": {
-    "logo": "outlook.bmp",
+    "logo": "brightnessup.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "5",
-      "7",
+      "11",
+      "0",
       "0"
     ],
     "valuearray": [
-      "8",
       "3",
+      "0",
       "0"
     ]
   },
@@ -76,32 +76,32 @@
     ]
   },
   "button21": {
-    "logo": "explorer.bmp",
+    "logo": "sleep.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "5",
-      "4",
+      "11",
+      "0",
       "0"
     ],
     "valuearray": [
-      "8",
-      "e",
+      "4",
+      "0",
       "0"
     ]
   },
   "button22": {
-    "logo": "lock.bmp",
+    "logo": "info.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "5",
-      "4",
+      "11",
+      "0",
       "0"
     ],
     "valuearray": [
-      "8",
-      "l",
+      "0",
+      "0",
       "0"
     ]
   },
@@ -121,16 +121,16 @@
     ]
   },
   "button24": {
-    "logo": "playpause.bmp",
+    "logo": "blank.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "3",
+      "0",
       "0",
       "0"
     ],
     "valuearray": [
-      "4",
+      "0",
       "0",
       "0"
     ]
@@ -196,16 +196,16 @@
     ]
   },
   "button34": {
-    "logo": "home.bmp",
+    "logo": "playpause.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "14",
+      "3",
       "0",
       "0"
     ],
     "valuearray": [
-      "0",
+      "4",
       "0",
       "0"
     ]

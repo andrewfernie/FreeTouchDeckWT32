@@ -25,7 +25,7 @@
       "0"
     ],
     "valuearray": [
-      "0",
+      "2",
       "0",
       "0"
     ]
@@ -46,16 +46,16 @@
     ]
   },
   "button14": {
-    "logo": "blank.bmp",
-    "latch": false,
-    "latchlogo": "",
+    "logo": "USBComm2_off.bmp",
+    "latch": true,
+    "latchlogo": "USBComm2.bmp",
     "actionarray": [
-      "0",
+      "11",
       "0",
       "0"
     ],
     "valuearray": [
-      "0",
+      "8",
       "0",
       "0"
     ]

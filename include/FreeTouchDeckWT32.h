@@ -2,8 +2,8 @@
 
 // Basic macros for debug and info messages to the serial port
 #define LOG_MSG_BASIC 1
-#define LOG_MSG_LEVEL 1  // 1=ERROR, 2=ERROR+WARN, 3=ERROR+WARN+INFO
-#define LOG_MSG_DEBUG 0
+#define LOG_MSG_LEVEL 3  // 1=ERROR, 2=ERROR+WARN, 3=ERROR+WARN+INFO
+#define LOG_MSG_DEBUG 1
 
 #include "std_defs.h"
 
@@ -100,7 +100,7 @@ extern const char *versionnumber;
 
 // Button layout and number of pages with buttons
 #define BUTTON_ROWS 3
-#define BUTTON_COLS 4
+#define BUTTON_COLS 5
 #define BUTTONS_PER_PAGE (BUTTON_ROWS * BUTTON_COLS)
 #define NUM_PAGES 10  // Includes Menu0 which is the home page
 

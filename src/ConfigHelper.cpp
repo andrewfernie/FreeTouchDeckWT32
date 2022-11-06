@@ -6,7 +6,8 @@ bool startWifiStation()
     MSG_INFO1("startWifiStation(): Connecting to", wificonfig.ssid);
     if (String(WiFi.SSID()) != String(wificonfig.ssid)) {
         WiFi.mode(WIFI_STA);
-        WiFi.begin();
+        MSG_INFO2("startWifiStation(): ssid, pwd=", wificonfig.ssid, wificonfig.password);
+        WiFi.begin(wificonfig.ssid, wificonfig.password);
         uint8_t attempts = wificonfig.attempts;
         MSG_DEBUG1("startWifiStation(): attempts =", attempts);
         MSG_DEBUG1("startWifiStation(): attempt delay =", wificonfig.attemptdelay);
