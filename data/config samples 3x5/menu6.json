@@ -1,47 +1,47 @@
 {
-  "menuname":"Menu_6", 
+  "menuname":"Windows", 
   "button11": {
-    "logo": "wifi.bmp",
+    "logo": "snip.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "11",
-      "0",
-      "0"
+      "5",
+      "5",
+      "4"
     ],
     "valuearray": [
-      "1",
-      "0",
-      "0"
+      "8",
+      "2",
+      "s"
     ]
   },
   "button12": {
-    "logo": "brightnessdown.bmp",
+    "logo": "todo.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "11",
-      "0",
+      "5",
+      "7",
       "0"
     ],
     "valuearray": [
-      "0",
-      "0",
+      "8",
+      "2",
       "0"
     ]
   },
   "button13": {
-    "logo": "brightnessup.bmp",
+    "logo": "outlook.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "11",
-      "0",
+      "5",
+      "7",
       "0"
     ],
     "valuearray": [
+      "8",
       "3",
-      "0",
       "0"
     ]
   },
@@ -75,33 +75,33 @@
       "0"
     ]
   },
-  "button21": {
-    "logo": "sleep.bmp",
+    "button21": {
+    "logo": "explorer.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "11",
-      "0",
+      "5",
+      "4",
       "0"
     ],
     "valuearray": [
-      "4",
-      "0",
+      "8",
+      "e",
       "0"
     ]
   },
   "button22": {
-    "logo": "info.bmp",
+    "logo": "lock.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "11",
-      "0",
+      "5",
+      "4",
       "0"
     ],
     "valuearray": [
-      "0",
-      "0",
+      "8",
+      "l",
       "0"
     ]
   },

@@ -22,12 +22,13 @@
       - AsyncTCP (latest version) download from: https://github.com/me-no-dev/AsyncTCP
       - ArduinoJson (tested with version 6.17.3), available through Library Manager
 
-      --- If you use Capacitive touch (ESP32 TouchDown) ---
+      --- If you use capacitive touch screen you will also need a library for that
+      - The WT32-SC01 apepars to be a FT6336, but works with both of the following libraries
       - Dustin Watts FT6236 Library (version 1.0.2), https://github.com/DustinWatts/FT6236
+      - or the FT6336U library (https://github.com/aselectroworks)
+      - You can select which library to use in the FreeTouchDeckWT32.h file
 
-  The FILESYSTEM (SPI FLASH filing system) is used to hold touch screen calibration data.
-  It has to be runs at least once when using resistive touch. After that you can set
-  REPEAT_CAL to false (default).
+    NOTE: This version of the code has not been tested with resistive touch screens.
 
   !-- Make sure you have setup your TFT display and ESP setup correctly in TFT_eSPI/user_setup.h --!
 
@@ -41,14 +42,13 @@
 
 #include "FreeTouchDeckWT32.h"
 
-const char *versionnumber = "WT32-0.1.7-AF";
+const char *versionnumber = "WT32-0.1.8-AF";
 
 /*
-<<<<<<< HEAD
-=======
+ * Version 0.1.8-AF  - Added support for FT6236 capacitive touch screen library
+ *
  * Version 0.1.7-AF  - Fix menu1.json for brightness down button code
  *
->>>>>>> github/Work
  * Version 0.1.6-AF  - A.Fernie 2022-09-09
  *    Updates to codes sent on com port for each button press
  *
@@ -104,10 +104,16 @@ const char *versionnumber = "WT32-0.1.7-AF";
  * Added some missing characters.
  */
 
-#ifdef ENABLE_TOUCH_SCREEN
 #ifdef USECAPTOUCH
-FT6336U ts = FT6336U(PIN_SDA, PIN_SCL);
-#endif
+    #ifdef USE_FT6336U_LIB
+        #ifdef CUSTOM_TOUCH_SDA
+            FT6336U ts = FT6336U(PIN_SDA, PIN_SCL);
+        #else
+            FT6336U ts = FT6336U();
+        #endif
+    #else
+        FT6236 ts = FT6236();
+    #endif
 #endif
 
 BleKeyboard bleKeyboard("FreeTouchDeck", "Made by me");
@@ -156,10 +162,9 @@ float externalBatteryVoltage = 0.0;
 long lastADCRead = 0;
 #endif
 
-    //-------------------------------- SETUP --------------------------------------------------------------
+//-------------------------------- SETUP --------------------------------------------------------------
 
-    void
-    setup()
+void setup()
 {
     // Use serial port
     Serial.begin(115200);
@@ -172,15 +177,27 @@ long lastADCRead = 0;
     ledBrightness = savedStates.getInt("ledBrightness", 255);
     MSG_INFOLN("[INFO] Brightness has been set");
 
-#ifdef ENABLE_TOUCH_SCREEN
 #ifdef USECAPTOUCH
-    if (!ts.begin()) {
-        MSG_WARNLN("[WARNING]: Unable to start the capacitive touchscreen.");
-    }
-    else {
-        MSG_INFOLN("[INFO] Capacitive touch started!");
-    }
-#endif
+#ifdef CUSTOM_TOUCH_SDA
+    #ifdef USE_FT6336U_LIB
+        if (!ts.begin())
+    #else
+        if (!ts.begin(40, CUSTOM_TOUCH_SDA, CUSTOM_TOUCH_SCL))
+    #endif
+#else
+    #ifdef USE_FT6336U_LIB
+        if (!ts.begin())
+    #else
+        if (!ts.begin(40))
+    #endif   
+#endif  // defined(CUSTOM_TOUCH_SDA)
+
+        if (!ts.begin()) {
+            MSG_WARNLN("[WARNING]: Unable to start the capacitive touchscreen.");
+        }
+        else {
+            MSG_INFOLN("[INFO] Capacitive touch started!");
+        }
 #endif
 
     // Setup PWM channel and attach pin 32
@@ -265,7 +282,7 @@ long lastADCRead = 0;
 #endif
 
 #ifdef READ_EXTERNAL_BATTERY
-// External battery read voltage setup
+    // External battery read voltage setup
 
     pinMode(EXTERNAL_BATTERY_PIN, INPUT);
     analogSetPinAttenuation(EXTERNAL_BATTERY_PIN, ADC_11db);
@@ -408,12 +425,6 @@ long lastADCRead = 0;
 
 void loop(void)
 {
-#ifdef ENABLE_TOUCH_SCREEN
-#ifdef USECAPTOUCH
-    FT6336U_TouchPointType touchPos;
-#endif
-#endif
-
     bool pressed = false;
     uint16_t t_x = 0, t_y = 0;
 
@@ -496,6 +507,9 @@ void loop(void)
         }
     }
 
+#ifdef USECAPTOUCH
+#ifdef USE_FT6336U_LIB
+    FT6336U_TouchPointType touchPos;
     touchPos = ts.scan();
 
     if (touchPos.tp[0].tapped) {
@@ -518,6 +532,25 @@ void loop(void)
     else {
         pressed = false;
     }
+#else
+    if (ts.touched()) {
+        // Retrieve a point
+        TS_Point p = ts.getPoint();
+
+        // Flip things around so it matches our screen rotation
+        p.x = map(p.x, 0, 320, 320, 0);
+        t_y = p.x;
+        t_x = p.y;
+
+        pressed = true;
+    }
+    else {
+        pressed = false;
+    }
+#endif
+#else
+    pressed = tft.getTouch(&t_x, &t_y);
+#endif
 
     if (pageNum == WEB_REQUEST_PAGE) {
         // If the pageNum is set to NUM_PAGES+1, do not draw anything on screen or check for touch
@@ -696,9 +729,8 @@ void loop(void)
                                 }
                             }
 
-                            if (generalconfig.usbcommsenable){
-
-                                // separate filename from menu[pageNum].button[row][col].logo path 
+                            if (generalconfig.usbcommsenable) {
+                                // separate filename from menu[pageNum].button[row][col].logo path
                                 char logoname[20];
                                 char *p = strrchr(menu[pageNum].button[row][col].logo, '/');
                                 if (p != NULL) {
@@ -714,7 +746,7 @@ void loop(void)
                                     *dot = '\0';
                                 }
                                 char usbData[40];
-                                snprintf(usbData , sizeof(usbData), "{ButtonPress, %s , %s}", menu[pageNum].name, logoname);
+                                snprintf(usbData, sizeof(usbData), "{ButtonPress, %s , %s}", menu[pageNum].name, logoname);
                                 Serial.println(usbData);
                             }
                         }
@@ -733,7 +765,7 @@ void loop(void)
         }
     }
 #ifdef READ_EXTERNAL_BATTERY
-    if((millis() - lastADCRead) > 100){
+    if ((millis() - lastADCRead) > 100) {
         float newVoltage = readExternalBattery();
 
         externalBatteryVoltage = externalBatteryVoltage + 0.1 * (newVoltage - externalBatteryVoltage);
@@ -746,7 +778,7 @@ void loop(void)
 float readExternalBattery()
 {
     uint16_t voltage = analogRead(EXTERNAL_BATTERY_PIN);
-    float scaledVoltage = (float)voltage  * EXTERNAL_BATTERY_SCALE;
+    float scaledVoltage = (float)voltage * EXTERNAL_BATTERY_SCALE;
     return scaledVoltage;
 }
 #endif

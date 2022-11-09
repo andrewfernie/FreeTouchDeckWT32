@@ -106,18 +106,18 @@
     ]
   },
   "button23": {
-    "logo": "blank.bmp",
+    "logo": "answer.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "0",
-      "0",
-      "0"
+      "5",
+      "5",
+      "4"
     ],
     "valuearray": [
-      "0",
-      "0",
-      "0"
+      "1",
+      "6",
+      "s"
     ]
   },
   "button24": {

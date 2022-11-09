@@ -2,8 +2,8 @@
 
 // Basic macros for debug and info messages to the serial port
 #define LOG_MSG_BASIC 1
-#define LOG_MSG_LEVEL 1  // 1=ERROR, 2=ERROR+WARN, 3=ERROR+WARN+INFO
-#define LOG_MSG_DEBUG 0
+#define LOG_MSG_LEVEL 3  // 1=ERROR, 2=ERROR+WARN, 3=ERROR+WARN+INFO
+#define LOG_MSG_DEBUG 1
 
 #include "std_defs.h"
 
@@ -100,7 +100,7 @@ extern const char *versionnumber;
 
 // Button layout and number of pages with buttons
 #define BUTTON_ROWS 3
-#define BUTTON_COLS 4
+#define BUTTON_COLS 5
 #define BUTTONS_PER_PAGE (BUTTON_ROWS * BUTTON_COLS)
 #define NUM_PAGES 10  // Includes Menu0 which is the home page
 
@@ -122,16 +122,23 @@ extern const char *versionnumber;
 // #define DUMP_JSON_DOC_ON_SAVE
 
 // Touch panel definition
-#define ENABLE_TOUCH_SCREEN
-#ifdef ENABLE_TOUCH_SCREEN
-#ifdef USECAPTOUCH
-#include <Wire.h>
 
-#include "FT6336U.h"
-extern FT6336U ts;
+// Choice is between the FT6336U library and the FT6236 library from Dustin Watts
+// The FT6336U library supports multi-touch, which is not used yet in this project, but might be in the future.
+// At present, either will work fine.
+#define USE_FT6336U_LIB
+
+#ifdef USECAPTOUCH
+    #include <Wire.h>
+    #ifdef USE_FT6336U_LIB
+        #include "FT6336U.h"
+        extern FT6336U ts;
+    #else
+        #include "FT6236.h"
+        extern FT6236 ts;
+    #endif
 #else
-#include "Touch.h"
-#endif
+    #include "Touch.h"
 #endif
 
 extern BleKeyboard bleKeyboard;

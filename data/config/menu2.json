@@ -106,31 +106,31 @@
     ]
   },
   "button23": {
-    "logo": "answer.bmp",
+    "logo": "blank.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "5",
-      "5",
-      "4"
-    ],
-    "valuearray": [
-      "1",
-      "6",
-      "s"
-    ]
-  },
-  "button24": {
-    "logo": "playpause.bmp",
-    "latch": false,
-    "latchlogo": "",
-    "actionarray": [
-      "3",
+      "0",
       "0",
       "0"
     ],
     "valuearray": [
-      "4",
+      "0",
+      "0",
+      "0"
+    ]
+  },
+  "button24": {
+    "logo": "blank.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "0",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "0",
       "0",
       "0"
     ]
@@ -196,16 +196,16 @@
     ]
   },
   "button34": {
-    "logo": "home.bmp",
+    "logo": "playpause.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "14",
+      "3",
       "0",
       "0"
     ],
     "valuearray": [
-      "0",
+      "4",
       "0",
       "0"
     ]
