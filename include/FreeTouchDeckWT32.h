@@ -122,16 +122,23 @@ extern const char *versionnumber;
 // #define DUMP_JSON_DOC_ON_SAVE
 
 // Touch panel definition
-#define ENABLE_TOUCH_SCREEN
-#ifdef ENABLE_TOUCH_SCREEN
-#ifdef USECAPTOUCH
-#include <Wire.h>
 
-#include "FT6336U.h"
-extern FT6336U ts;
+// Choice is between the FT6336U library and the FT6236 library from Dustin Watts
+// The FT6336U library supports multi-touch, which is not used yet in this project, but might be in the future.
+// At present, either will work fine.
+#define USE_FT6336U_LIB
+
+#ifdef USECAPTOUCH
+    #include <Wire.h>
+    #ifdef USE_FT6336U_LIB
+        #include "FT6336U.h"
+        extern FT6336U ts;
+    #else
+        #include "FT6236.h"
+        extern FT6236 ts;
+    #endif
 #else
-#include "Touch.h"
-#endif
+    #include "Touch.h"
 #endif
 
 extern BleKeyboard bleKeyboard;
