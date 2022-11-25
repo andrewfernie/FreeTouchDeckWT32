@@ -97,7 +97,7 @@ void drawKeypad()
                     imageBGColor = getLatchImageBG(row, col);
                 }
                 else {
-                    imageBGColor = getImageBG(row, col);
+                    imageBGColor = getImageBG(pageNum, row, col);
                 }
 
                 if (imageBGColor > 0) {

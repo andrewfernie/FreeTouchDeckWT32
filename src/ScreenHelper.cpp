@@ -220,8 +220,7 @@ void drawBmp(const char *filename, int16_t x, int16_t y)
     bmpFS = FILESYSTEM.open(filename, "r");
 
     if (!bmpFS) {
-        MSG_ERROR("ERROR: File not found:");
-        MSG_ERRORLN(filename);
+        MSG_ERROR1("ERROR: File not found:", filename);
         return;
     }
 
@@ -266,7 +265,7 @@ void drawBmp(const char *filename, int16_t x, int16_t y)
             tft.setSwapBytes(oldSwapBytes);
         }
         else
-            MSG_ERRORLN("[ERROR] BMP format not recognized.");
+            MSG_ERROR1("[ERROR] BMP format not recognized for file: ", filename);
     }
     bmpFS.close();
 }
@@ -319,7 +318,7 @@ uint16_t getBMPColor(const char *filename)
     int16_t pixelsize = readNbytesInt(&bmpImage, 0x1C, 2);
 
     if (pixelsize != 24) {
-        MSG_ERRORLN("[ERROR] getBMPColor: Image is not 24 bpp");
+        MSG_ERROR2("[ERROR] getBMPColor: ", filename, " Image is not 24 bpp");
         return 0x0000;
     }
 
@@ -337,8 +336,8 @@ uint16_t getBMPColor(const char *filename)
 }
 
 /**
-* @brief This function returns the RGB565 colour of the first pixel for a
-         given the logo number. The pagenumber is global.
+* @brief This function returns the RGB565 colour of the first pixel in a logo for a
+         given button. The pagenumber is global.
 *
 * @param logonumber int
 *
@@ -346,21 +345,26 @@ uint16_t getBMPColor(const char *filename)
 *
 * @note Uses getBMPColor to read the actual image data.
 */
-uint16_t getImageBG(int row, int col)
+uint16_t getImageBG(int page, int row, int col)
 {
-    if ((pageNum >= 0) && (pageNum < NUM_PAGES)){
+    uint16_t bg_color = 0x0000;
+
+    if ((page >= 0) && (page < NUM_PAGES)){
         if ((row >= 0) && (row < BUTTON_ROWS) && (col >= 0) && (col < BUTTON_COLS)) {
-            return getBMPColor(menu[pageNum].button[row][col].logo);
+            MSG_DEBUG3("getImageBG: call getBMPColor: page, row, col: ", page, row, col);
+            bg_color = getBMPColor(menu[page].button[row][col].logo);
+            MSG_DEBUG3("getImageBG: return from call getBMPColor: page, row, col: ", page, row, col);
         }
         else {
-            MSG_ERRORLN("[ERROR] getImageBG: Invalid logo index");
-            return 0x0000;
+            MSG_ERROR3("[ERROR] getImageBG: Invalid logo index ", page, row, col);
+            bg_color = 0x0000;
         }
     }
     else {
-        MSG_ERRORLN("[ERROR] getImageBG: Invalid pageNum");
-        return 0x0000;
+        MSG_ERROR1("[ERROR] getImageBG: Invalid pageNum", page);
+        bg_color = 0x0000;
     }
+    return bg_color;
 }
 
 /**
@@ -375,20 +379,23 @@ uint16_t getImageBG(int row, int col)
  */
 uint16_t getLatchImageBG(uint8_t row, uint8_t col)
 {
+    uint16_t bg_color;
+
     if ((pageNum >= 0) && (pageNum < NUM_PAGES)) {
         if ((row >= 0) && (row < BUTTON_ROWS) && (col >= 0) && (col < BUTTON_COLS)) {
             if (strcmp(menu[pageNum - 1].button[row][col].latchlogo, "/logos/") == 0) {
-                return getBMPColor(menu[pageNum - 1].button[row][col].logo);
+                bg_color = getBMPColor(menu[pageNum - 1].button[row][col].logo);
             }
-            return getBMPColor(menu[pageNum - 1].button[row][col].latchlogo);
+            bg_color = getBMPColor(menu[pageNum - 1].button[row][col].latchlogo);
         }
         else {
             MSG_ERRORLN("[ERROR] getLatchImageBG: Invalid latch logo index");
-            return 0x0000;
+            bg_color = 0x0000;
         }
     }
     else {
         MSG_ERRORLN("[ERROR] getLatchImageBG: Invalid pageNum");
-        return 0x0000;
+        bg_color = 0x0000;
     }
+    return bg_color;
 }
