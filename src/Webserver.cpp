@@ -239,7 +239,7 @@ void handleJSONUpload(AsyncWebServerRequest *request, String filename, size_t in
             menuIndexText = filename.substring(startIndex, endIndex);
             menuIndexNum = menuIndexText.toInt();
 
-            if ((menuIndexNum > 0) || (menuIndexText[0] == '0')) {
+            if (((menuIndexNum > 0) && (menuIndexNum < NUM_PAGES)) || (menuIndexText[0] == '0')) {
                 validMenuName = true;
             }
         }

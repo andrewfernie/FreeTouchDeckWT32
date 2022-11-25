@@ -102,7 +102,7 @@ extern const char *versionnumber;
 #define BUTTON_ROWS 3
 #define BUTTON_COLS 5
 #define BUTTONS_PER_PAGE (BUTTON_ROWS * BUTTON_COLS)
-#define NUM_PAGES 10  // Includes Menu0 which is the home page
+#define NUM_PAGES 11  // Includes Menu0 which is the home page
 
 // Keypad start position, centre of the first button
 #define KEY_X SCREEN_WIDTH / (BUTTON_COLS * 2)

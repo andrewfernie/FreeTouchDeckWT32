@@ -91,16 +91,16 @@
     ]
   },
   "button22": {
-    "logo": "sleep.bmp",
+    "logo": "blank.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "11",
+      "0",
       "0",
       "0"
     ],
     "valuearray": [
-      "4",
+      "0",
       "0",
       "0"
     ]
