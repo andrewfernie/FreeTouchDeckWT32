@@ -75,7 +75,7 @@
       "0"
     ]
   },
-    "button21": {
+  "button21": {
     "logo": "sleep_off.bmp",
     "latch": true,
     "latchlogo": "sleep_on.bmp",
@@ -121,16 +121,16 @@
     ]
   },
   "button24": {
-    "logo": "blank.bmp",
+    "logo": "playpause.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "0",
+      "3",
       "0",
       "0"
     ],
     "valuearray": [
-      "0",
+      "4",
       "0",
       "0"
     ]
@@ -196,16 +196,16 @@
     ]
   },
   "button34": {
-    "logo": "playpause.bmp",
+    "logo": "home.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "3",
+      "14",
       "0",
       "0"
     ],
     "valuearray": [
-      "4",
+      "0",
       "0",
       "0"
     ]

@@ -1,21 +1,6 @@
 {
   "menuname":"VSCode", 
   "button11": {
-    "logo": "blank.bmp",
-    "latch": false,
-    "latchlogo": "",
-    "actionarray": [
-      "0",
-      "0",
-      "0"
-    ],
-    "valuearray": [
-      "0",
-      "0",
-      "0"
-    ]
-  },
-  "button12": {
     "logo": "VSC_Run.bmp",
     "latch": false,
     "latchlogo": "",
@@ -30,22 +15,7 @@
       "0"
     ]
   },
-  "button13": {
-    "logo": "blank.bmp",
-    "latch": false,
-    "latchlogo": "",
-    "actionarray": [
-      "0",
-      "0",
-      "0"
-    ],
-    "valuearray": [
-      "0",
-      "0",
-      "0"
-    ]
-  },
-  "button14": {
+    "button12": {
     "logo": "VSC_Stop.bmp",
     "latch": false,
     "latchlogo": "",
@@ -60,7 +30,7 @@
       "0"
     ]
   },
-  "button15": {
+    "button13": {
     "logo": "VSC_TglBreakpoint.bmp",
     "latch": false,
     "latchlogo": "",
@@ -75,7 +45,37 @@
       "0"
     ]
   },
-  "button21": {
+  "button14": {
+    "logo": "blank.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "0",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "0",
+      "0",
+      "0"
+    ]
+  },
+  "button15": {
+    "logo": "blank.bmp",
+    "latch": false,
+    "latchlogo": "",
+    "actionarray": [
+      "0",
+      "0",
+      "0"
+    ],
+    "valuearray": [
+      "0",
+      "0",
+      "0"
+    ]
+  },
+    "button21": {
     "logo": "VSC_StepInto.bmp",
     "latch": false,
     "latchlogo": "",
@@ -121,16 +121,16 @@
     ]
   },
   "button24": {
-    "logo": "blank.bmp",
+    "logo": "playpause.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "0",
+      "3",
       "0",
       "0"
     ],
     "valuearray": [
-      "0",
+      "4",
       "0",
       "0"
     ]
@@ -151,56 +151,56 @@
     ]
   },
   "button31": {
-    "logo": "blank.bmp",
+    "logo": "volumedown.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "0",
+      "3",
       "0",
       "0"
     ],
     "valuearray": [
-      "0",
+      "2",
       "0",
       "0"
     ]
   },
   "button32": {
-    "logo": "blank.bmp",
+    "logo": "volumeup.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "0",
+      "3",
       "0",
       "0"
     ],
     "valuearray": [
-      "0",
+      "3",
       "0",
       "0"
     ]
   },
   "button33": {
-    "logo": "blank.bmp",
+    "logo": "nosound.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "0",
+      "3",
       "0",
       "0"
     ],
     "valuearray": [
-      "0",
+      "1",
       "0",
       "0"
     ]
   },
   "button34": {
-    "logo": "blank.bmp",
+    "logo": "home.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "0",
+      "14",
       "0",
       "0"
     ],

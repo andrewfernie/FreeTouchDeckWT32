@@ -42,9 +42,11 @@
 
 #include "FreeTouchDeckWT32.h"
 
-const char *versionnumber = "WT32-0.1.8-AF";
+const char *versionnumber = "WT32-0.1.9-AF";
 
 /*
+ * Version 0.1.9-AF  - Fix to variables in wificonfig.json. Defined TOUCH_CS to avoid warning.
+ *
  * Version 0.1.8-AF  - Added support for FT6236 capacitive touch screen library
  *
  * Version 0.1.7-AF  - Fix menu1.json for brightness down button code
