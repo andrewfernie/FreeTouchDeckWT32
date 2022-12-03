@@ -42,9 +42,11 @@
 
 #include "FreeTouchDeckWT32.h"
 
-const char *versionnumber = "WT32-0.1.9-AF";
+const char *versionnumber = "WT32-0.1.10-AF";
 
 /*
+ * Version 0.1.10-AF - In work  
+ *
  * Version 0.1.9-AF  - Fix to variables in wificonfig.json. Defined TOUCH_CS to avoid warning.
  *
  * Version 0.1.8-AF  - Added support for FT6236 capacitive touch screen library
@@ -515,14 +517,14 @@ void loop(void)
     touchPos = ts.scan();
 
     if (touchPos.tp[0].tapped) {
-        // MSG_DEBUG(" Tap Detected: ");
-        // MSG_DEBUGLN(touchPos.touch_count);
-        // MSG_DEBUG(" pageNum: ");
-        // MSG_DEBUGLN(pageNum);
-        // MSG_DEBUG(" x,y: ");
-        // MSG_DEBUG(touchPos.tp[0].x);
-        // MSG_DEBUG(" : ");
-        // MSG_DEBUGLN(touchPos.tp[0].y);
+        MSG_TOUCH_DEBUG(" Tap Detected: ");
+        MSG_TOUCH_DEBUGLN(touchPos.touch_count);
+        MSG_TOUCH_DEBUG(" pageNum: ");
+        MSG_TOUCH_DEBUGLN(pageNum);
+        MSG_TOUCH_DEBUG(" x,y: ");
+        MSG_TOUCH_DEBUG(touchPos.tp[0].x);
+        MSG_TOUCH_DEBUG(" : ");
+        MSG_TOUCH_DEBUGLN(touchPos.tp[0].y);
 
         // Flip things around so it matches our screen rotation
         //         p.x = map(p.x, 0, 320, 320, 0);

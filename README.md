@@ -12,5 +12,21 @@ To aid the configurability to adapt to different mnenu layout, the code now has 
 Other changes: 
 1. There are now 10 pages. This includes Menu0 (home).
 2. Updated to latest platformio Arduino platform (2.x)
-3./Changed from SPIFFS to LittleFS. Note that if you check the serial monitor output you will see some error messages like "[vfs_api.cpp:104] open(): /littlefs/list does not exist". This is a known issue with ESPAsyncWebsServer related to LittleFS supporting folders while SPIFFS does not. See https://github.com/lorol/LITTLEFS/issues/2 for more on the topic.
+3.Changed from SPIFFS to LittleFS. 
 
+Build Notes:
+1. You may see messages like
+        In file included from include/FreeTouchDeckWT32.h:14,
+                 from include/SaveConfig.h:3,
+                 from src/SaveConfig.cpp:1:
+        .pio/libdeps/esp-wrover-kit/TFT_eSPI/TFT_eSPI.h:909:8: warning: #warning >>>>------>> TOUCH_CS pin not defined, TFT_eSPI touch functions will not be available! [-Wcpp]
+        #warning >>>>------>> TOUCH_CS pin not defined, TFT_eSPI touch functions will not be available!
+    
+    You can get rid of these by removing the semi-colon in the front of the following line in platformio.ini, but this will also stop any debug messages going to the serial port. I just ignore the messages.
+
+        ; define TOUCH_CS
+
+
+2. You may  see some error messages like 
+        "[vfs_api.cpp:104] open(): /littlefs/list does not exist". 
+This is a known issue with ESPAsyncWebsServer related to LittleFS supporting folders while SPIFFS does not. See https://github.com/lorol/

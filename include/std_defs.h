@@ -18,8 +18,13 @@
 #endif
 
 #ifndef LOG_MSG_DEBUG
-#define LOG_MSG_DEBUG 0         // off
+#define LOG_MSG_DEBUG 0  // off
 //#define LOG_MSG_DEBUG 1         // on
+#endif
+
+#ifndef LOG_MSG_TOUCH_DEBUG
+#define LOG_MSG_TOUCH_DEBUG 0  // off
+//#define LOG_MSG_TOUCH_DEBUG 1         // on
 #endif
 
 #define MSG_BASICLN(x)       \
@@ -206,3 +211,42 @@
         MSG_PORT.print(" ");   \
         MSG_PORT.println(w);   \
     }
+
+#define MSG_TOUCH_DEBUGLN(x)       \
+    if (LOG_MSG_TOUCH_DEBUG > 0) { \
+        MSG_PORT.println(x); \
+    }
+#define MSG_TOUCH_DEBUG(x)         \
+    if (LOG_MSG_TOUCH_DEBUG > 0) { \
+        MSG_PORT.print(x);   \
+    }
+#define MSG_TOUCH_DEBUG1(x, y)     \
+    if (LOG_MSG_TOUCH_DEBUG > 0) { \
+        MSG_PORT.print(x);   \
+        MSG_PORT.print(" "); \
+        MSG_PORT.println(y); \
+    }
+#define MSG_TOUCH_DEBUG1F(x, y)      \
+    if (LOG_MSG_TOUCH_DEBUG > 0) {   \
+        MSG_PORT.printf(x, y); \
+    }
+#define MSG_TOUCH_DEBUG2(x, y, z)  \
+    if (LOG_MSG_TOUCH_DEBUG > 0) { \
+        MSG_PORT.print(x);   \
+        MSG_PORT.print(" "); \
+        MSG_PORT.print(y);   \
+        MSG_PORT.print(" "); \
+        MSG_PORT.println(z); \
+    }
+    
+#define MSG_TOUCH_DEBUG3(x, y, z, w) \
+    if (LOG_MSG_TOUCH_DEBUG > 0) {   \
+        MSG_PORT.print(x);     \
+        MSG_PORT.print(" ");   \
+        MSG_PORT.print(y);     \
+        MSG_PORT.print(" ");   \
+        MSG_PORT.print(z);     \
+        MSG_PORT.print(" ");   \
+        MSG_PORT.println(w);   \
+    }
+    
