@@ -17,7 +17,7 @@ extern float externalBatteryVoltage;
  *
  * @note none
  */
-void drawlatched(int b, int col, int row)
+void drawlatched(int b, uint8_t col, uint8_t row)
 {
     int offset;
     if (SCREEN_WIDTH < 480) {
@@ -37,17 +37,16 @@ void drawlatched(int b, int col, int row)
          we are currently on. The pagenumber is a global variable
          and doesn't need to be passed.
 *
-* @param logonumber int
 * @param col int
 * @param row int
 * @param transparent boolean
+* @param latch boolean
 *
 * @return none
 *
-* @note Logos start at the top left and are 0 indexed. The same goes
-         for the colomn and the row.
+* @note row and col start at the top left and are 0 indexed. 
 */
-void drawlogo(int col, int row, bool transparent, bool latch)
+void drawlogo(uint8_t col, uint8_t row, bool transparent, bool latch)
 {
     //    int16_t x = KEY_X - KEY_X / 2 + 4 + col * (KEY_W + KEY_SPACING_X);
     //    int16_t y = KEY_Y - KEY_Y / 2 + 4 + row * (KEY_H + KEY_SPACING_Y);
@@ -75,7 +74,107 @@ void drawlogo(int col, int row, bool transparent, bool latch)
 }
 
 /**
-* @brief This function draws the buttons that are on every page.
+* @brief This function checks if the button is active or inactive.
+         Inactive means that the logo is "blank.bmp" and that there are no actions
+         defined for the button.
+*
+* @param page int
+* @param col int
+* @param row int
+*
+* @return boolean true if active, false if inactive
+*
+* @note row and col start at the top left and are 0 indexed.
+*/
+bool isActiveButton(uint8_t page, uint8_t row, uint8_t col)
+{
+    bool activeButton = false;
+    char logoPathAndName[64];
+
+    strcpy(logoPathAndName, logopath);
+    strcat(logoPathAndName, "blank.bmp");
+
+    if (strcmp(menu[pageNum].button[row][col].logo, logoPathAndName) != 0) {
+        activeButton = true;
+    }
+    else {
+        if ((menu[pageNum].button[row][col].actions[0].action != ActionEnum::Action_NoAction) ||
+            (menu[pageNum].button[row][col].actions[1].action != ActionEnum::Action_NoAction) ||
+            (menu[pageNum].button[row][col].actions[2].action != ActionEnum::Action_NoAction))
+            activeButton = true;
+    }
+
+    return activeButton;
+}
+
+/**
+* @brief This function draws a button, both the logo and the surround box. 
+*
+* @param page int
+* @param col int
+* @param row int
+*
+* @return none
+*
+* @note row and col start at the top left and are 0 indexed.
+*/
+void drawButtonRowCol(uint8_t page, uint8_t row, uint8_t col)
+{
+    bool drawTransparent;
+    uint16_t imageBGColor;
+    uint16_t buttonBG = TFT_BLACK;
+    uint16_t outlineColor = TFT_BLACK;
+    bool activeButton = false;
+
+    buttonBG = TFT_BLACK;
+    outlineColor = TFT_BLACK;
+    activeButton = false;
+
+    activeButton = isActiveButton(pageNum, row, col);
+
+    if (activeButton) {
+        if (menu[pageNum].button[row][col].islatched) {
+            imageBGColor = getLatchImageBG(pageNum, row, col);
+        }
+        else {
+            imageBGColor = getImageBG(pageNum, row, col);
+        }
+
+        if (imageBGColor > 0) {
+            buttonBG = imageBGColor;
+            drawTransparent = false;
+        }
+        else {
+            if (menu[pageNum].button[row][col].actions[0].action == Action_ChangePage) {
+                buttonBG = generalconfig.menuButtonColour;
+                drawTransparent = true;
+            }
+            else {
+                buttonBG = generalconfig.functionButtonColour;
+                drawTransparent = true;
+            }
+        }
+        outlineColor = TFT_WHITE;
+    }
+    tft.setFreeFont(LABEL_FONT);
+    key[row][col].initButton(&tft, KEY_X + col * (KEY_W + KEY_SPACING_X),
+                             KEY_Y + row * (KEY_H + KEY_SPACING_Y),  // x, y, w, h, outline, fill, text
+                             KEY_W, KEY_H, outlineColor, buttonBG, outlineColor,
+                             (char *)"", KEY_TEXTSIZE);
+    key[row][col].drawButton();
+    // After drawing the button outline we call this to draw a logo.
+    if (activeButton) {
+        if (menu[pageNum].button[row][col].islatched) {
+            drawlogo(col, row, drawTransparent, true);
+        }
+        else {
+            drawlogo(col, row, drawTransparent, false);
+        }
+    }
+}
+
+/**
+* @brief This function draws the set buttons that are on each page.
          Pagenumber is global and doesn't need to be passed.
 *
 * @param none
@@ -90,43 +189,7 @@ void drawKeypad()
         // Draw the button outlines and fill them with colours
         for (uint8_t row = 0; row < BUTTON_ROWS; row++) {
             for (uint8_t col = 0; col < BUTTON_COLS; col++) {
-                uint16_t buttonBG;
-                bool drawTransparent;
-                uint16_t imageBGColor;
-                if (menu[pageNum].button[row][col].islatched) {
-                    imageBGColor = getLatchImageBG(row, col);
-                }
-                else {
-                    imageBGColor = getImageBG(pageNum, row, col);
-                }
-
-                if (imageBGColor > 0) {
-                    buttonBG = imageBGColor;
-                    drawTransparent = false;
-                }
-                else {
-                    if (menu[pageNum].button[row][col].actions[0].action == Action_ChangePage) {
-                        buttonBG = generalconfig.menuButtonColour;
-                        drawTransparent = true;
-                    }
-                    else {
-                        buttonBG = generalconfig.functionButtonColour;
-                        drawTransparent = true;
-                    }
-                }
-                tft.setFreeFont(LABEL_FONT);
-                key[row][col].initButton(&tft, KEY_X + col * (KEY_W + KEY_SPACING_X),
-                                         KEY_Y + row * (KEY_H + KEY_SPACING_Y),  // x, y, w, h, outline, fill, text
-                                         KEY_W, KEY_H, TFT_WHITE, buttonBG, TFT_WHITE,
-                                         (char *)"", KEY_TEXTSIZE);
-                key[row][col].drawButton();
-                // After drawing the button outline we call this to draw a logo.
-                if (menu[pageNum].button[row][col].islatched) {
-                    drawlogo(col, row, drawTransparent, true);
-                }
-                else {
-                    drawlogo(col, row, drawTransparent, false);
-                }
+                drawButtonRowCol(pageNum, row, col);
             }
         }
     }

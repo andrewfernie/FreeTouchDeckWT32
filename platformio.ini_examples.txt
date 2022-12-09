@@ -1,0 +1,89 @@
+;
+; You will need to define the display and touch screen hardware in your platformio.ini file. This file contains some examples.
+; Cut and paste the block for your setup into platformio.ini
+;
+; *************
+; For the WT32-SC01 card
+;
+	-DUSER_SETUP_LOADED=1
+	-DST7796_DRIVER
+	-DUSECAPTOUCH=1
+	
+	; You don't need to define TFT_WIDTH and TFT_HEIGHT here if you are using the default setup. They are defined in the
+	; driver, so you just end up with a duplicate definition warning.
+	;-DTFT_WIDTH=480
+	;-DTFT_HEIGHT=320
+	-DSCREEN_WIDTH=480
+	-DSCREEN_HEIGHT=320
+
+	-DPIN_SDA=18
+	-DPIN_SCL=19
+
+	-DTFT_MISO=12
+	-DTFT_MOSI=13
+	-DTFT_SCLK=14
+	-DTFT_CS=15
+	-DTFT_DC=21
+	-DTFT_RST=22
+	-DTFT_BL=23
+
+	-DLOAD_GLCD=1   
+	-DLOAD_FONT2=1 
+	-DLOAD_FONT4=1  
+	-DLOAD_FONT6=1  
+	-DLOAD_FONT7=1  
+	-DLOAD_FONT8=1  
+	-DLOAD_GFXFF=1  
+
+	-DSPI_FREQUENCY=27000000
+	-DSPI_READ_FREQUENCY=20000000
+	-DSPI_TOUCH_FREQUENCY=2500000
+
+	; Uncomment the define below if you want to use SLEEP and wake up on touch-- -- -- -;
+	; The pin where the IRQ from the touch screen is connected uses ESP - style GPIO_NUM_* instead of just pinnumber 
+  	-DTOUCH_INTERRUPT_PIN=GPIO_NUM_39
+
+	-DLV_TICK_CUSTOM=1
+
+;
+; *************
+; For a generic LCD with the ILI9488 controller and resistive touch screen. Specific pins
+; will be according to your wiring.
+;
+	-DUSER_SETUP_LOADED=1
+    -DILI9488_DRIVER
+
+	; You don't need to define TFT_WIDTH and TFT_HEIGHT here if you are using the default setup. They are defined in the
+	; driver, so you just end up with a duplicate definition warning.
+	;-DTFT_WIDTH=480
+	;-DTFT_HEIGHT=320
+	-DSCREEN_WIDTH=480
+	-DSCREEN_HEIGHT=320
+
+    -DTFT_BL=32
+    -DTFT_BACKLIGHT_ON=HIGH
+
+    -DTFT_MISO=19
+    -DTFT_MOSI=23
+    -DTFT_SCLK=18
+    -DTFT_CS=15
+    -DTFT_DC=2
+    -DTFT_RST=4
+
+    -DTOUCH_CS=21
+
+    -DLOAD_GLCD=1
+    -DLOAD_FONT2=1
+    -DLOAD_FONT4=1
+    -DLOAD_FONT6=1
+    -DLOAD_FONT7=1
+    -DLOAD_FONT8=1
+    -DLOAD_GFXFF=1  
+
+    -DSPI_FREQUENCY=27000000
+    -DSPI_READ_FREQUENCY=20000000
+    -DSPI_TOUCH_FREQUENCY=2500000
+
+	; Uncomment the define below if you want to use SLEEP and wake up on touch-- -- -- -;
+	; The pin where the IRQ from the touch screen is connected uses ESP - style GPIO_NUM_* instead of just pinnumber 
+	-DTOUCH_INTERRUPT_PIN=GPIO_NUM_27

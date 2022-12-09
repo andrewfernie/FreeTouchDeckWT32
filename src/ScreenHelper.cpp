@@ -310,6 +310,8 @@ int32_t readNbytesInt(File *p_file, int position, byte nBytes)
 */
 uint16_t getBMPColor(const char *filename)
 {
+    uint16_t color = 0x0000;
+
     // Open File
     File bmpImage;
     bmpImage = FILESYSTEM.open(filename, FILE_READ);
@@ -319,20 +321,26 @@ uint16_t getBMPColor(const char *filename)
 
     if (pixelsize != 24) {
         MSG_ERROR2("[ERROR] getBMPColor: ", filename, " Image is not 24 bpp");
-        return 0x0000;
+        MSG_ERROR2("        logo is *", filename, "*");
+        color = 0x0000;
+    }
+    else {
+        // Read first pixel
+        bmpImage.seek(dataStartingOffset);  // skip bitmap header
+
+        byte R, G, B;
+
+        B = bmpImage.read();
+        G = bmpImage.read();
+        R = bmpImage.read();
+
+        bmpImage.close();
+
+        color = tft.color565(R, G, B);
     }
 
-    bmpImage.seek(dataStartingOffset);  // skip bitmap header
 
-    byte R, G, B;
-
-    B = bmpImage.read();
-    G = bmpImage.read();
-    R = bmpImage.read();
-
-    bmpImage.close();
-
-    return tft.color565(R, G, B);
+    return color;
 }
 
 /**
@@ -345,15 +353,13 @@ uint16_t getBMPColor(const char *filename)
 *
 * @note Uses getBMPColor to read the actual image data.
 */
-uint16_t getImageBG(int page, int row, int col)
+uint16_t getImageBG(uint8_t page, uint8_t row, uint8_t col)
 {
     uint16_t bg_color = 0x0000;
 
     if ((page >= 0) && (page < NUM_PAGES)){
         if ((row >= 0) && (row < BUTTON_ROWS) && (col >= 0) && (col < BUTTON_COLS)) {
-            MSG_DEBUG3("getImageBG: call getBMPColor: page, row, col: ", page, row, col);
             bg_color = getBMPColor(menu[page].button[row][col].logo);
-            MSG_DEBUG3("getImageBG: return from call getBMPColor: page, row, col: ", page, row, col);
         }
         else {
             MSG_ERROR3("[ERROR] getImageBG: Invalid logo index ", page, row, col);
@@ -377,16 +383,18 @@ uint16_t getImageBG(int page, int row, int col)
  *
  * @note Uses getBMPColor to read the actual image data.
  */
-uint16_t getLatchImageBG(uint8_t row, uint8_t col)
+uint16_t getLatchImageBG(uint8_t page, uint8_t row, uint8_t col)
 {
     uint16_t bg_color;
 
-    if ((pageNum >= 0) && (pageNum < NUM_PAGES)) {
+    if ((page >= 0) && (page < NUM_PAGES)) {
         if ((row >= 0) && (row < BUTTON_ROWS) && (col >= 0) && (col < BUTTON_COLS)) {
-            if (strcmp(menu[pageNum - 1].button[row][col].latchlogo, "/logos/") == 0) {
-                bg_color = getBMPColor(menu[pageNum - 1].button[row][col].logo);
+            if (strcmp(menu[page - 1].button[row][col].latchlogo, "/logos/") == 0) {
+                bg_color = getBMPColor(menu[page - 1].button[row][col].logo);
             }
-            bg_color = getBMPColor(menu[pageNum - 1].button[row][col].latchlogo);
+            else{
+                bg_color = getBMPColor(menu[page - 1].button[row][col].latchlogo);
+            }
         }
         else {
             MSG_ERRORLN("[ERROR] getLatchImageBG: Invalid latch logo index");
@@ -394,7 +402,7 @@ uint16_t getLatchImageBG(uint8_t row, uint8_t col)
         }
     }
     else {
-        MSG_ERRORLN("[ERROR] getLatchImageBG: Invalid pageNum");
+        MSG_ERRORLN("[ERROR] getLatchImageBG: Invalid page");
         bg_color = 0x0000;
     }
     return bg_color;

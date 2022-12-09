@@ -1,7 +1,9 @@
 #pragma once
 #include "FreeTouchDeckWT32.h"
-void drawlatched(int b, int col, int row);
-void drawlogo(int col, int row, bool transparent, bool latch);
+void drawlatched(int b, uint8_t col, uint8_t row);
+void drawlogo(uint8_t col, uint8_t row, bool transparent, bool latch);
+void drawButtonRowCol(uint8_t page, uint8_t row, uint8_t col);
+bool isActiveButton(uint8_t page, uint8_t row, uint8_t col);
 void drawKeypad();
 void drawErrorMessage(String message);
 void printDeviceAddress();

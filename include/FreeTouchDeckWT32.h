@@ -3,10 +3,14 @@
 // Basic macros for debug and info messages to the serial port
 #define LOG_MSG_BASIC 1
 #define LOG_MSG_LEVEL 1  // 1=ERROR, 2=ERROR+WARN, 3=ERROR+WARN+INFO
-#define LOG_MSG_DEBUG 0
+#define LOG_MSG_DEBUG 1
 #define LOG_MSG_TOUCH_DEBUG 0  // messages to console each time a touch is detected
 
 #include "std_defs.h"
+ 
+// NOTE: The hardware configuration for the display (pins, display type, etc.) is defined in the platformio.ini file. 
+// This avoids the need to modify files in the TFT_eSPI library, which would be overwritten when the library is updated.
+
 
 #include <BleKeyboard.h>  // BleKeyboard is used to communicate over BLE
 #include <FS.h>           // Filesystem support header
@@ -14,7 +18,7 @@
 #include <TFT_eSPI.h>     // The TFT_eSPI library
 #include <pgmspace.h>     // PROGMEM support header
 
-// Define the storage to be used. For now just SPIFFS.
+// Define the storage to be used. 
 #define FILESYSTEM_LITTLEFS
 
 #ifdef FILESYSTEM_LITTLEFS
@@ -58,21 +62,7 @@
 #include "UserActions.h"
 #include "Webserver.h"
 
-// ------- Uncomment the next line if you use capacitive touch -------
-// (THE ESP32 TOUCHDOWN USES THIS!)
-#define USECAPTOUCH
 
-// ------- Uncomment and populate the following if your cap touch uses custom i2c pins -------
-#define CUSTOM_TOUCH_SDA PIN_SDA
-#define CUSTOM_TOUCH_SCL PIN_SCL
-
-// PAY ATTENTION! Even if resistive touch is not used, the TOUCH pin has to be defined!
-// It can be a random unused pin.
-// TODO: Find a way around this!
-
-// ------- Uncomment the define below if you want to use SLEEP and wake up on touch -------
-// The pin where the IRQ from the touch screen is connected uses ESP-style GPIO_NUM_* instead of just pinnumber
-#define TOUCH_INTERRUPT_PIN GPIO_NUM_39
 #define MIN_TO_MS 60 * 1000
 
 // ------- Uncomment the define below if you want to use a piezo buzzer and specify the pin where the speaker is connected -------
@@ -86,15 +76,12 @@
 #define EXTERNAL_BATTERY_SCALE (EXTERNAL_BATTERY_ADC_SCALE * 2.13)  // include any input voltage dividers here
 #endif
 
-// ------- NimBLE definition, use only if the NimBLE library is installed
-// and if you are using the original ESP32-BLE-Keyboard library by T-VK -------
-//#define USE_NIMBLE
+    // ------- NimBLE definition, use only if the NimBLE library is installed
+    // and if you are using the original ESP32-BLE-Keyboard library by T-VK -------
+    //#define USE_NIMBLE
 
-extern const char *versionnumber;
+    extern const char* versionnumber;
 
-// Set the width and height of your screen here:
-#define SCREEN_WIDTH 480
-#define SCREEN_HEIGHT 320
 
 // Logo Size
 #define LOGO_SIZE_X_Y 75
@@ -120,24 +107,26 @@ extern const char *versionnumber;
 // Font size multiplier
 #define KEY_TEXTSIZE 1
 
-// #define DUMP_JSON_DOC_ON_SAVE
 
 // Touch panel definition
 
-// Choice is between the FT6336U library and the FT6236 library from Dustin Watts
-// The FT6336U library supports multi-touch, which is not used yet in this project, but might be in the future.
-// At present, either will work fine.
-#define USE_FT6336U_LIB
-
 #ifdef USECAPTOUCH
-    #include <Wire.h>
-    #ifdef USE_FT6336U_LIB
-        #include "FT6336U.h"
-        extern FT6336U ts;
-    #else
-        #include "FT6236.h"
-        extern FT6236 ts;
-    #endif
+    // ------- Uncomment and populate the following if your cap touch uses custom i2c pins -------
+#define CUSTOM_TOUCH_SDA PIN_SDA
+#define CUSTOM_TOUCH_SCL PIN_SCL
+
+    // With a capacitive touch screen the choice is between the FT6336U library and the FT6236 library from Dustin Watts
+    // The FT6336U library supports multi-touch, which is not used yet in this project, but might be in the future.
+    // At present, either will work fine.
+#define USE_FT6336U_LIB
+#include <Wire.h>
+#ifdef USE_FT6336U_LIB
+#include "FT6336U.h"
+    extern FT6336U ts;
+#else
+#include "FT6236.h"
+    extern FT6236 ts;
+#endif
 #else
     #include "Touch.h"
 #endif

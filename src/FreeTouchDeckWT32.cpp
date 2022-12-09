@@ -16,26 +16,22 @@
 
       !----------------------------- Library Dependencies --------------------------- !
       - Adafruit-GFX-Library (tested with version 1.10.4), available through Library Manager
-      - TFT_eSPI (tested with version 2.3.70), available through Library Manager
+      - TFT_eSPI (tested with version 2.4.70), available through Library Manager
       - ESP32-BLE-Keyboard (latest version) download from: https://github.com/T-vK/ESP32-BLE-Keyboard
       - ESPAsyncWebserver (latest version) download from: https://github.com/me-no-dev/ESPAsyncWebServer
       - AsyncTCP (latest version) download from: https://github.com/me-no-dev/AsyncTCP
       - ArduinoJson (tested with version 6.17.3), available through Library Manager
 
       --- If you use capacitive touch screen you will also need a library for that
-      - The WT32-SC01 apepars to be a FT6336, but works with both of the following libraries
+      - The WT32-SC01 appears to be a FT6336, but works with both of the following libraries
       - Dustin Watts FT6236 Library (version 1.0.2), https://github.com/DustinWatts/FT6236
       - or the FT6336U library (https://github.com/aselectroworks)
       - You can select which library to use in the FreeTouchDeckWT32.h file
 
-    NOTE: This version of the code has not been tested with resistive touch screens.
-
-  !-- Make sure you have setup your TFT display and ESP setup correctly in TFT_eSPI/user_setup.h --!
+  !-- Make sure you have setup your TFT display and ESP setup correctly in platformio.ini
 
         Select the right screen driver and the board (ESP32 is the only one tested) you are
-        using. Also make sure TOUCH_CS is defined correctly. TFT_BL is also be needed!
-
-        You can find examples of User_Setup.h in the "user_setup.h Examples" folder.
+        using. Also make sure TOUCH_CS is defined correctly. TFT_BL is also needed!
 
 */
 #include <Arduino.h>
@@ -45,11 +41,12 @@
 const char *versionnumber = "WT32-0.1.10-AF";
 
 /*
- * Version 0.1.10-AF - In work  
+ * Version 0.1.10-AF - Support for both WT32-SC01 and generic H/W configurations. Some sample configurations are provided.
+ *                   - Don't draw inactive buttons. Inactive means the logo is blank.bmp and there are no actions defined.
  *
  * Version 0.1.9-AF  - Fix to variables in wificonfig.json. Defined TOUCH_CS to avoid warning.
  *
- * Version 0.1.8-AF  - Added support for FT6236 capacitive touch screen library
+ * Version 0.1.8-AF  - Added support for FT6236 capacitive touch screen libraryOSO
  *
  * Version 0.1.7-AF  - Fix menu1.json for brightness down button code
  *
@@ -109,15 +106,15 @@ const char *versionnumber = "WT32-0.1.10-AF";
  */
 
 #ifdef USECAPTOUCH
-    #ifdef USE_FT6336U_LIB
-        #ifdef CUSTOM_TOUCH_SDA
-            FT6336U ts = FT6336U(PIN_SDA, PIN_SCL);
-        #else
-            FT6336U ts = FT6336U();
-        #endif
-    #else
-        FT6236 ts = FT6236();
-    #endif
+#ifdef USE_FT6336U_LIB
+#ifdef CUSTOM_TOUCH_SDA
+FT6336U ts = FT6336U(PIN_SDA, PIN_SCL);
+#else
+FT6336U ts = FT6336U();
+#endif
+#else
+FT6236 ts = FT6236();
+#endif
 #endif
 
 BleKeyboard bleKeyboard("FreeTouchDeck", "Made by me");
@@ -183,17 +180,17 @@ void setup()
 
 #ifdef USECAPTOUCH
 #ifdef CUSTOM_TOUCH_SDA
-    #ifdef USE_FT6336U_LIB
-        if (!ts.begin())
-    #else
-        if (!ts.begin(40, CUSTOM_TOUCH_SDA, CUSTOM_TOUCH_SCL))
-    #endif
+#ifdef USE_FT6336U_LIB
+    if (!ts.begin())
 #else
-    #ifdef USE_FT6336U_LIB
-        if (!ts.begin())
-    #else
-        if (!ts.begin(40))
-    #endif   
+    if (!ts.begin(40, CUSTOM_TOUCH_SDA, CUSTOM_TOUCH_SCL))
+#endif
+#else
+#ifdef USE_FT6336U_LIB
+    if (!ts.begin())
+#else
+    if (!ts.begin(40))
+#endif
 #endif  // defined(CUSTOM_TOUCH_SDA)
 
         if (!ts.begin()) {
@@ -653,48 +650,7 @@ void loop(void)
             for (uint8_t col = 0; col < BUTTON_COLS; col++) {
                 if (key[row][col].justReleased()) {
                     // Draw normal button space (non inverted)
-
-                    uint16_t buttonBG;
-                    bool drawTransparent;
-
-                    uint16_t imageBGColor;
-                    if (menu[pageNum].button[row][col].islatched) {
-                        // TODO                if (menu[pageNum].button[row][col].islatched && b < (BUTTONS_PER_PAGE)) {
-                        //                     if (islatched[pageNum][b] && b < (BUTTONS_PER_PAGE)) {
-                        imageBGColor = getLatchImageBG(row, col);
-                    }
-                    else {
-                        imageBGColor = getImageBG(pageNum, row, col);
-                    }
-
-                    if (imageBGColor > 0) {
-                        buttonBG = imageBGColor;
-                        drawTransparent = false;
-                    }
-                    else {
-                        if (menu[pageNum].button[row][col].actions[0].action == Action_ChangePage) {
-                            buttonBG = generalconfig.menuButtonColour;
-                            drawTransparent = true;
-                        }
-                        else {
-                            buttonBG = generalconfig.functionButtonColour;
-                            drawTransparent = true;
-                        }
-                    }
-                    tft.setFreeFont(LABEL_FONT);
-                    key[row][col].initButton(&tft, KEY_X + col * (KEY_W + KEY_SPACING_X),
-                                             KEY_Y + row * (KEY_H + KEY_SPACING_Y),  // x, y, w, h, outline, fill, text
-                                             KEY_W, KEY_H, TFT_WHITE, buttonBG, TFT_WHITE,
-                                             (char *)"", KEY_TEXTSIZE);
-                    key[row][col].drawButton();
-
-                    // After drawing the button outline we call this to draw a logo.
-                    if (menu[pageNum].button[row][col].islatched) {
-                        drawlogo(col, row, drawTransparent, true);
-                    }
-                    else {
-                        drawlogo(col, row, drawTransparent, false);
-                    }
+                    drawButtonRowCol(pageNum, row, col);
                 }
 
                 if (key[row][col].justPressed()) {
@@ -709,13 +665,24 @@ void loop(void)
                     }
 #endif
 
-                    tft.setFreeFont(LABEL_FONT);
-                    key[row][col].initButton(&tft, KEY_X + col * (KEY_W + KEY_SPACING_X),
-                                             KEY_Y + row * (KEY_H + KEY_SPACING_Y),  // x, y, w, h, outline, fill, text
-                                             KEY_W, KEY_H, TFT_WHITE, TFT_WHITE, TFT_WHITE,
-                                             (char *)"", KEY_TEXTSIZE);
-                    key[row][col].drawButton();
+                    bool activeButton = isActiveButton(pageNum, row, col);
 
+                    tft.setFreeFont(LABEL_FONT);
+                    if (activeButton) {
+                        // Draw inverted button space
+                        key[row][col].initButton(&tft, KEY_X + col * (KEY_W + KEY_SPACING_X),
+                                                 KEY_Y + row * (KEY_H + KEY_SPACING_Y),  // x, y, w, h, outline, fill, text
+                                                 KEY_W, KEY_H, TFT_WHITE, TFT_WHITE, TFT_WHITE,
+                                                 (char *)"", KEY_TEXTSIZE);
+                    }
+                    else {
+                        // Draw black button if inactive
+                        key[row][col].initButton(&tft, KEY_X + col * (KEY_W + KEY_SPACING_X),
+                                                 KEY_Y + row * (KEY_H + KEY_SPACING_Y),  // x, y, w, h, outline, fill, text
+                                                 KEY_W, KEY_H, TFT_BLACK, TFT_BLACK, TFT_BLACK,
+                                                 (char *)"", KEY_TEXTSIZE);
+                    }
+                    key[row][col].drawButton();
                     //---------------------------------------- Button press handling --------------------------------------------------
 
                     if ((pageNum >= 0) && (pageNum < NUM_PAGES)) {
@@ -763,7 +730,6 @@ void loop(void)
 
                     MSG_INFO1("Battery voltage:", externalBatteryVoltage);
                 }
-
                 delay(10);  // UI debouncing
             }
         }
