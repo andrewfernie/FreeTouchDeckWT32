@@ -109,9 +109,10 @@
 // Font size multiplier
 #define KEY_TEXTSIZE 1
 
+// Display of wifi password when wifi is enabled
+//#define WIFI_PASSWORD_DISPLAY
 
 // Touch panel definition
-
 #ifdef USECAPTOUCH
     // ------- Uncomment and populate the following if your cap touch uses custom i2c pins -------
 #define CUSTOM_TOUCH_SDA PIN_SDA

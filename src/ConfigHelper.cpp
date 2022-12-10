@@ -140,11 +140,14 @@ void configmode()
     tft.print("  SSID: ");
     tft.println(wificonfig.ssid);
     tft.print("  PWD: ");
+#ifdef WIFI_PASSWORD_DISPLAY
     tft.println(wificonfig.password);
-    tft.println("");
-    MSG_INFO1("[INFO] configmode ssid", wificonfig.ssid);
-    MSG_INFO1("[INFO] configmode pwd", wificonfig.password);
-    MSG_INFO1("[INFO] configmode mode", wificonfig.wifimode);
+#else
+    tft.println("********");
+#endif
+    tft.print("  Config mode: ");
+    tft.println(wificonfig.wifimode);
+    tft.println();
 
     if (String(wificonfig.ssid) == "YOUR_WIFI_SSID" || String(wificonfig.password) == "YOUR_WIFI_PASSWORD")  // Still default
     {

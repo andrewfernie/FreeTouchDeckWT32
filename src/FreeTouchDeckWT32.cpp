@@ -38,9 +38,14 @@
 
 #include "FreeTouchDeckWT32.h"
 
-const char *versionnumber = "WT32-0.1.10-AF";
+const char *versionnumber = "WT32-0.1.11-AF";
 
 /*
+ * Version 0.1.11-AF - Improved algorithm for calculating button size from key spacing rather than key spacing from button size
+ *                   - Added espressif32 version requirement to the platform_packages callout (not needed on some platforms, but
+ *                     this should make it more compatible across development platforms)
+ *                   - Changed the WiFi connect code to show the SSID and Password that is being used to connect. The password display
+ *                     is dependent on defining WIFI_PASSWORD_DISPLAY, and is disabled by default
  * Version 0.1.10-AF - Support for both WT32-SC01 and generic H/W configurations. Some sample configurations are provided.
  *                   - Don't draw inactive buttons. Inactive means the logo is blank.bmp and there are no actions defined.
  *
