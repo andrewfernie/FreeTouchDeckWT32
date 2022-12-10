@@ -137,6 +137,11 @@ void configmode()
 
     MSG_INFOLN("[INFO] Entering Config Mode");
     tft.println("Connecting to Wifi...");
+    tft.print("  SSID: ");
+    tft.println(wificonfig.ssid);
+    tft.print("  PWD: ");
+    tft.println(wificonfig.password);
+    tft.println("");
     MSG_INFO1("[INFO] configmode ssid", wificonfig.ssid);
     MSG_INFO1("[INFO] configmode pwd", wificonfig.password);
     MSG_INFO1("[INFO] configmode mode", wificonfig.wifimode);
@@ -147,6 +152,7 @@ void configmode()
         MSG_WARNLN("[WARNING]: WiFi Config still set to default! Configurator started as AP.");
         startDefaultAP();
         tft.println("Started as AP because WiFi settings are still set to default.");
+        tft.println("");
         tft.println("To configure, connect to 'FreeTouchDeck' with password 'defaultpass'");
         tft.println("Then go to http://freetouchdeck.local");
         tft.print("The IP is: ");
@@ -159,6 +165,7 @@ void configmode()
         MSG_WARNLN("[WARNING]: WiFi Config Failed to load! Configurator started as AP.");
         startDefaultAP();
         tft.println("Started as AP because WiFi settings failed to load.");
+        tft.println("");
         tft.println("To configure, connect to 'FreeTouchDeck' with password 'defaultpass'");
         tft.println("Then go to http://freetouchdeck.local");
         tft.print("The IP is: ");
@@ -170,6 +177,7 @@ void configmode()
             startDefaultAP();
             MSG_WARNLN("[WARNING]: Could not connect to AP, so started as AP.");
             tft.println("Started as AP because WiFi connection failed.");
+            tft.println("");
             tft.println("To configure, connect to 'FreeTouchDeck' with password 'defaultpass'");
             tft.println("Then go to http://freetouchdeck.local");
             tft.print("The IP is: ");
@@ -178,6 +186,7 @@ void configmode()
         else {
             MSG_WARNLN("[WARNING]: Started as STA and in config mode.");
             tft.println("Started as STA and in config mode.");
+            tft.println("");
             tft.println("To configure:");
             tft.println("http://freetouchdeck.local");
             tft.print("The IP is: ");
@@ -188,6 +197,7 @@ void configmode()
         MSG_WARNLN("[WARNING]: Started as AP and in config mode.");
         startWifiAP();
         tft.println("Started as AP and in config mode.");
+        tft.println("");
         tft.println("To configure:");
         tft.println("http://freetouchdeck.local");
         tft.print("The IP is: ");

@@ -23,7 +23,7 @@
 
 #ifdef FILESYSTEM_LITTLEFS
 #define FILESYSTEM LittleFS
-#include <LITTLEFS.h>  // https://github.com/lorol/LITTLEFS
+#include <LittleFS.h>  // https://github.com/lorol/LITTLEFS
 #else
 #define FILESYSTEM SPIFFS
 #include <SPIFFS.h>  // Filesystem support header
@@ -97,12 +97,14 @@
 #define KEY_Y SCREEN_HEIGHT / (BUTTON_ROWS * 2)
 
 // Gaps between buttons
-#define KEY_SPACING_X SCREEN_WIDTH / (BUTTON_COLS * 8)
-#define KEY_SPACING_Y SCREEN_HEIGHT / (BUTTON_ROWS * 8)
+// First - strictly define the gap between each button
+#define KEY_SPACING_X 6
+#define KEY_SPACING_Y 6
 
 // Width and height of a button
-#define KEY_W (SCREEN_WIDTH / BUTTON_COLS) - KEY_SPACING_X
-#define KEY_H (SCREEN_HEIGHT / BUTTON_ROWS) - KEY_SPACING_Y
+// Second - define button width based on spacing and number of buttons (use what's left)
+#define KEY_W (SCREEN_WIDTH - ( BUTTON_COLS - 1 ) * ( KEY_SPACING_X + 1 ) ) / BUTTON_COLS
+#define KEY_H (SCREEN_HEIGHT - ( BUTTON_ROWS - 1 ) * ( KEY_SPACING_Y + 1 ) ) / BUTTON_ROWS
 
 // Font size multiplier
 #define KEY_TEXTSIZE 1
