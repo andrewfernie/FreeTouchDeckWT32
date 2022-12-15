@@ -100,6 +100,33 @@ void bleKeyboardAction(int action, int value, char *symbol)
                 case 7:
                     bleKeyboard.write(KEY_MEDIA_PREVIOUS_TRACK);
                     break;
+                case 8:
+                    bleKeyboard.write(KEY_MEDIA_WWW_HOME);
+                    break;
+                case 9:
+                    bleKeyboard.write(KEY_MEDIA_LOCAL_MACHINE_BROWSER);
+                    break;
+                case 10:
+                    bleKeyboard.write(KEY_MEDIA_CALCULATOR);
+                    break;
+                case 11:
+                    bleKeyboard.write(KEY_MEDIA_WWW_BOOKMARKS);
+                    break;
+                case 12:
+                    bleKeyboard.write(KEY_MEDIA_WWW_SEARCH);
+                    break;
+                case 13:
+                    bleKeyboard.write(KEY_MEDIA_WWW_STOP);
+                    break;
+                case 14:
+                    bleKeyboard.write(KEY_MEDIA_WWW_BACK);
+                    break;
+                case 15:
+                    bleKeyboard.write(KEY_MEDIA_CONSUMER_CONTROL_CONFIGURATION);
+                    break;
+                case 16:
+                    bleKeyboard.write(KEY_MEDIA_EMAIL_READER);
+                    break;
                 default:
                     // if nothing matches do nothing
                     break;
