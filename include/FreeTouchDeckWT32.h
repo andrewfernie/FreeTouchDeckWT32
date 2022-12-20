@@ -92,19 +92,23 @@
 #define BUTTONS_PER_PAGE (BUTTON_ROWS * BUTTON_COLS)
 #define NUM_PAGES 10  // Includes Menu0 which is the home page
 
-// Keypad start position, centre of the first button
-#define KEY_X SCREEN_WIDTH / (BUTTON_COLS * 2)
-#define KEY_Y SCREEN_HEIGHT / (BUTTON_ROWS * 2)
-
 // Gaps between buttons
 // First - strictly define the gap between each button
-#define KEY_SPACING_X 6
-#define KEY_SPACING_Y 6
+#define KEY_SPACING_X 12   
+#define KEY_SPACING_Y 12
+
+// Define or calculate a margin around the edge of the display (default is half of the key spacing value)
+#define KEY_MARGIN_X (KEY_SPACING_X / 2)
+#define KEY_MARGIN_Y (KEY_SPACING_Y / 2)
 
 // Width and height of a button
 // Second - define button width based on spacing and number of buttons (use what's left)
-#define KEY_W (SCREEN_WIDTH - ( BUTTON_COLS - 1 ) * ( KEY_SPACING_X + 1 ) ) / BUTTON_COLS
-#define KEY_H (SCREEN_HEIGHT - ( BUTTON_ROWS - 1 ) * ( KEY_SPACING_Y + 1 ) ) / BUTTON_ROWS
+#define KEY_W ((SCREEN_WIDTH - (2 * KEY_MARGIN_X)) - ( BUTTON_COLS - 1 ) * ( KEY_SPACING_X + 1 ) ) / BUTTON_COLS
+#define KEY_H ((SCREEN_HEIGHT - (2 * KEY_MARGIN_Y)) - ( BUTTON_ROWS - 1 ) * ( KEY_SPACING_Y + 1 ) ) / BUTTON_ROWS
+
+// Keypad start position, centre of the first button
+#define KEY_X KEY_MARGIN_X + (KEY_W / 2)
+#define KEY_Y KEY_MARGIN_Y + (KEY_H / 2)
 
 // Font size multiplier
 #define KEY_TEXTSIZE 1
