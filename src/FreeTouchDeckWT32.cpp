@@ -38,9 +38,11 @@
 
 #include "FreeTouchDeckWT32.h"
 
-const char *versionnumber = "WT32-0.1.12-AF";
+const char *versionnumber = "WT32-0.2.0-AF";
 
 /*
+ * Version 0.2.0-AF  - Merge pull request that improves key spacing calculations by adding a margin around the screen.
+ *
  * Version 0.1.12-AF - Use PSRAM to save logos and draw directly from PSRAM to screen. Overall, drawing a 4x3 keypad goes from about 2.2s to about 1.1s
  *                     the first time the menu is accessed down to about 0.2s all future times.
  *
