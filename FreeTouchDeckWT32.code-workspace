@@ -35,7 +35,9 @@
 			"fstream": "cpp",
 			"iosfwd": "cpp",
 			"istream": "cpp",
-			"sstream": "cpp"
+			"sstream": "cpp",
+			"atomic": "cpp",
+			"cstdint": "cpp"
 		}
 	}
 }

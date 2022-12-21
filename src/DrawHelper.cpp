@@ -44,30 +44,28 @@ void drawlatched(int b, uint8_t col, uint8_t row)
 *
 * @return none
 *
-* @note row and col start at the top left and are 0 indexed. 
+* @note row and col start at the top left and are 0 indexed.
 */
 void drawlogo(uint8_t col, uint8_t row, bool transparent, bool latch)
 {
-    //    int16_t x = KEY_X - KEY_X / 2 + 4 + col * (KEY_W + KEY_SPACING_X);
-    //    int16_t y = KEY_Y - KEY_Y / 2 + 4 + row * (KEY_H + KEY_SPACING_Y);
     int16_t x = KEY_X + col * (KEY_W + KEY_SPACING_X) - LOGO_SIZE_X_Y / 2;
     int16_t y = KEY_Y + row * (KEY_H + KEY_SPACING_Y) - LOGO_SIZE_X_Y / 2;
 
     if ((pageNum >= 0) && (pageNum < NUM_PAGES)) {
         if (latch) {
-            if (transparent == true) {
-                drawBmpTransparent(menu[pageNum].button[row][col].latchlogo, x, y);
+            if (menu[pageNum].button[row][col].pLatchImage == nullptr || !psramAvailable) {
+                drawBmp(menu[pageNum].button[row][col].latchlogo, x, y, transparent);
             }
             else {
-                drawBmp(menu[pageNum].button[row][col].latchlogo, x, y);
+                drawLogoFromPSRAM(menu[pageNum].button[row][col].pLatchImage, x, y, transparent);
             }
         }
         else {
-            if (transparent == true) {
-                drawBmpTransparent(menu[pageNum].button[row][col].logo, x, y);
+            if (menu[pageNum].button[row][col].pImage == nullptr || !psramAvailable) {
+                drawBmp(menu[pageNum].button[row][col].logo, x, y, transparent);
             }
             else {
-                drawBmp(menu[pageNum].button[row][col].logo, x, y);
+                drawLogoFromPSRAM(menu[pageNum].button[row][col].pImage, x, y, transparent);
             }
         }
     }
@@ -108,16 +106,16 @@ bool isActiveButton(uint8_t page, uint8_t row, uint8_t col)
 }
 
 /**
-* @brief This function draws a button, both the logo and the surround box. 
-*
-* @param page int
-* @param col int
-* @param row int
-*
-* @return none
-*
-* @note row and col start at the top left and are 0 indexed.
-*/
+ * @brief This function draws a button, both the logo and the surround box.
+ *
+ * @param page int
+ * @param col int
+ * @param row int
+ *
+ * @return none
+ *
+ * @note row and col start at the top left and are 0 indexed.
+ */
 void drawButtonRowCol(uint8_t page, uint8_t row, uint8_t col)
 {
     bool drawTransparent;
@@ -130,14 +128,56 @@ void drawButtonRowCol(uint8_t page, uint8_t row, uint8_t col)
     outlineColor = TFT_BLACK;
     activeButton = false;
 
+    uint8_t status = ReturnSuccess;
+
     activeButton = isActiveButton(pageNum, row, col);
 
     if (activeButton) {
         if (menu[pageNum].button[row][col].islatched) {
-            imageBGColor = getLatchImageBG(pageNum, row, col);
+            if (menu[pageNum].button[row][col].pLatchImage == nullptr) {
+                if (psramAvailable) {
+                    status = loadBmpToPSRAM(menu[pageNum].button[row][col].latchlogo, &(menu[pageNum].button[row][col].pLatchImage));
+                    if (status == ReturnSuccess) {
+                        imageBGColor = menu[pageNum].button[row][col].pLatchImage[2];
+                        menu[pageNum].button[row][col].latchImageBGColour = imageBGColor;
+                        menu[pageNum].button[row][col].latchImageBGColourValid = true;
+                    }
+                    else {
+                        MSG_ERROR1("Error allocating PSRAM for latch logo: ", menu[pageNum].button[row][col].latchlogo);
+                    }
+                }
+                else {
+                    imageBGColor = getLatchImageBG(pageNum,row,col);
+                    menu[pageNum].button[row][col].latchImageBGColour = imageBGColor;
+                    menu[pageNum].button[row][col].latchImageBGColourValid = true;
+                }
+            }
+            else {
+                imageBGColor = menu[pageNum].button[row][col].latchImageBGColour;
+            }
         }
         else {
-            imageBGColor = getImageBG(pageNum, row, col);
+            if (menu[pageNum].button[row][col].pImage == nullptr) {
+                if (psramAvailable) {
+                    status = loadBmpToPSRAM(menu[pageNum].button[row][col].logo, &(menu[pageNum].button[row][col].pImage));
+                    if (status == ReturnSuccess) {
+                        imageBGColor = menu[pageNum].button[row][col].pImage[2];
+                        menu[pageNum].button[row][col].imageBGColour = imageBGColor;
+                        menu[pageNum].button[row][col].imageBGColourValid = true;
+                    }
+                    else {
+                        MSG_ERROR1("Error allocating PSRAM for logo: ", menu[pageNum].button[row][col].logo);
+                    }
+                }
+                else {
+                    imageBGColor = getImageBG(pageNum,row,col);
+                    menu[pageNum].button[row][col].imageBGColour = imageBGColor;
+                    menu[pageNum].button[row][col].imageBGColourValid = true;
+                } 
+            }
+            else {
+                imageBGColor = menu[pageNum].button[row][col].imageBGColour;
+            }
         }
 
         if (imageBGColor > 0) {
@@ -156,6 +196,7 @@ void drawButtonRowCol(uint8_t page, uint8_t row, uint8_t col)
         }
         outlineColor = TFT_WHITE;
     }
+
     tft.setFreeFont(LABEL_FONT);
     key[row][col].initButton(&tft, KEY_X + col * (KEY_W + KEY_SPACING_X),
                              KEY_Y + row * (KEY_H + KEY_SPACING_Y),  // x, y, w, h, outline, fill, text
@@ -163,13 +204,9 @@ void drawButtonRowCol(uint8_t page, uint8_t row, uint8_t col)
                              (char *)"", KEY_TEXTSIZE);
     key[row][col].drawButton();
     // After drawing the button outline we call this to draw a logo.
+
     if (activeButton) {
-        if (menu[pageNum].button[row][col].islatched) {
-            drawlogo(col, row, drawTransparent, true);
-        }
-        else {
-            drawlogo(col, row, drawTransparent, false);
-        }
+        drawlogo(col, row, drawTransparent, menu[pageNum].button[row][col].islatched);
     }
 }
 
@@ -334,4 +371,9 @@ void printinfo()
     tft.print(freeram / 1000);
     tft.print("kB");
     displayinginfo = true;
+}
+
+uint32_t usedPSRAM()
+{
+    return ESP.getPsramSize() - ESP.getFreePsram();
 }

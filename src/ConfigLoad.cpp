@@ -201,6 +201,11 @@ bool loadConfig(String value)
                 strcpy(menu[fileNameMenuNumber].button[row][col].latchlogo, templogopath);
                 MSG_INFO2("[INFO] load_config loading latchlogo", objectName, templogopath);
 
+                menu[fileNameMenuNumber].button[row][col].imageBGColourValid = false;
+                menu[fileNameMenuNumber].button[row][col].latchImageBGColourValid = false;
+                menu[fileNameMenuNumber].button[row][col].pImage = nullptr;
+                menu[fileNameMenuNumber].button[row][col].pLatchImage = nullptr;
+
                 JsonArray button_actionarray = doc[objectName]["actionarray"];
 
                 int button_actionarray_0 = button_actionarray[0];

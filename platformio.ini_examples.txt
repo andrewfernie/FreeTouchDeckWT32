@@ -27,6 +27,10 @@
 	-DTFT_RST=22
 	-DTFT_BL=23
 
+	; The WT32-SC01 doesn't need TOUCH_CS to be defined to make it work, but if you don't define it you get a warning
+	; that it is not defined. So define it using any unused valid output pin to avoid the warning.
+    -DTOUCH_CS=33
+
 	-DLOAD_GLCD=1   
 	-DLOAD_FONT2=1 
 	-DLOAD_FONT4=1  
@@ -44,6 +48,7 @@
   	-DTOUCH_INTERRUPT_PIN=GPIO_NUM_39
 
 	-DLV_TICK_CUSTOM=1
+
 
 ;
 ; *************

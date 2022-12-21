@@ -38,9 +38,12 @@
 
 #include "FreeTouchDeckWT32.h"
 
-const char *versionnumber = "WT32-0.1.11-AF";
+const char *versionnumber = "WT32-0.1.12-AF";
 
 /*
+ * Version 0.1.12-AF - Use PSRAM to save logos and draw directly from PSRAM to screen. Overall, drawing a 4x3 keypad goes from about 2.2s to about 1.1s
+ *                     the first time the menu is accessed down to about 0.2s all future times.
+ *
  * Version 0.1.11-AF - Improved algorithm for calculating button size from key spacing rather than key spacing from button size
  *                   - Added espressif32 version requirement to the platform_packages callout (not needed on some platforms, but
  *                     this should make it more compatible across development platforms)
@@ -152,12 +155,12 @@ Config generalconfig;
 
 Generallogos generallogo;
 
-// struct Logos screen[NUM_PAGES];
-
 unsigned long previousMillis = 0;
 unsigned long Interval = 0;
 bool displayinginfo;
 char jsonFileFail[32] = "";
+
+bool psramAvailable = false;
 
 // Invoke the TFT_eSPI button class and create all the button objects
 TFT_eSPI_Button key[BUTTON_ROWS][BUTTON_COLS];
@@ -182,6 +185,14 @@ void setup()
 
     ledBrightness = savedStates.getInt("ledBrightness", 255);
     MSG_INFOLN("[INFO] Brightness has been set");
+
+    psramAvailable = psramFound();
+
+    //  Pins to use for debug output for a scope or logic analyzer
+    // INIT_DEBUG_PIN(DEBUG_PIN_1);
+    // INIT_DEBUG_PIN(DEBUG_PIN_2);
+    // INIT_DEBUG_PIN(DEBUG_PIN_3);
+    // INIT_DEBUG_PIN(DEBUG_PIN_4);
 
 #ifdef USECAPTOUCH
 #ifdef CUSTOM_TOUCH_SDA
@@ -269,7 +280,7 @@ void setup()
     else {
         // Draw a splash screen
         if (checkfile("/logos/freetouchdeck_logo.bmp", false)) {
-            drawBmp("/logos/freetouchdeck_logo.bmp", 0, 0);
+            drawBmp("/logos/freetouchdeck_logo.bmp", 0, 0, false);
         }
         else {
             MSG_INFOLN("[INFO] No \"/logos/freetouchdeck_logo.bmp\" file found for splash screen.");
@@ -298,6 +309,7 @@ void setup()
     // Let's first check if all the files we need exist
     if (!checkfile("/config/general.json", true)) {
         MSG_ERRORLN("[ERROR] /config/general.json not found!");
+        tft.printf("[ERROR] /config/general.json not found!\n");
         while (1)
             yield();  // Stop!
     }
@@ -312,6 +324,8 @@ void setup()
 
         if (!checkfile(filename, false)) {
             MSG_WARN2("[WARNING]: ", filename, " not found. Initializing to default.json");
+            tft.printf("[WARNING]: %s not found. Initializing to default.json\n", filename);
+
             if (CopyFile("/config/default.json", filename)) {
                 MSG_INFO2("[WARN] Successful initialization of ", filename, " to default.json");
             }
@@ -400,6 +414,61 @@ void setup()
     }
 
     MSG_INFOLN("[INFO] All configs loaded");
+
+    // Preload the logos into PSRAM
+
+#ifdef PRELOAD_LOGOS
+    if (psramAvailable) {
+        tft.printf("[INFO] PSRAM available\n");
+        MSG_BASICLN("[INFO] PSRAM available");
+        tft.printf("[INFO] Preloading logos. Please wait...\n");
+        MSG_BASICLN("[INFO] Preloading logos. Please wait...");
+        uint16_t imageBGColor;
+        uint8_t status;
+        for (uint8_t page = 0; page < NUM_PAGES; page++) {
+            for (uint8_t row = 0; row < BUTTON_ROWS; row++) {
+                for (uint8_t col = 0; col < BUTTON_COLS; col++) {
+                    // Load the logo into PSRAM
+                    status = loadBmpToPSRAM(menu[page].button[row][col].logo, &(menu[page].button[row][col].pImage));
+
+                    if (status == ReturnSuccess) {
+                        imageBGColor = menu[page].button[row][col].pImage[2];
+                        menu[page].button[row][col].imageBGColour = imageBGColor;
+                        menu[page].button[row][col].imageBGColourValid = true;
+                    }
+                    else {
+                        menu[page].button[row][col].imageBGColourValid = false;
+                        menu[page].button[row][col].pImage = nullptr;
+                        tft.printf("Error allocating PSRAM for logo: %s\n", menu[page].button[row][col].logo);
+                        MSG_ERROR1("Error allocating PSRAM for logo: ", menu[page].button[row][col].logo);
+                    }
+
+                    // Load the latchLogo into PSRAM
+                    if (menu[page].button[row][col].latch) {
+                        status = loadBmpToPSRAM(menu[page].button[row][col].latchlogo, &(menu[page].button[row][col].pLatchImage));
+                        if (status == ReturnSuccess) {
+                            imageBGColor = menu[page].button[row][col].pLatchImage[2];
+                            menu[page].button[row][col].latchImageBGColour = imageBGColor;
+                            menu[page].button[row][col].latchImageBGColourValid = true;
+                        }
+                        else {
+                            menu[page].button[row][col].latchImageBGColourValid = false;
+                            menu[page].button[row][col].pLatchImage = nullptr;
+                            tft.printf("Error allocating PSRAM for latch logo: %s\n", menu[page].button[row][col].latchlogo);
+                            MSG_ERROR1("Error allocating PSRAM for latch logo: ", menu[page].button[row][col].latchlogo);
+                        }
+                    }
+                }
+            }
+        }
+        tft.printf("[INFO] Finished preloading logos\n");
+        MSG_BASICLN("[INFO] Finished preloading logos");
+    }
+    else {
+        tft.printf("[INFO] PSRAM not available\n");
+        MSG_BASICLN("[INFO] PSRAM not available");
+    }
+#endif
 
     // Setup the Font used for plain text
     tft.setFreeFont(LABEL_FONT);
@@ -650,6 +719,7 @@ void loop(void)
                 }
             }
         }
+        // long t_draw_start = millis();
         // Check if any key has changed state
         for (uint8_t row = 0; row < BUTTON_ROWS; row++) {
             for (uint8_t col = 0; col < BUTTON_COLS; col++) {

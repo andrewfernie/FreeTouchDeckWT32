@@ -2,9 +2,10 @@
 
 // Basic macros for debug and info messages to the serial port
 #define LOG_MSG_BASIC 1
-#define LOG_MSG_LEVEL 1  // 1=ERROR, 2=ERROR+WARN, 3=ERROR+WARN+INFO
+#define LOG_MSG_LEVEL 2  // 1=ERROR, 2=ERROR+WARN, 3=ERROR+WARN+INFO
 #define LOG_MSG_DEBUG 1
 #define LOG_MSG_TOUCH_DEBUG 0  // messages to console each time a touch is detected
+#define USE_DEBUG_PINS 0
 
 #include "std_defs.h"
  
@@ -82,8 +83,10 @@
 
     extern const char* versionnumber;
 
+// ------- Uncomment the define below if you want to preload the logos to PSRAM at start (adds about 10s to startup) -------
+//#define PRELOAD_LOGOS
 
-// Logo Size
+    // Logo Size
 #define LOGO_SIZE_X_Y 75
 
 // Button layout and number of pages with buttons
@@ -142,6 +145,13 @@ extern TFT_eSPI tft;
 
 extern Preferences savedStates;
 
+extern bool psramAvailable;
+
+const uint8_t DEBUG_PIN_1 = 25;
+const uint8_t DEBUG_PIN_2 = 26;
+const uint8_t DEBUG_PIN_3 = 27;
+const uint8_t DEBUG_PIN_4 = 5;
+
 // This is the file name used to store the calibration data
 // You can change this to create new calibration files.
 // The FILESYSTEM file name must start with "/".
@@ -182,6 +192,12 @@ struct Button {
     bool islatched;
     char logo[32];
     char latchlogo[32];
+    uint16_t imageBGColour;
+    uint16_t latchImageBGColour;
+    uint8_t imageBGColourValid;
+    uint8_t latchImageBGColourValid;
+    uint16_t* pImage;
+    uint16_t* pLatchImage;
 };
 
 // Each menu has an array of buttons

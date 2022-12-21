@@ -9,3 +9,4 @@ void drawErrorMessage(String message);
 void printDeviceAddress();
 void printinfo();
 bool CopyFile(String FileOriginal, String FileCopy);
+uint32_t usedPSRAM();

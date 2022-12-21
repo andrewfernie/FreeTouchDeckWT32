@@ -64,7 +64,8 @@ unsigned long convertHTMLtoRGB888(char *html)
 *
 * @note none
 */
-void convertRGB888toHTML(unsigned long rgb, char *html, unsigned int htmlsize){
+void convertRGB888toHTML(unsigned long rgb, char *html, unsigned int htmlsize)
+{
     snprintf(html, htmlsize, "#%6.6X", rgb & 0x00ffffff);
 }
 
@@ -105,7 +106,8 @@ unsigned long convertRGB565ToRGB888(unsigned int rgb)
  *
  * @note none
  */
-unsigned int convertHTMLtoRGB565(char *html){
+unsigned int convertHTMLtoRGB565(char *html)
+{
     unsigned long rgb888 = convertHTMLtoRGB888(html);
     return convertRGB888ToRGB565(rgb888);
 }
@@ -119,24 +121,27 @@ unsigned int convertHTMLtoRGB565(char *html){
  *
  * @note none
  */
-void convertRGB565toHTML(unsigned int rgb, char *html, unsigned int htmlsize){
+void convertRGB565toHTML(unsigned int rgb, char *html, unsigned int htmlsize)
+{
     unsigned long rgb888 = convertRGB565ToRGB888(rgb);
     convertRGB888toHTML(rgb888, html, htmlsize);
 }
 
 /**
-* @brief This function draws a transparent BMP on the TFT screen according
+* @brief This function draws a BMP on the TFT screen according
          to the given x and y coordinates.
 *
 * @param  *filename
 * @param x int16_t
 * @param y int16_t
+* @param transparent uint8_t
 *
 * @return none
 *
-* @note A completely black pixel is transparent e.g. (0x0000) not drawn.
+* @note If transparent is true then black pixels are not drawn (i.e. they are transparent). If false,
+*       black pixels are drawn.
 */
-void drawBmpTransparent(const char *filename, int16_t x, int16_t y)
+void drawBmp(const char *filename, int16_t x, int16_t y, uint8_t transparent)
 {
     if ((x >= tft.width()) || (y >= tft.height()))
         return;
@@ -188,12 +193,18 @@ void drawBmpTransparent(const char *filename, int16_t x, int16_t y)
 
                 // Push the pixel row to screen, pushImage will crop the line if needed
                 // y is decremented as the BMP image is drawn bottom up
-                tft.pushImage(x, y--, w, 1, (uint16_t *)lineBuffer, TFT_BLACK);
+
+                if (transparent) {
+                    tft.pushImage(x, y--, w, 1, (uint16_t *)lineBuffer, TFT_BLACK);
+                }
+                else {
+                    tft.pushImage(x, y--, w, 1, (uint16_t *)lineBuffer);
+                }
             }
             tft.setSwapBytes(oldSwapBytes);
         }
         else
-            MSG_ERRORLN("ERROR: BMP format not recognized.");
+            MSG_ERROR1("[ERROR] BMP format not recognized for file: ", filename);
     }
     bmpFS.close();
 }
@@ -202,72 +213,136 @@ void drawBmpTransparent(const char *filename, int16_t x, int16_t y)
 * @brief This function draws a BMP on the TFT screen according
          to the given x and y coordinates.
 *
-* @param  *filename
+* @param pImage uint16_t*
 * @param x int16_t
 * @param y int16_t
+* @param transparent uint8_t
 *
-* @return none
+* @return uint8_t 0 = success, other = error
 *
-* @note In contradiction to drawBmpTransparent() this does draw black pixels.
+* @note If transparent is true then black pixels are not drawn (i.e. they are transparent). If false,
+*       black pixels are drawn.
 */
-void drawBmp(const char *filename, int16_t x, int16_t y)
+uint8_t drawLogoFromPSRAM(uint16_t *pImage, int16_t x, int16_t y, uint8_t transparent)
 {
+    uint16_t *pImagePtr;
+    uint16_t w, h, row;
+
+    uint8_t status = ReturnSuccess;
+
     if ((x >= tft.width()) || (y >= tft.height()))
-        return;
+        return ReturnFail;
+
+    if (pImage != nullptr) {
+        w = pImage[0];
+        h = pImage[1];
+        pImagePtr = pImage + 2;
+
+        // y += h - 1;
+
+        bool oldSwapBytes = tft.getSwapBytes();
+        tft.setSwapBytes(true);
+
+        if (transparent) {
+            tft.pushImage(x, y, w, h, pImagePtr, TFT_BLACK);
+        }
+        else {
+            tft.pushImage(x, y, w, h, pImagePtr);
+        }
+
+        tft.setSwapBytes(oldSwapBytes);
+    }
+
+    return status;
+}
+
+/**
+* @brief This function loads a logo file into a buffer allocated in PSRAM. This gets all of the (slow)
+         filesystem accesses out of the way once. After that the logo can be drawn directly from PSRAM.
+*
+* @param  *filename
+* @param pImage *uint16_t
+*
+* @return 0 for success, other for failure
+*
+* @note Make sure to check the status of the return value. If it is not equal to zero, then the logo was not loaded.
+*/
+uint8_t loadBmpToPSRAM(const char *filename, uint16_t **pImage)
+{
+    uint8_t status = ReturnSuccess;
 
     fs::File bmpFS;
-
     bmpFS = FILESYSTEM.open(filename, "r");
 
     if (!bmpFS) {
-        MSG_ERROR1("ERROR: File not found:", filename);
-        return;
+        MSG_WARN1("[WARN]: Bitmap not found: ", filename);
+        filename = "/logos/question.bmp";
+        MSG_WARN1("[WARN]: Will use : ", filename);
+        bmpFS = FILESYSTEM.open(filename, "r");
     }
 
-    uint32_t seekOffset;
-    uint16_t w, h, row;
-    uint8_t r, g, b;
+    if (!bmpFS) {
+        status = ReturnFail;
+        MSG_ERROR1("[ERROR] Failed to open file: ", filename);
+    }
+    else {
+        uint32_t seekOffset;
+        uint16_t w, h;
+        uint8_t r, g, b;
+        uint16_t *pImagePtr = 0;
 
-    if (read16(bmpFS) == 0x4D42) {
-        read32(bmpFS);
-        read32(bmpFS);
-        seekOffset = read32(bmpFS);
-        read32(bmpFS);
-        w = read32(bmpFS);
-        h = read32(bmpFS);
+        if (read16(bmpFS) == 0x4D42) {
+            read32(bmpFS);
+            read32(bmpFS);
+            seekOffset = read32(bmpFS);
+            read32(bmpFS);
+            w = read32(bmpFS);
+            h = read32(bmpFS);
 
-        if ((read16(bmpFS) == 1) && (read16(bmpFS) == 24) && (read32(bmpFS) == 0)) {
-            y += h - 1;
+            if ((read16(bmpFS) == 1) && (read16(bmpFS) == 24) && (read32(bmpFS) == 0)) {
+                uint16_t imageSize = 2 + 2 + (w * h * 2);  // 2 bytes for width, 2 bytes for height, 2 bytes per pixel
+                uint16_t *pLogoImage = (uint16_t *)ps_malloc(imageSize);
 
-            bool oldSwapBytes = tft.getSwapBytes();
-            tft.setSwapBytes(true);
-            bmpFS.seek(seekOffset);
-
-            uint16_t padding = (4 - ((w * 3) & 3)) & 3;
-            uint8_t lineBuffer[w * 3 + padding];
-
-            for (row = 0; row < h; row++) {
-                bmpFS.read(lineBuffer, sizeof(lineBuffer));
-                uint8_t *bptr = lineBuffer;
-                uint16_t *tptr = (uint16_t *)lineBuffer;
-                // Convert 24 to 16 bit colours
-                for (uint16_t col = 0; col < w; col++) {
-                    b = *bptr++;
-                    g = *bptr++;
-                    r = *bptr++;
-                    *tptr++ = ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3);
+                if (pLogoImage == NULL) {
+                    MSG_ERROR1("[ERROR] Could not allocate memory for image: ", filename);
+                    status = ReturnFail;
+                }
+                else {
+                    pLogoImage[0] = w;
+                    pLogoImage[1] = h;
+                    pImagePtr = pLogoImage + 2;
                 }
 
-                // Push the pixel row to screen, pushImage will crop the line if needed
-                // y is decremented as the BMP image is drawn bottom up
-                tft.pushImage(x, y--, w, 1, (uint16_t *)lineBuffer);
+                if (status == ReturnSuccess) {
+                    bmpFS.seek(seekOffset);
+
+                    uint16_t padding = (4 - ((w * 3) & 3)) & 3;
+                    uint8_t lineBuffer[w * 3 + padding];
+
+                    for (int row = h - 1; row >= 0; row--) {
+                        bmpFS.read(lineBuffer, sizeof(lineBuffer));
+                        uint8_t *bptr = lineBuffer;
+                        uint16_t *tptr = (uint16_t *)lineBuffer;
+                        // Convert 24 to 16 bit colours
+                        for (int col = 0; col < w; col++) {
+                            b = *bptr++;
+                            g = *bptr++;
+                            r = *bptr++;
+                            pImagePtr[row * w + col] = ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3);
+                        }
+                    }
+                    *pImage = pLogoImage;
+                }
             }
-            tft.setSwapBytes(oldSwapBytes);
+            else {
+                MSG_ERROR1("[ERROR] BMP format not recognized for file: ", filename);
+                status = ReturnFail;
+            }
         }
-        else
-            MSG_ERROR1("[ERROR] BMP format not recognized for file: ", filename);
+        bmpFS.close();
     }
-    bmpFS.close();
+
+    return status;
 }
 
 /**
@@ -339,7 +414,6 @@ uint16_t getBMPColor(const char *filename)
         color = tft.color565(R, G, B);
     }
 
-
     return color;
 }
 
@@ -357,7 +431,7 @@ uint16_t getImageBG(uint8_t page, uint8_t row, uint8_t col)
 {
     uint16_t bg_color = 0x0000;
 
-    if ((page >= 0) && (page < NUM_PAGES)){
+    if ((page >= 0) && (page < NUM_PAGES)) {
         if ((row >= 0) && (row < BUTTON_ROWS) && (col >= 0) && (col < BUTTON_COLS)) {
             bg_color = getBMPColor(menu[page].button[row][col].logo);
         }
@@ -392,7 +466,7 @@ uint16_t getLatchImageBG(uint8_t page, uint8_t row, uint8_t col)
             if (strcmp(menu[page - 1].button[row][col].latchlogo, "/logos/") == 0) {
                 bg_color = getBMPColor(menu[page - 1].button[row][col].logo);
             }
-            else{
+            else {
                 bg_color = getBMPColor(menu[page - 1].button[row][col].latchlogo);
             }
         }

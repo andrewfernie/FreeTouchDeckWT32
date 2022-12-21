@@ -1,3 +1,8 @@
+#include <stdint.h>
+
+const uint8_t ReturnSuccess = 0;
+const uint8_t ReturnFail = 1;
+
 
 #ifdef LOG_MSG_PORT
 #define MSG_PORT LOG_MSG_PORT
@@ -26,6 +31,21 @@
 #define LOG_MSG_TOUCH_DEBUG 0  // off
 //#define LOG_MSG_TOUCH_DEBUG 1         // on
 #endif
+
+#ifndef USE_DEBUG_PINS
+#define USE_DEBUG_PINS 0  // off
+// #define USE_DEBUG_PINS 1         // on
+#endif
+
+#define INIT_DEBUG_PIN(x) \
+    if (USE_DEBUG_PINS > 0) { \
+        pinMode(x, OUTPUT);   \
+    }
+
+#define WRITE_DEBUG_PIN(x, y) \
+    if (USE_DEBUG_PINS > 0) { \
+        digitalWrite(x, y);   \
+    }
 
 #define MSG_BASICLN(x)       \
     if (LOG_MSG_BASIC) {     \
