@@ -38,9 +38,11 @@
 
 #include "FreeTouchDeckWT32.h"
 
-const char *versionnumber = "WT32-0.2.0-AF";
+const char *versionnumber = "WT32-0.2.1-AF";
 
 /*
+ * Version 0.2.1-AF  - Top and bottom status lines. Run loop at fixed 20ms (assuming it doesn't overrun).
+ *
  * Version 0.2.0-AF  - Merge pull request that improves key spacing calculations by adding a margin around the screen.
  *
  * Version 0.1.12-AF - Use PSRAM to save logos and draw directly from PSRAM to screen. Overall, drawing a 4x3 keypad goes from about 2.2s to about 1.1s
@@ -173,6 +175,12 @@ float externalBatteryVoltage = 0.0;
 long lastADCRead = 0;
 #endif
 
+long last_loop_start = 0;
+long loop_count = 0;
+long this_loop_start = 0;
+long loop_100_count = 0;
+long loop_100_time = 0;
+
 //-------------------------------- SETUP --------------------------------------------------------------
 
 void setup()
@@ -269,10 +277,12 @@ void setup()
 
     // ----------------- Load webserver ---------------------
 
+    MSG_INFOLN("[INFO] Handler setup");
     handlerSetup();
 
     // ------------------- Splash screen ------------------
 
+    MSG_INFOLN("[INFO] Splash screen");
     // If we are woken up we do not need the splash screen
     if (wakeup_reason > 0) {
         // But we do draw something to indicate we are waking up
@@ -297,17 +307,18 @@ void setup()
 
 // Calibrate the touch screen and retrieve the scaling factors
 #ifndef USECAPTOUCH
+    MSG_INFOLN("[INFO] Calibrate touch screen");
     touch_calibrate();
 #endif
 
 #ifdef READ_EXTERNAL_BATTERY
     // External battery read voltage setup
-
+    MSG_INFOLN("[INFO] Battery monitor setup");
     pinMode(EXTERNAL_BATTERY_PIN, INPUT);
     analogSetPinAttenuation(EXTERNAL_BATTERY_PIN, ADC_11db);
     adcAttachPin(EXTERNAL_BATTERY_PIN);
 #endif
-
+    MSG_INFOLN("[INFO] Check for general.json");
     // Let's first check if all the files we need exist
     if (!checkfile("/config/general.json", true)) {
         MSG_ERRORLN("[ERROR] /config/general.json not found!");
@@ -323,6 +334,7 @@ void setup()
         sprintf(filenumber, "%d", i);
         strcat(filename, filenumber);
         strcat(filename, ".json");
+        MSG_INFO1("[INFO] Check for ", filename);
 
         if (!checkfile(filename, false)) {
             MSG_WARN2("[WARNING]: ", filename, " not found. Initializing to default.json");
@@ -370,11 +382,15 @@ void setup()
 
     // Now load the config files, starting with general.json
     if (!loadConfig("general")) {
-        Serial.print("[WARNING]: general.json failed to load!");
-        Serial.print("[WARNING]: To reset to default type \'reset general\'");
+        MSG_WARNLN("[WARNING]: general.json failed to load!");
+        MSG_WARNLN("[WARNING]: To reset to default type \'reset general\'");
         pageNum = SPECIAL_4_PAGE;
     }
     else {
+        // Menu to display on startup
+        pageNum = constrain(generalconfig.startup_menu, 0, NUM_PAGES - 1);
+        callingPageNum = pageNum;
+
 #ifdef TOUCH_INTERRUPT_PIN
         Interval = generalconfig.sleeptimer * MIN_TO_MS;
         if (generalconfig.sleepenable) {
@@ -505,321 +521,336 @@ void loop(void)
     bool pressed = false;
     uint16_t t_x = 0, t_y = 0;
 
-    // Check if there is data available on the serial input that needs to be handled.
+    if (millis() > (last_loop_start + loop_period)) {
+        this_loop_start = millis();
+        loop_count++;
+        // Check if there is data available on the serial input that needs to be handled.
 
-    if (Serial.available()) {
-        String command = Serial.readStringUntil(' ');
+        if (Serial.available()) {
+            String command = Serial.readStringUntil(' ');
 
-        if (command == "cal") {
-            MSG_INFOLN("[INFO] received command cal");
-            FILESYSTEM.remove(CALIBRATION_FILE);
-            ESP.restart();
-        }
-        else if (command == "setssid") {
-            String value = Serial.readString();
-            MSG_INFO1("[INFO] received command setssid ", value.c_str());
-            if (saveWifiSSID(value)) {
-                MSG_INFO1F("[INFO] Saved new SSID: %s\n", value.c_str());
-                loadMainConfig();
-                MSG_INFOLN("[INFO] New configuration loaded");
+            if (command == "cal") {
+                MSG_INFOLN("[INFO] received command cal");
+                FILESYSTEM.remove(CALIBRATION_FILE);
+                ESP.restart();
             }
-        }
-        else if (command == "setpassword") {
-            String value = Serial.readString();
-            MSG_INFO1("[INFO] received command setpassword ", value.c_str());
-            if (saveWifiPW(value)) {
-                MSG_INFO1F("[INFO] Saved new Password: %s\n", value.c_str());
-                loadMainConfig();
-                MSG_INFOLN("[INFO] New configuration loaded");
+            else if (command == "setssid") {
+                String value = Serial.readString();
+                MSG_INFO1("[INFO] received command setssid ", value.c_str());
+                if (saveWifiSSID(value)) {
+                    MSG_INFO1F("[INFO] Saved new SSID: %s\n", value.c_str());
+                    loadMainConfig();
+                    MSG_INFOLN("[INFO] New configuration loaded");
+                }
             }
-        }
-        else if (command == "setwifimode") {
-            String value = Serial.readString();
-            MSG_INFO1("[INFO] received command setwifimode ", value.c_str());
-            if (saveWifiMode(value)) {
-                MSG_INFO1F("[INFO] Saved new WiFi Mode: %s\n", value.c_str());
-                loadMainConfig();
-                MSG_INFOLN("[INFO] New configuration loaded");
+            else if (command == "setpassword") {
+                String value = Serial.readString();
+                MSG_INFO1("[INFO] received command setpassword ", value.c_str());
+                if (saveWifiPW(value)) {
+                    MSG_INFO1F("[INFO] Saved new Password: %s\n", value.c_str());
+                    loadMainConfig();
+                    MSG_INFOLN("[INFO] New configuration loaded");
+                }
             }
-        }
-        else if (command == "setwifimodesta") {
-            String value = "WIFI_STA";
-            MSG_INFO1("[INFO] received command setwifimode ", value.c_str());
-            if (saveWifiMode(value)) {
-                MSG_INFO1F("[INFO] Saved new WiFi Mode: %s\n", value.c_str());
-                loadMainConfig();
-                MSG_INFOLN("[INFO] New configuration loaded");
+            else if (command == "setwifimode") {
+                String value = Serial.readString();
+                MSG_INFO1("[INFO] received command setwifimode ", value.c_str());
+                if (saveWifiMode(value)) {
+                    MSG_INFO1F("[INFO] Saved new WiFi Mode: %s\n", value.c_str());
+                    loadMainConfig();
+                    MSG_INFOLN("[INFO] New configuration loaded");
+                }
             }
-        }
-        else if (command == "setwifimodeap") {
-            String value = "WIFI_AP";
-            MSG_INFO1("[INFO] received command setwifimode ", value.c_str());
-            if (saveWifiMode(value)) {
-                MSG_INFO1F("[INFO] Saved new WiFi Mode: %s\n", value.c_str());
-                loadMainConfig();
-                MSG_INFOLN("[INFO] New configuration loaded");
+            else if (command == "setwifimodesta") {
+                String value = "WIFI_STA";
+                MSG_INFO1("[INFO] received command setwifimode ", value.c_str());
+                if (saveWifiMode(value)) {
+                    MSG_INFO1F("[INFO] Saved new WiFi Mode: %s\n", value.c_str());
+                    loadMainConfig();
+                    MSG_INFOLN("[INFO] New configuration loaded");
+                }
             }
-        }
-        else if (command == "restart") {
-            MSG_WARNLN("[WARNING]: Restarting");
-            ESP.restart();
-        }
-        else if (command == "reset") {
-            String file = Serial.readString();
-            MSG_INFO1F("[INFO] Resetting %s.json now\n", file.c_str());
-            resetconfig(file);
-        }
-        else {
-            for (size_t i = 0; i < NUM_PAGES; i++) {
-                char menuName[16];
-                sprintf(menuName, "menu%d", i);
-
-                if (command == menuName && pageNum != i && pageNum != WEB_REQUEST_PAGE) {
-                    pageNum = i;
-                    drawKeypad();
-                    MSG_INFO("Auto Switched to ");
-                    MSG_INFOLN(menuName);
+            else if (command == "setwifimodeap") {
+                String value = "WIFI_AP";
+                MSG_INFO1("[INFO] received command setwifimode ", value.c_str());
+                if (saveWifiMode(value)) {
+                    MSG_INFO1F("[INFO] Saved new WiFi Mode: %s\n", value.c_str());
+                    loadMainConfig();
+                    MSG_INFOLN("[INFO] New configuration loaded");
+                }
+            }
+            else if (command == "restart") {
+                MSG_WARNLN("[WARNING]: Restarting");
+                ESP.restart();
+            }
+            else if (command == "reset") {
+                String file = Serial.readString();
+                MSG_INFO1F("[INFO] Resetting %s.json now\n", file.c_str());
+                resetconfig(file);
+            }
+            else {
+                for (size_t i = 0; i < NUM_PAGES; i++) {
+                    char menuName[16];
+                    sprintf(menuName, "menu%d", i);
+                    if (command == menuName && pageNum != i && pageNum != WEB_REQUEST_PAGE) {
+                        pageNum = i;
+                        drawKeypad();
+                        MSG_INFO("Auto Switched to ");
+                        MSG_INFOLN(menuName);
+                    }
                 }
             }
         }
-    }
 
 #ifdef USECAPTOUCH
 #ifdef USE_FT6336U_LIB
-    FT6336U_TouchPointType touchPos;
-    touchPos = ts.scan();
+        FT6336U_TouchPointType touchPos;
+        touchPos = ts.scan();
 
-    if (touchPos.tp[0].tapped) {
-        MSG_TOUCH_DEBUG(" Tap Detected: ");
-        MSG_TOUCH_DEBUGLN(touchPos.touch_count);
-        MSG_TOUCH_DEBUG(" pageNum: ");
-        MSG_TOUCH_DEBUGLN(pageNum);
-        MSG_TOUCH_DEBUG(" x,y: ");
-        MSG_TOUCH_DEBUG(touchPos.tp[0].x);
-        MSG_TOUCH_DEBUG(" : ");
-        MSG_TOUCH_DEBUGLN(touchPos.tp[0].y);
+        if (touchPos.tp[0].tapped) {
+            MSG_TOUCH_DEBUG(" Tap Detected: ");
+            MSG_TOUCH_DEBUGLN(touchPos.touch_count);
+            MSG_TOUCH_DEBUG(" pageNum: ");
+            MSG_TOUCH_DEBUGLN(pageNum);
+            MSG_TOUCH_DEBUG(" x,y: ");
+            MSG_TOUCH_DEBUG(touchPos.tp[0].x);
+            MSG_TOUCH_DEBUG(" : ");
+            MSG_TOUCH_DEBUGLN(touchPos.tp[0].y);
 
-        // Flip things around so it matches our screen rotation
-        //         p.x = map(p.x, 0, 320, 320, 0);
+            // Flip things around so it matches our screen rotation
+            //         p.x = map(p.x, 0, 320, 320, 0);
 
-        t_x = touchPos.tp[0].y;
-        t_y = 320 - touchPos.tp[0].x;
-        pressed = true;
-    }
-    else {
-        pressed = false;
-    }
+            t_x = touchPos.tp[0].y;
+            t_y = 320 - touchPos.tp[0].x;
+            pressed = true;
+        }
+        else {
+            pressed = false;
+        }
 #else
-    if (ts.touched()) {
-        // Retrieve a point
-        TS_Point p = ts.getPoint();
+        if (ts.touched()) {
+            // Retrieve a point
+            TS_Point p = ts.getPoint();
 
-        // Flip things around so it matches our screen rotation
-        p.x = map(p.x, 0, 320, 320, 0);
-        t_y = p.x;
-        t_x = p.y;
+            // Flip things around so it matches our screen rotation
+            p.x = map(p.x, 0, 320, 320, 0);
+            t_y = p.x;
+            t_x = p.y;
 
-        pressed = true;
-    }
-    else {
-        pressed = false;
-    }
+            pressed = true;
+        }
+        else {
+            pressed = false;
+        }
 #endif
 #else
-    pressed = tft.getTouch(&t_x, &t_y);
+        pressed = tft.getTouch(&t_x, &t_y);
 #endif
 
-    if (pageNum == WEB_REQUEST_PAGE) {
-        // If the pageNum is set to NUM_PAGES+1, do not draw anything on screen or check for touch
-        // and start handling incomming web requests.
-    }
-    else if (pageNum == SPECIAL_PAGE_INFO) {
-        if (!displayinginfo) {
-            printinfo();
+        if (pageNum == WEB_REQUEST_PAGE) {
+            // If the pageNum is set to NUM_PAGES+1, do not draw anything on screen or check for touch
+            // and start handling incomming web requests.
+        }
+        else if (pageNum == SPECIAL_PAGE_INFO) {
+            if (!displayinginfo) {
+                printinfo();
+            }
+
+            if (pressed) {
+                displayinginfo = false;
+                pageNum = callingPageNum;
+                tft.fillScreen(generalconfig.backgroundColour);
+                drawKeypad();
+            }
         }
 
-        if (pressed) {
-            displayinginfo = false;
-            pageNum = callingPageNum;
-            tft.fillScreen(generalconfig.backgroundColour);
-            drawKeypad();
-        }
-    }
-    else if (pageNum == SPECIAL_3_PAGE) {
-        // We were unable to connect to WiFi. Waiting for touch to get back to the settings menu.
+        else if (pageNum == SPECIAL_3_PAGE) {
+            // We were unable to connect to WiFi. Waiting for touch to get back to the settings menu.
 
-        if (pressed) {
-            // Return to Settings page
-            displayinginfo = false;
-            pageNum = callingPageNum;
-            tft.fillScreen(generalconfig.backgroundColour);
-            drawKeypad();
+            if (pressed) {
+                // Return to Settings page
+                displayinginfo = false;
+                pageNum = callingPageNum;
+                tft.fillScreen(generalconfig.backgroundColour);
+                drawKeypad();
+            }
         }
-    }
-    else if (pageNum == SPECIAL_4_PAGE) {
-        // A JSON file failed to load. We are drawing an error message. And waiting for a touch.
+        else if (pageNum == SPECIAL_4_PAGE) {
+            // A JSON file failed to load. We are drawing an error message. And waiting for a touch.
 
-        if (pressed) {
-            // Load home screen
-            displayinginfo = false;
-            pageNum = callingPageNum;
-            tft.fillScreen(generalconfig.backgroundColour);
-            drawKeypad();
+            if (pressed) {
+                // Load home screen
+                displayinginfo = false;
+                pageNum = callingPageNum;
+                tft.fillScreen(generalconfig.backgroundColour);
+                drawKeypad();
+            }
         }
-    }
-    else {
-        // Check if sleep is enabled and if our timer has ended.
+        else {
+            // Check if sleep is enabled and if our timer has ended.
 
 #ifdef TOUCH_INTERRUPT_PIN
-        if (generalconfig.sleepenable) {
-            if (millis() > previousMillis + Interval) {
-                // The timer has ended and we are going to sleep  .
-                tft.fillScreen(TFT_BLACK);
-                MSG_INFOLN("[INFO] Going to sleep.");
-#ifdef speakerPin
-                if (generalconfig.beep) {
-                    ledcAttachPin(speakerPin, 2);
-                    ledcWriteTone(2, 1200);
-                    delay(150);
-                    ledcDetachPin(speakerPin);
-                    ledcWrite(2, 0);
-
-                    ledcAttachPin(speakerPin, 2);
-                    ledcWriteTone(2, 800);
-                    delay(150);
-                    ledcDetachPin(speakerPin);
-                    ledcWrite(2, 0);
-
-                    ledcAttachPin(speakerPin, 2);
-                    ledcWriteTone(2, 600);
-                    delay(150);
-                    ledcDetachPin(speakerPin);
-                    ledcWrite(2, 0);
-                }
-#endif
-                MSG_INFOLN("[INFO] Saving latched states");
-
-                esp_sleep_enable_ext0_wakeup(TOUCH_INTERRUPT_PIN, 0);
-                esp_deep_sleep_start();
-            }
-        }
-#endif
-
-        // // Touch coordinates are stored here
-
-        // Check if the X and Y coordinates of the touch are within one of our buttons
-        for (uint8_t i = 0; i < BUTTON_ROWS; i++) {
-            for (uint8_t j = 0; j < BUTTON_COLS; j++) {
-                if (pressed && key[i][j].contains(t_x, t_y)) {
-                    key[i][j].press(true);  // tell the button it is pressed
-
-                    // After receiving a valid touch reset the sleep timer
-                    previousMillis = millis();
-                }
-                else {
-                    key[i][j].press(false);  // tell the button it is NOT pressed
-                }
-            }
-        }
-        // long t_draw_start = millis();
-        // Check if any key has changed state
-        for (uint8_t row = 0; row < BUTTON_ROWS; row++) {
-            for (uint8_t col = 0; col < BUTTON_COLS; col++) {
-                if (key[row][col].justReleased()) {
-                    // Draw normal button space (non inverted)
-                    drawButtonRowCol(pageNum, row, col);
-                }
-
-                if (key[row][col].justPressed()) {
-// Beep
+            if (generalconfig.sleepenable) {
+                if (millis() > previousMillis + Interval) {
+                    // The timer has ended and we are going to sleep  .
+                    tft.fillScreen(TFT_BLACK);
+                    MSG_INFOLN("[INFO] Going to sleep.");
 #ifdef speakerPin
                     if (generalconfig.beep) {
                         ledcAttachPin(speakerPin, 2);
+                        ledcWriteTone(2, 1200);
+                        delay(150);
+                        ledcDetachPin(speakerPin);
+                        ledcWrite(2, 0);
+
+                        ledcAttachPin(speakerPin, 2);
+                        ledcWriteTone(2, 800);
+                        delay(150);
+                        ledcDetachPin(speakerPin);
+                        ledcWrite(2, 0);
+
+                        ledcAttachPin(speakerPin, 2);
                         ledcWriteTone(2, 600);
-                        delay(50);
+                        delay(150);
                         ledcDetachPin(speakerPin);
                         ledcWrite(2, 0);
                     }
 #endif
+                    MSG_INFOLN("[INFO] Saving latched states");
 
-                    bool activeButton = isActiveButton(pageNum, row, col);
+                    esp_sleep_enable_ext0_wakeup(TOUCH_INTERRUPT_PIN, 0);
+                    esp_deep_sleep_start();
+                }
+            }
+#endif
 
-                    tft.setFreeFont(LABEL_FONT);
-                    if (activeButton) {
-                        // Draw inverted button space
-                        key[row][col].initButton(&tft, KEY_X + col * (KEY_W + KEY_SPACING_X),
-                                                 KEY_Y + row * (KEY_H + KEY_SPACING_Y),  // x, y, w, h, outline, fill, text
-                                                 KEY_W, KEY_H, TFT_WHITE, TFT_WHITE, TFT_WHITE,
-                                                 (char *)"", KEY_TEXTSIZE);
+            // // Touch coordinates are stored here
+
+            // Check if the X and Y coordinates of the touch are within one of our buttons
+            for (uint8_t i = 0; i < BUTTON_ROWS; i++) {
+                for (uint8_t j = 0; j < BUTTON_COLS; j++) {
+                    if (pressed && key[i][j].contains(t_x, t_y)) {
+                        key[i][j].press(true);  // tell the button it is pressed
+
+                        // After receiving a valid touch reset the sleep timer
+                        previousMillis = millis();
                     }
                     else {
-                        // Draw black button if inactive
-                        key[row][col].initButton(&tft, KEY_X + col * (KEY_W + KEY_SPACING_X),
-                                                 KEY_Y + row * (KEY_H + KEY_SPACING_Y),  // x, y, w, h, outline, fill, text
-                                                 KEY_W, KEY_H, TFT_BLACK, TFT_BLACK, TFT_BLACK,
-                                                 (char *)"", KEY_TEXTSIZE);
+                        key[i][j].press(false);  // tell the button it is NOT pressed
                     }
-                    key[row][col].drawButton();
-                    //---------------------------------------- Button press handling --------------------------------------------------
-
-                    if ((pageNum >= 0) && (pageNum < NUM_PAGES)) {
-                        if (row < BUTTON_ROWS && col < BUTTON_COLS) {
-                            bleKeyboardAction(menu[pageNum].button[row][col].actions[0].action, menu[pageNum].button[row][col].actions[0].value, menu[pageNum].button[row][col].actions[0].symbol);
-                            bleKeyboardAction(menu[pageNum].button[row][col].actions[1].action, menu[pageNum].button[row][col].actions[1].value, menu[pageNum].button[row][col].actions[1].symbol);
-                            bleKeyboardAction(menu[pageNum].button[row][col].actions[2].action, menu[pageNum].button[row][col].actions[2].value, menu[pageNum].button[row][col].actions[2].symbol);
-                            bleKeyboard.releaseAll();
-                            if (menu[pageNum].button[row][col].latch) {
-                                if (menu[pageNum].button[row][col].islatched) {
-                                    menu[pageNum].button[row][col].islatched = false;
-                                }
-                                else {
-                                    menu[pageNum].button[row][col].islatched = true;
-                                }
-                            }
-
-                            if (generalconfig.usbcommsenable) {
-                                // separate filename from menu[pageNum].button[row][col].logo path
-                                char logoname[20];
-                                char *p = strrchr(menu[pageNum].button[row][col].logo, '/');
-                                if (p != NULL) {
-                                    strcpy(logoname, p + 1);
-                                }
-                                else {
-                                    strcpy(logoname, menu[pageNum].button[row][col].logo);
-                                }
-
-                                // remove extension from logoname
-                                char *dot = strrchr(logoname, '.');
-                                if (dot != NULL) {
-                                    *dot = '\0';
-                                }
-                                char usbData[40];
-                                snprintf(usbData, sizeof(usbData), "{ButtonPress, %s , %s}", menu[pageNum].name, logoname);
-                                Serial.println(usbData);
-                            }
-                        }
-                        else  // Back home
-                        {
-                            pageNum = 0;
-                            drawKeypad();
-                        }
-                    }
-
-                    MSG_INFO1("Battery voltage:", externalBatteryVoltage);
                 }
-                delay(10);  // UI debouncing
+            }
+            // long t_draw_start = millis();
+            // Check if any key has changed state
+            for (uint8_t row = 0; row < BUTTON_ROWS; row++) {
+                for (uint8_t col = 0; col < BUTTON_COLS; col++) {
+                    if (key[row][col].justReleased()) {
+                        // Draw normal button space (non inverted)
+                        drawButtonRowCol(pageNum, row, col);
+                    }
+
+                    if (key[row][col].justPressed()) {
+// Beep
+#ifdef speakerPin
+                        if (generalconfig.beep) {
+                            ledcAttachPin(speakerPin, 2);
+                            ledcWriteTone(2, 600);
+                            delay(50);
+                            ledcDetachPin(speakerPin);
+                            ledcWrite(2, 0);
+                        }
+#endif
+
+                        bool activeButton = isActiveButton(pageNum, row, col);
+
+                        tft.setFreeFont(LABEL_FONT);
+                        if (activeButton) {
+                            // Draw inverted button space
+                            key[row][col].initButton(&tft, KEY_X + col * (KEY_W + KEY_SPACING_X),
+                                                     KEY_Y + row * (KEY_H + KEY_SPACING_Y),  // x, y, w, h, outline, fill, text
+                                                     KEY_W, KEY_H, TFT_WHITE, TFT_WHITE, TFT_WHITE,
+                                                     (char *)"", KEY_TEXTSIZE);
+                        }
+                        else {
+                            // Draw black button if inactive
+                            key[row][col].initButton(&tft, KEY_X + col * (KEY_W + KEY_SPACING_X),
+                                                     KEY_Y + row * (KEY_H + KEY_SPACING_Y),  // x, y, w, h, outline, fill, text
+                                                     KEY_W, KEY_H, TFT_BLACK, TFT_BLACK, TFT_BLACK,
+                                                     (char *)"", KEY_TEXTSIZE);
+                        }
+                        key[row][col].drawButton();
+                        //---------------------------------------- Button press handling --------------------------------------------------
+
+                        if ((pageNum >= 0) && (pageNum < NUM_PAGES)) {
+                            if (row < BUTTON_ROWS && col < BUTTON_COLS) {
+                                bleKeyboardAction(menu[pageNum].button[row][col].actions[0].action, menu[pageNum].button[row][col].actions[0].value, menu[pageNum].button[row][col].actions[0].symbol);
+                                bleKeyboardAction(menu[pageNum].button[row][col].actions[1].action, menu[pageNum].button[row][col].actions[1].value, menu[pageNum].button[row][col].actions[1].symbol);
+                                bleKeyboardAction(menu[pageNum].button[row][col].actions[2].action, menu[pageNum].button[row][col].actions[2].value, menu[pageNum].button[row][col].actions[2].symbol);
+                                bleKeyboard.releaseAll();
+                                if (menu[pageNum].button[row][col].latch) {
+                                    if (menu[pageNum].button[row][col].islatched) {
+                                        menu[pageNum].button[row][col].islatched = false;
+                                    }
+                                    else {
+                                        menu[pageNum].button[row][col].islatched = true;
+                                    }
+                                }
+
+                                if (generalconfig.usbcommsenable) {
+                                    // separate filename from menu[pageNum].button[row][col].logo path
+                                    char logoname[20];
+                                    char *p = strrchr(menu[pageNum].button[row][col].logo, '/');
+                                    if (p != NULL) {
+                                        strcpy(logoname, p + 1);
+                                    }
+                                    else {
+                                        strcpy(logoname, menu[pageNum].button[row][col].logo);
+                                    }
+
+                                    // remove extension from logoname
+                                    char *dot = strrchr(logoname, '.');
+                                    if (dot != NULL) {
+                                        *dot = '\0';
+                                    }
+                                    char usbData[40];
+                                    snprintf(usbData, sizeof(usbData), "{ButtonPress, %s , %s}", menu[pageNum].name, logoname);
+                                    Serial.println(usbData);
+                                }
+                            }
+                            else  // Back home
+                            {
+                                pageNum = 0;
+                                drawKeypad();
+                            }
+                        }
+
+                        MSG_INFO1("Battery voltage:", externalBatteryVoltage);
+                    }
+                    //                    delay(10);  // UI debouncing
+                }
             }
         }
-    }
-#ifdef READ_EXTERNAL_BATTERY
-    if ((millis() - lastADCRead) > 100) {
-        float newVoltage = readExternalBattery();
 
-        externalBatteryVoltage = externalBatteryVoltage + 0.1 * (newVoltage - externalBatteryVoltage);
-        lastADCRead = millis();
-    }
+        // Draw top status bar.
+        drawTopStatusBar(false);
+
+#ifdef READ_EXTERNAL_BATTERY
+        if ((millis() - lastADCRead) > 100) {
+            float newVoltage = readExternalBattery();
+
+            externalBatteryVoltage = externalBatteryVoltage + 0.1 * (newVoltage - externalBatteryVoltage);
+            lastADCRead = millis();
+        }
 #endif
-}
+        loop_100_time = loop_100_time + (millis() - this_loop_start);
+        loop_100_count++;
+        if (loop_100_count > 100) {
+            loop_100_count = 0;
+            loop_100_time = 0;
+        }
+        last_loop_start = this_loop_start;
+                }
+            }
 
 #ifdef READ_EXTERNAL_BATTERY
 float readExternalBattery()

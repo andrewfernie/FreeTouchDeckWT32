@@ -66,6 +66,8 @@
 
 #define MIN_TO_MS 60 * 1000
 
+const long loop_period = 20;  // 20ms loop period
+
 // ------- Uncomment the define below if you want to use a piezo buzzer and specify the pin where the speaker is connected -------
 //#define speakerPin 26
 
@@ -101,17 +103,19 @@
 #define KEY_SPACING_Y 12
 
 // Define or calculate a margin around the edge of the display (default is half of the key spacing value)
+// Separate values for top and bottom allow for a status bar at the top or bottom of the screen
 #define KEY_MARGIN_X (KEY_SPACING_X / 2)
-#define KEY_MARGIN_Y (KEY_SPACING_Y / 2)
+#define KEY_MARGIN_Y_TOP (20 + KEY_SPACING_Y / 2)
+#define KEY_MARGIN_Y_BOTTOM (KEY_SPACING_Y / 2)
 
 // Width and height of a button
 // Second - define button width based on spacing and number of buttons (use what's left)
 #define KEY_W ((SCREEN_WIDTH - (2 * KEY_MARGIN_X)) - ( BUTTON_COLS - 1 ) * ( KEY_SPACING_X + 1 ) ) / BUTTON_COLS
-#define KEY_H ((SCREEN_HEIGHT - (2 * KEY_MARGIN_Y)) - ( BUTTON_ROWS - 1 ) * ( KEY_SPACING_Y + 1 ) ) / BUTTON_ROWS
+#define KEY_H ((SCREEN_HEIGHT - (KEY_MARGIN_Y_TOP + KEY_MARGIN_Y_BOTTOM)) - ( BUTTON_ROWS - 1 ) * ( KEY_SPACING_Y + 1 ) ) / BUTTON_ROWS
 
 // Keypad start position, centre of the first button
 #define KEY_X KEY_MARGIN_X + (KEY_W / 2)
-#define KEY_Y KEY_MARGIN_Y + (KEY_H / 2)
+#define KEY_Y KEY_MARGIN_Y_TOP + (KEY_H / 2)
 
 // Font size multiplier
 #define KEY_TEXTSIZE 1
@@ -182,6 +186,9 @@ extern char logopath[64];
 // templogopath is used to hold the complete path of an image. It is empty for now.
 extern char templogopath[64];
 
+
+extern long loop_count;
+
 // Struct Action: actions and value
 struct Actions {
     uint8_t action;
@@ -230,6 +237,7 @@ struct Config {
     uint8_t modifier2;
     uint8_t modifier3;
     uint16_t helperdelay;
+    uint16_t startup_menu;
 };
 
 struct Wificonfig {

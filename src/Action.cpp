@@ -19,7 +19,7 @@
 
 void bleKeyboardAction(int action, int value, char *symbol)
 {
-    MSG_DEBUG3("[INFO] BLE Keyboard action received:", action, value, symbol);
+    MSG_DEBUG3("[DEBUG] Action received:", action, value, symbol);
     switch (action) {
         case Action_NoAction:
             // No Action

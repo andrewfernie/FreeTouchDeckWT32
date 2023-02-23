@@ -82,6 +82,9 @@ int saveConfigGeneral(AsyncWebServerRequest *request)
     String Helperdelay = helperdelay->value().c_str();
     general["helperdelay"] = Helperdelay.toInt();
 
+    AsyncWebParameter *startup_menu = request->getParam("startup_menu", true);
+    String Startup_menu = startup_menu->value().c_str();
+    general["startup_menu"] = Startup_menu.toInt();
     if (serializeJsonPretty(doc, file) == 0) {
         MSG_WARNLN("[WARNING]: Failed to write to /config/general.json file");
         status = 2;
@@ -154,6 +157,8 @@ int saveCurrentConfigGeneral()
     general["modifier3"] = generalconfig.modifier3;
 
     general["helperdelay"] = generalconfig.helperdelay;
+
+    general["startup_menu"] = generalconfig.startup_menu;
 
     if (serializeJsonPretty(doc, file) == 0) {
         MSG_WARNLN("[WARNING]: Failed to write to /config/general.json file");

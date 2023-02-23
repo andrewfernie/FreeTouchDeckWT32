@@ -5,8 +5,12 @@ extern float readExternalBattery();
 extern float externalBatteryVoltage;
 #endif
 
+char topStatusBarText[64];
+char topStatusBarText2[64];
+char bottomStatusBarText[64];
+
 /**
- * @brief This function draws the a "latched" dot. it uses the logonumber, colomn and row to
+ * @brief This function draws the a "latched" dot. it uses the logonumber, column and row to
  *        determine where.
  *
  * @param b int
@@ -229,6 +233,8 @@ void drawKeypad()
                 drawButtonRowCol(pageNum, row, col);
             }
         }
+
+        drawTopStatusBar(true);     // Draw the top status bar, with a forced redraw
     }
 
     else if (pageNum == SPECIAL_4_PAGE) {
@@ -305,7 +311,7 @@ void printDeviceAddress()
 void printinfo()
 {
     tft.fillScreen(TFT_BLACK);
-    tft.setCursor(1, 3);
+    tft.setCursor(KEY_MARGIN_X, KEY_MARGIN_Y_TOP);
     tft.setTextFont(2);
     if (SCREEN_WIDTH < 480) {
         tft.setTextSize(1);
@@ -350,8 +356,12 @@ void printinfo()
     tft.printf("Battery voltage: %f V\n", externalBatteryVoltage);
 #endif
 
-    tft.print("Free Storage: ");
-    float freemem = FILESYSTEM.totalBytes() - FILESYSTEM.usedBytes();
+    tft.print("Filesystem storage. Total: ");
+    tft.print(FILESYSTEM.totalBytes() / 1000);
+    tft.print(" kB, used: ");
+    tft.print(FILESYSTEM.usedBytes() / 1000);
+    tft.print(" kB, free: ");
+    long freemem = FILESYSTEM.totalBytes() - FILESYSTEM.usedBytes();
     tft.print(freemem / 1000);
     tft.println(" kB");
     tft.print("BLE Keyboard version: ");
@@ -366,14 +376,117 @@ void printinfo()
     tft.print("Free heap: ");
     float freeram = esp_get_free_heap_size();
     tft.print(freeram / 1000);
-    tft.print("kB,");
+    tft.print("kB, Minimum free heap: ");
     freeram = esp_get_minimum_free_heap_size();
     tft.print(freeram / 1000);
+    tft.println("kB");
+    if (psramAvailable) {
+        tft.print("Used PSRAM: ");
+        long kBPSRAM = usedPSRAM();
+        tft.print(kBPSRAM / 1000);
+        tft.print("kB, ");
+        tft.print("Free PSRAM: ");
+        kBPSRAM = ESP.getFreePsram();
+        tft.print(kBPSRAM / 1000);
     tft.print("kB");
+    }
+    else {
+        tft.println("PSRAM: Not available");
+    }
     displayinginfo = true;
 }
 
 uint32_t usedPSRAM()
 {
     return ESP.getPsramSize() - ESP.getFreePsram();
+}
+
+
+/**
+ * @brief This function displays some basic status information at the top of the screen.
+ *
+ * @param force_redraw bool. If true, the status bar will be redrawn even if the text is the same.
+ *
+ * @return none
+ *
+ * @note none
+ */
+void drawTopStatusBar(bool force_redraw = true)
+{
+    char buffer[64];
+    char buffer2[64];
+    int comparison;
+    int comparison2;
+
+    if (bleKeyboard.isConnected()) {
+        snprintf(buffer, 64, "BT Connected");
+    }
+    else {
+        snprintf(buffer, 64, "No BT");
+    }
+    comparison = strncmp(buffer, topStatusBarText, 64);
+
+#ifdef READ_EXTERNAL_BATTERY
+    snprintf(buffer2, 64-strlen(buffer), "%4.1fV\n", externalBatteryVoltage);
+    int x_start = SCREEN_WIDTH - KEY_MARGIN_X - tft.textWidth(buffer2, 2);
+    comparison2 = strncmp(buffer2, topStatusBarText2, 64);
+#endif
+
+
+
+    if (comparison != 0 || comparison2 !=0 || force_redraw) {
+        tft.fillRect(0, 0, SCREEN_WIDTH, KEY_MARGIN_Y_TOP, TFT_BLACK);
+        tft.setCursor(KEY_MARGIN_X, 3);
+        tft.setTextFont(2);
+        tft.setTextSize(1);
+        tft.setTextColor(TFT_WHITE, TFT_BLACK);
+        tft.print(buffer);
+        strncpy(topStatusBarText, buffer, 64);
+
+#ifdef READ_EXTERNAL_BATTERY
+        tft.setCursor(x_start, 3);
+        tft.print(buffer2);
+        strncpy(topStatusBarText2, buffer2, 64);
+#endif
+    }
+}
+
+/**
+ * @brief This function displays some basic status information at the bottom of the screen.
+ *
+ * @param force_redraw bool. If true, the status bar will be redrawn even if the text is the same.
+ *
+ * @return none
+ *
+ * @note  It is not currently being used, but is provided for potential future use.
+ */
+void drawBottomStatusBar(bool force_redraw = true)
+{
+    char buffer[64];
+    int comparison;
+
+    if (bleKeyboard.isConnected()) {
+        snprintf(buffer, 64, "BT Connected");
+    }
+    else {
+        snprintf(buffer, 64, "No BT");
+    }
+
+    comparison = strncmp(buffer, bottomStatusBarText, 64);
+
+    if (comparison != 0 || force_redraw) {
+        tft.fillRect(0, SCREEN_HEIGHT - KEY_MARGIN_Y_BOTTOM, SCREEN_WIDTH, KEY_MARGIN_Y_BOTTOM, TFT_BLACK);
+        tft.setCursor(1, SCREEN_HEIGHT - KEY_MARGIN_Y_BOTTOM);
+        tft.setTextFont(2);
+        if (SCREEN_WIDTH < 480) {
+            tft.setTextSize(1);
+        }
+        else {
+            tft.setTextSize(1);
+        }
+        tft.setTextColor(TFT_WHITE, TFT_BLACK);
+//        tft.print(buffer);
+
+        strncpy(bottomStatusBarText, buffer, 64);
+    }
 }

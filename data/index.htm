@@ -223,6 +223,19 @@
 					<option value="1000">1000</option>
 				</select>
 
+				&nbsp;&nbsp;Menu on startup:&nbsp;
+				<select class="startup_menu" id='startup_menu' name='startup_menu'>
+					<option value="0">0</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+				</select>
 				<div class="form" style="width: 50%; text-align: : center; margin: auto;">
 					<input type="hidden" id='save' name='save' value="general">
 					<br /><button style='cursor: pointer;' form="generalconfig" type='save'>Save General Config</button>
@@ -2839,6 +2852,7 @@
 				document.getElementById("modifier2").value = data.modifier2;
 				document.getElementById("modifier3").value = data.modifier3;
 				document.getElementById("helperdelay").value = data.helperdelay;
+				document.getElementById("startup_menu").value = data.startup_menu;
 
 			}).then(() => {
 				getwificonfig();

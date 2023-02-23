@@ -72,7 +72,7 @@ bool loadConfig(String value)
     if (value == "general") {
         File configfile = FILESYSTEM.open("/config/general.json", "r");
 
-        DynamicJsonDocument doc(384);
+        DynamicJsonDocument doc(512);
 
         DeserializationError error = deserializeJson(doc, configfile);
 
@@ -151,11 +151,16 @@ bool loadConfig(String value)
         uint16_t helperdelay = doc["helperdelay"] | 250;
         generalconfig.helperdelay = helperdelay;
 
+        uint16_t startup_menu = doc["startup_menu"] | 0;
+        generalconfig.startup_menu = startup_menu;
         configfile.close();
 
         if (error) {
-            MSG_ERROR1("[ERROR] deserializeJson() error", error.c_str());
+            MSG_ERROR2("[ERROR] general.json deserializeJson() error", error.c_str(), doc.memoryUsage());
             return false;
+        }
+        else {
+            MSG_INFO1("[INFO] general.json load_config() success. Memory usage: ", doc.memoryUsage());
         }
         return true;
     }
