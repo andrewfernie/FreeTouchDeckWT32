@@ -135,7 +135,7 @@ String handleInfo()
     output += "{\"";
     output += "TFT_eSPI Version";
     output += "\":\"";
-    output += String(TFT_ESPI_VERSION);
+    output += String(LGFX_VERSION);
     output += "\"},";
 
     output += "{\"";

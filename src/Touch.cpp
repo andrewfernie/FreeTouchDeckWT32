@@ -48,13 +48,13 @@ void touch_calibrate()
     // data not valid so recalibrate
     tft.fillScreen(TFT_BLACK);
     tft.setCursor(20, 0);
-    tft.setTextFont(2);
+    tft.setFont(&fonts::Font2);
     tft.setTextSize(1);
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
 
     tft.println("Touch corners as indicated");
 
-    tft.setTextFont(1);
+    tft.setFont(&fonts::Font0);
     tft.println();
 
     if (REPEAT_CAL)

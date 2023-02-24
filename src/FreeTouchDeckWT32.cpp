@@ -38,7 +38,7 @@
 
 #include "FreeTouchDeckWT32.h"
 
-const char *versionnumber = "WT32-0.2.1-AF";
+const char *versionnumber = "WT32-0.2.1-AF-LovyanGFX";
 
 /*
  * Version 0.2.1-AF  - Top and bottom status lines. Run loop at fixed 20ms (assuming it doesn't overrun).
@@ -133,7 +133,7 @@ BleKeyboard bleKeyboard("FreeTouchDeck", "Made by me");
 
 AsyncWebServer webserver(80);
 
-TFT_eSPI tft = TFT_eSPI(SCREEN_HEIGHT, SCREEN_WIDTH);  // Apparently the display is a portrait mode, but we want landscape
+LGFX_ESP32_ST7796_Generic tft;
 
 Preferences savedStates;
 
@@ -167,7 +167,7 @@ char jsonFileFail[32] = "";
 bool psramAvailable = false;
 
 // Invoke the TFT_eSPI button class and create all the button objects
-TFT_eSPI_Button key[BUTTON_ROWS][BUTTON_COLS];
+LGFX_Button key[BUTTON_ROWS][BUTTON_COLS];
 
 #ifdef READ_EXTERNAL_BATTERY
 float readExternalBattery();
@@ -286,7 +286,7 @@ void setup()
     // If we are woken up we do not need the splash screen
     if (wakeup_reason > 0) {
         // But we do draw something to indicate we are waking up
-        tft.setTextFont(2);
+        tft.setFont(&fonts::Font2);
         tft.println(" Waking up...");
     }
     else {
@@ -298,7 +298,7 @@ void setup()
             MSG_INFOLN("[INFO] No \"/logos/freetouchdeck_logo.bmp\" file found for splash screen.");
         }
         tft.setCursor(1, 3);
-        tft.setTextFont(2);
+        tft.setFont(&fonts::Font2);
         tft.setTextSize(1);
         tft.setTextColor(TFT_WHITE, TFT_BLACK);
         tft.printf("Loading version %s\n", versionnumber);
@@ -489,7 +489,7 @@ void setup()
 #endif
 
     // Setup the Font used for plain text
-    tft.setFreeFont(LABEL_FONT);
+    tft.setFont(&fonts::FreeSerif9pt7b);
 
     //------------------BLE Initialization ------------------------------------------------------------------------
 
@@ -502,7 +502,7 @@ void setup()
     MSG_INFO("[INFO] ArduinoJson version: ");
     MSG_INFOLN(ARDUINOJSON_VERSION);
     MSG_INFO("[INFO] TFT_eSPI version: ");
-    MSG_INFOLN(TFT_ESPI_VERSION);
+    MSG_INFOLN(LGFX_VERSION);
 
     // ---------------- Start the first keypad -------------
 
@@ -763,7 +763,7 @@ void loop(void)
 
                         bool activeButton = isActiveButton(pageNum, row, col);
 
-                        tft.setFreeFont(LABEL_FONT);
+                        tft.setFont(&fonts::FreeSerif9pt7b);
                         if (activeButton) {
                             // Draw inverted button space
                             key[row][col].initButton(&tft, KEY_X + col * (KEY_W + KEY_SPACING_X),

@@ -201,7 +201,7 @@ void drawButtonRowCol(uint8_t page, uint8_t row, uint8_t col)
         outlineColor = TFT_WHITE;
     }
 
-    tft.setFreeFont(LABEL_FONT);
+    tft.setFont(&fonts::FreeSerif9pt7b);
     key[row][col].initButton(&tft, KEY_X + col * (KEY_W + KEY_SPACING_X),
                              KEY_Y + row * (KEY_H + KEY_SPACING_Y),  // x, y, w, h, outline, fill, text
                              KEY_W, KEY_H, outlineColor, buttonBG, outlineColor,
@@ -241,7 +241,7 @@ void drawKeypad()
         // Pagenum max + 4 means that a JSON config failed to load completely.
         tft.fillScreen(TFT_BLACK);
         tft.setCursor(0, 0);
-        tft.setTextFont(2);
+        tft.setFont(&fonts::Font2);
         tft.setTextSize(1);
         tft.setTextColor(TFT_WHITE, TFT_BLACK);
 
@@ -264,7 +264,7 @@ void drawErrorMessage(String message)
 {
     tft.fillScreen(TFT_BLACK);
     tft.setCursor(20, 20);
-    tft.setTextFont(2);
+    tft.setFont(&fonts::Font2);
     tft.setTextSize(1);
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
     tft.println(message);
@@ -312,7 +312,7 @@ void printinfo()
 {
     tft.fillScreen(TFT_BLACK);
     tft.setCursor(KEY_MARGIN_X, KEY_MARGIN_Y_TOP);
-    tft.setTextFont(2);
+    tft.setFont(&fonts::Font2);
     if (SCREEN_WIDTH < 480) {
         tft.setTextSize(1);
     }
@@ -369,7 +369,7 @@ void printinfo()
     tft.print("ArduinoJson version: ");
     tft.println(ARDUINOJSON_VERSION);
     tft.print("TFT_eSPI version: ");
-    tft.println(TFT_ESPI_VERSION);
+    tft.println(LGFX_VERSION);
     tft.print("ESP-IDF: ");
     tft.println(esp_get_idf_version());
     tft.println(esp_get_idf_version());
@@ -428,7 +428,7 @@ void drawTopStatusBar(bool force_redraw = true)
 
 #ifdef READ_EXTERNAL_BATTERY
     snprintf(buffer2, 64-strlen(buffer), "%4.1fV\n", externalBatteryVoltage);
-    int x_start = SCREEN_WIDTH - KEY_MARGIN_X - tft.textWidth(buffer2, 2);
+    int x_start = SCREEN_WIDTH - KEY_MARGIN_X - tft.textWidth(buffer2, &fonts::Font2);
     comparison2 = strncmp(buffer2, topStatusBarText2, 64);
 #endif
 
@@ -437,7 +437,7 @@ void drawTopStatusBar(bool force_redraw = true)
     if (comparison != 0 || comparison2 !=0 || force_redraw) {
         tft.fillRect(0, 0, SCREEN_WIDTH, KEY_MARGIN_Y_TOP, TFT_BLACK);
         tft.setCursor(KEY_MARGIN_X, 3);
-        tft.setTextFont(2);
+        tft.setFont(&fonts::Font2);
         tft.setTextSize(1);
         tft.setTextColor(TFT_WHITE, TFT_BLACK);
         tft.print(buffer);
@@ -477,7 +477,7 @@ void drawBottomStatusBar(bool force_redraw = true)
     if (comparison != 0 || force_redraw) {
         tft.fillRect(0, SCREEN_HEIGHT - KEY_MARGIN_Y_BOTTOM, SCREEN_WIDTH, KEY_MARGIN_Y_BOTTOM, TFT_BLACK);
         tft.setCursor(1, SCREEN_HEIGHT - KEY_MARGIN_Y_BOTTOM);
-        tft.setTextFont(2);
+        tft.setFont(&fonts::Font2);
         if (SCREEN_WIDTH < 480) {
             tft.setTextSize(1);
         }

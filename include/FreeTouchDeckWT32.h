@@ -16,7 +16,10 @@
 #include <BleKeyboard.h>  // BleKeyboard is used to communicate over BLE
 #include <FS.h>           // Filesystem support header
 #include <Preferences.h>  // Used to store states before sleep/reboot
-#include <TFT_eSPI.h>     // The TFT_eSPI library
+
+#define LGFX_USE_V1
+#define LGFX_VERSION 1
+#include <LGFX_ESP32_ST7796_Generic.hpp>  // The LovyanGFX library
 #include <pgmspace.h>     // PROGMEM support header
 
 // Define the storage to be used. 
@@ -149,7 +152,7 @@ extern BleKeyboard bleKeyboard;
 
 extern AsyncWebServer webserver;
 
-extern TFT_eSPI tft;
+extern LGFX_ESP32_ST7796_Generic tft;
 
 extern Preferences savedStates;
 
@@ -266,8 +269,9 @@ extern unsigned long Interval;
 extern bool displayinginfo;
 extern char jsonFileFail[32];
 
+
 // Invoke the TFT_eSPI button class and create all the button objects
-extern TFT_eSPI_Button key[BUTTON_ROWS][BUTTON_COLS];
+extern LGFX_Button key[BUTTON_ROWS][BUTTON_COLS];
 
 // Checking for BLE Keyboard version
 #ifndef BLE_KEYBOARD_VERSION

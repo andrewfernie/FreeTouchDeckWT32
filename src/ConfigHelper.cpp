@@ -131,7 +131,7 @@ void configmode()
 {
     tft.fillScreen(TFT_BLACK);
     tft.setCursor(0, 0);
-    tft.setTextFont(2);
+    tft.setFont(&fonts::Font2);
     tft.setTextSize(1);
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
 
@@ -335,7 +335,7 @@ bool checkfile(const char* filename, bool showMessage)
         if (showMessage) {
             tft.fillScreen(TFT_BLACK);
             tft.setCursor(1, 3);
-            tft.setTextFont(2);
+            tft.setFont(&fonts::Font2);
             tft.setTextSize(2);
             tft.setTextColor(TFT_WHITE, TFT_BLACK);
             tft.printf("%s not found!\n\n", filename);
