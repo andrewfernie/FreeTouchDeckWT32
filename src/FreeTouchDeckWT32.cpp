@@ -38,9 +38,11 @@
 
 #include "FreeTouchDeckWT32.h"
 
-const char *versionnumber = "WT32-0.2.1-AF";
+const char *versionnumber = "WT32-0.2.2-AF";
 
 /*
+ * Version 0.2.2-AF  - More compile time switches for configurability of top and  bottom status lines. 
+ *
  * Version 0.2.1-AF  - Top and bottom status lines. Run loop at fixed 20ms (assuming it doesn't overrun).
  *
  * Version 0.2.0-AF  - Merge pull request that improves key spacing calculations by adding a margin around the screen.
@@ -831,8 +833,9 @@ void loop(void)
             }
         }
 
-        // Draw top status bar.
+        
         drawTopStatusBar(false);
+        drawBottomStatusBar(false);  
 
 #ifdef READ_EXTERNAL_BATTERY
         if ((millis() - lastADCRead) > 100) {

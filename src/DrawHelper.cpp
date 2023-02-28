@@ -5,8 +5,9 @@ extern float readExternalBattery();
 extern float externalBatteryVoltage;
 #endif
 
-char topStatusBarText[64];
-char topStatusBarText2[64];
+char topStatusBarTextLeft[32];
+char topStatusBarTextCenter[32];
+char topStatusBarTextRight[32];
 char bottomStatusBarText[64];
 
 /**
@@ -235,6 +236,7 @@ void drawKeypad()
         }
 
         drawTopStatusBar(true);     // Draw the top status bar, with a forced redraw
+        drawBottomStatusBar(true);  // Draw the bottom status bar, with a forced redraw
     }
 
     else if (pageNum == SPECIAL_4_PAGE) {
@@ -413,42 +415,64 @@ uint32_t usedPSRAM()
  */
 void drawTopStatusBar(bool force_redraw = true)
 {
+#ifdef ENABLE_TOP_STATUS_BAR
     char buffer[64];
-    char buffer2[64];
     int comparison;
-    int comparison2;
 
+#ifdef TOP_STATUS_BAR_SHOW_BT
     if (bleKeyboard.isConnected()) {
         snprintf(buffer, 64, "BT Connected");
     }
     else {
         snprintf(buffer, 64, "No BT");
     }
-    comparison = strncmp(buffer, topStatusBarText, 64);
+    comparison = strncmp(buffer, topStatusBarTextLeft, sizeof(topStatusBarTextLeft));
 
-#ifdef READ_EXTERNAL_BATTERY
-    snprintf(buffer2, 64-strlen(buffer), "%4.1fV\n", externalBatteryVoltage);
-    int x_start = SCREEN_WIDTH - KEY_MARGIN_X - tft.textWidth(buffer2, 2);
-    comparison2 = strncmp(buffer2, topStatusBarText2, 64);
-#endif
-
-
-
-    if (comparison != 0 || comparison2 !=0 || force_redraw) {
-        tft.fillRect(0, 0, SCREEN_WIDTH, KEY_MARGIN_Y_TOP, TFT_BLACK);
+    if (comparison != 0 || force_redraw) {
+        tft.fillRect(0, 0, SCREEN_WIDTH/3, KEY_MARGIN_Y_TOP, TFT_BLACK);
         tft.setCursor(KEY_MARGIN_X, 3);
         tft.setTextFont(2);
         tft.setTextSize(1);
         tft.setTextColor(TFT_WHITE, TFT_BLACK);
         tft.print(buffer);
-        strncpy(topStatusBarText, buffer, 64);
-
-#ifdef READ_EXTERNAL_BATTERY
-        tft.setCursor(x_start, 3);
-        tft.print(buffer2);
-        strncpy(topStatusBarText2, buffer2, 64);
-#endif
+        strncpy(topStatusBarTextLeft, buffer, sizeof(topStatusBarTextLeft));
     }
+#endif
+
+#ifdef TOP_STATUS_BAR_SHOW_MENU
+    strncpy(buffer, menu[pageNum].name, sizeof(buffer));
+    comparison = strncmp(buffer, topStatusBarTextCenter, sizeof(buffer));
+
+    if (comparison != 0 || force_redraw) {
+        tft.fillRect(SCREEN_WIDTH / 3, 0, SCREEN_WIDTH / 3, KEY_MARGIN_Y_TOP, TFT_BLACK);
+        tft.setTextFont(2);
+        tft.setTextSize(2);
+        tft.setCursor(SCREEN_WIDTH / 2 - tft.textWidth(buffer, 2) / 2, 0);
+        tft.setTextColor(TFT_WHITE, TFT_BLACK);
+        tft.print(buffer);
+
+        strncpy(topStatusBarTextCenter, buffer, sizeof(topStatusBarTextCenter));
+    }
+#endif
+
+#ifdef TOP_STATUS_BAR_SHOW_V
+    snprintf(buffer, strlen(buffer), "%4.1fV\n", externalBatteryVoltage);
+    int x_start = SCREEN_WIDTH - KEY_MARGIN_X - tft.textWidth(buffer, 2);
+    comparison = strncmp(buffer, topStatusBarTextRight, sizeof(buffer));
+
+    if (comparison != 0 || force_redraw) {
+        tft.fillRect(SCREEN_WIDTH - SCREEN_WIDTH / 3, 0, SCREEN_WIDTH / 3, KEY_MARGIN_Y_TOP, TFT_BLACK);
+        tft.setCursor(x_start, 3);
+        tft.setTextFont(2);
+        tft.setTextSize(1);
+        tft.setTextColor(TFT_WHITE, TFT_BLACK);
+        tft.print(buffer);
+
+        strncpy(topStatusBarTextRight, buffer, sizeof(topStatusBarTextRight));
+    }
+#endif
+
+#endif
 }
 
 /**
@@ -458,18 +482,20 @@ void drawTopStatusBar(bool force_redraw = true)
  *
  * @return none
  *
- * @note  It is not currently being used, but is provided for potential future use.
+ * @note  Currently only includes sample code. Provided for potential future use.
  */
 void drawBottomStatusBar(bool force_redraw = true)
 {
+
+#ifdef ENABLE_BOTTOM_STATUS_BAR
     char buffer[64];
     int comparison;
 
     if (bleKeyboard.isConnected()) {
-        snprintf(buffer, 64, "BT Connected");
+        snprintf(buffer, 64, "BT Connected - This is the bottom status bar");
     }
     else {
-        snprintf(buffer, 64, "No BT");
+        snprintf(buffer, 64, "No BT - This is the bottom status bar");
     }
 
     comparison = strncmp(buffer, bottomStatusBarText, 64);
@@ -485,8 +511,9 @@ void drawBottomStatusBar(bool force_redraw = true)
             tft.setTextSize(1);
         }
         tft.setTextColor(TFT_WHITE, TFT_BLACK);
-//        tft.print(buffer);
+        tft.print(buffer);
 
         strncpy(bottomStatusBarText, buffer, 64);
     }
+#endif
 }

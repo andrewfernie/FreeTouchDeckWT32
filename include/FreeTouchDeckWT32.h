@@ -68,6 +68,8 @@
 
 const long loop_period = 20;  // 20ms loop period
 
+extern const char* versionnumber;
+
 // ------- Uncomment the define below if you want to use a piezo buzzer and specify the pin where the speaker is connected -------
 //#define speakerPin 26
 
@@ -79,11 +81,6 @@ const long loop_period = 20;  // 20ms loop period
 #define EXTERNAL_BATTERY_SCALE (EXTERNAL_BATTERY_ADC_SCALE * 2.13)  // include any input voltage dividers here
 #endif
 
-    // ------- NimBLE definition, use only if the NimBLE library is installed
-    // and if you are using the original ESP32-BLE-Keyboard library by T-VK -------
-    //#define USE_NIMBLE
-
-    extern const char* versionnumber;
 
 // ------- Uncomment the define below if you want to preload the logos to PSRAM at start (adds about 10s to startup) -------
 //#define PRELOAD_LOGOS
@@ -102,11 +99,30 @@ const long loop_period = 20;  // 20ms loop period
 #define KEY_SPACING_X 12   
 #define KEY_SPACING_Y 12
 
+// ------- Status bar enable and configuration -------
+#define ENABLE_TOP_STATUS_BAR
+//#define ENABLE_BOTTOM_STATUS_BAR
+
+#ifdef ENABLE_TOP_STATUS_BAR
+#define TOP_STATUS_BAR_HEIGHT 20
+#define TOP_STATUS_BAR_SHOW_BT
+//#define TOP_STATUS_BAR_SHOW_MENU
+#define TOP_STATUS_BAR_SHOW_V
+#else
+#define TOP_STATUS_BAR_HEIGHT 0
+#endif
+
+#ifdef ENABLE_BOTTOM_STATUS_BAR
+#define BOTTOM_STATUS_BAR_HEIGHT 20
+#else
+#define BOTTOM_STATUS_BAR_HEIGHT 0
+#endif
+
 // Define or calculate a margin around the edge of the display (default is half of the key spacing value)
 // Separate values for top and bottom allow for a status bar at the top or bottom of the screen
 #define KEY_MARGIN_X (KEY_SPACING_X / 2)
-#define KEY_MARGIN_Y_TOP (20 + KEY_SPACING_Y / 2)
-#define KEY_MARGIN_Y_BOTTOM (KEY_SPACING_Y / 2)
+#define KEY_MARGIN_Y_TOP (TOP_STATUS_BAR_HEIGHT + KEY_SPACING_Y / 2)
+#define KEY_MARGIN_Y_BOTTOM (BOTTOM_STATUS_BAR_HEIGHT + KEY_SPACING_Y / 2)
 
 // Width and height of a button
 // Second - define button width based on spacing and number of buttons (use what's left)
