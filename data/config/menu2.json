@@ -1,21 +1,6 @@
 {
-  "menuname":"Teams", 
+  "menuname": "Teams",
   "button11": {
-    "logo": "mute.bmp",
-    "latch": true,
-    "latchlogo": "unmute.bmp",
-    "actionarray": [
-      "5",
-      "5",
-      "4"
-    ],
-    "valuearray": [
-      "1",
-      "6",
-      "m"
-    ]
-  },
-  "button12": {
     "logo": "videooff.bmp",
     "latch": true,
     "latchlogo": "videoon.bmp",
@@ -26,8 +11,23 @@
     ],
     "valuearray": [
       "1",
-      "6",
+      "2",
       "o"
+    ]
+  },
+  "button12": {
+    "logo": "mute.bmp",
+    "latch": true,
+    "latchlogo": "unmute.bmp",
+    "actionarray": [
+      "5",
+      "5",
+      "4"
+    ],
+    "valuearray": [
+      "1",
+      "2",
+      "m"
     ]
   },
   "button13": {
@@ -41,21 +41,21 @@
     ],
     "valuearray": [
       "1",
-      "6",
+      "2",
       "e"
     ]
   },
   "button14": {
-    "logo": "blank.bmp",
+    "logo": "screenshot.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "0",
+      "2",
       "0",
       "0"
     ],
     "valuearray": [
-      "0",
+      "11",
       "0",
       "0"
     ]
@@ -86,7 +86,7 @@
     ],
     "valuearray": [
       "1",
-      "6",
+      "2",
       "k"
     ]
   },
@@ -101,7 +101,7 @@
     ],
     "valuearray": [
       "1",
-      "6",
+      "2",
       "b"
     ]
   },
@@ -116,22 +116,22 @@
     ],
     "valuearray": [
       "1",
-      "6",
+      "2",
       "s"
     ]
   },
   "button24": {
-    "logo": "playpause.bmp",
+    "logo": "screenshotrepeat.bmp",
     "latch": false,
     "latchlogo": "",
     "actionarray": [
-      "3",
-      "0",
+      "5",
+      "2",
       "0"
     ],
     "valuearray": [
-      "4",
-      "0",
+      "2",
+      "11",
       "0"
     ]
   },
