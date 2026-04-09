@@ -92,3 +92,6 @@ __vm/
 *.pidb
 *.svclog
 *.scc
+
+FreeTouchDeckDataFromWork/
+FreeTouchDeckConfig.zip
