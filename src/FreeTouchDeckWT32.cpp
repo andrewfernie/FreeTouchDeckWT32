@@ -386,6 +386,7 @@ void setup()
     if (!loadConfig("general")) {
         MSG_WARNLN("[WARNING]: general.json failed to load!");
         MSG_WARNLN("[WARNING]: To reset to default type \'reset general\'");
+        strcpy(jsonFileFail, "general.json");
         pageNum = SPECIAL_4_PAGE;
     }
     else {
